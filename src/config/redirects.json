@@ -1,0 +1,17 @@
+[
+  { "from": "/about-us", "to": "/about" },
+  { "from": "/contact-us", "to": "/contact" },
+  { "from": "/our-team", "to": "/team" },
+  { "from": "/dinesh-gupta", "to": "/dinesh-gupta-co" },
+  { "from": "/pages/dinesh-gupta", "to": "/dinesh-gupta-co" },
+  { "from": "/pages/achievements", "to": "/achievements" },
+  { "from": "/pages/nbfc", "to": "/nbfc" },
+  { "from": "/pages/ucbs", "to": "/ucbs" },
+  { "from": "/pages/about-hr-labour-law", "to": "/hr-labour-law/about" },
+  { "from": "/pages/new-labour-codes-compliance", "to": "/hr-labour-law/new-labour-codes" },
+  { "from": "/pages/research", "to": "/resources/research" },
+  { "from": "/pages/podcasts", "to": "/resources/podcasts" },
+  { "from": "/pages/video-lectures", "to": "/resources/video-lectures" },
+  { "from": "/pages/disclaimer", "to": "/disclaimer" },
+  { "from": "/career", "to": "/careers" }
+]

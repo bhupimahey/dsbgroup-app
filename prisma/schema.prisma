@@ -1,0 +1,303 @@
+// DSB Law Group — MySQL schema (all-in Next.js)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum UserRole {
+  USER
+  EDITOR
+  ADMIN
+}
+
+enum PostType {
+  BLOG
+  ARTICLE
+}
+
+enum PostVisibility {
+  PUBLIC
+  PREMIUM
+}
+
+enum SubscriptionFrequency {
+  WEEKLY
+  TWICE_WEEKLY
+  MONTHLY
+}
+
+enum NewsletterStatus {
+  DRAFT
+  QUEUED
+  SENT
+}
+
+// ── Auth.js / NextAuth ───────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  passwordHash  String?
+  image         String?
+  role          UserRole  @default(USER)
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts               Account[]
+  sessions               Session[]
+  subscriptionPreferences SubscriptionPreference[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ── CMS ──────────────────────────────────────────────────────────────────────
+
+model Page {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  body            String   @db.LongText
+  imagePath       String?
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  metaKeywords    String?  @db.Text
+  published       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+enum TeamGroup {
+  MANAGING_PARTNERS_CEO
+  PARTNERS_DIRECTORS
+  SENIOR_WHOLE_TIME_CONSULTANTS
+  WHOLE_TIME_CONSULTANTS
+  EMPANELLED_ADVOCATES
+}
+
+model TeamMember {
+  id        String    @id @default(cuid())
+  name      String
+  title     String
+  bio       String    @db.LongText
+  teaser    String?   @db.Text
+  branch    String?
+  group     TeamGroup @default(WHOLE_TIME_CONSULTANTS)
+  imagePath String?
+  phone     String?
+  email     String?
+  sortOrder Int       @default(0)
+  published Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([group, sortOrder])
+}
+
+model FaqCategory {
+  id        String     @id @default(cuid())
+  name      String
+  sortOrder Int        @default(0)
+  items     FaqItem[]
+}
+
+model FaqItem {
+  id         String      @id @default(cuid())
+  categoryId String
+  question   String
+  answer     String      @db.Text
+  sortOrder  Int         @default(0)
+  published  Boolean     @default(true)
+  category   FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId])
+}
+
+model Office {
+  id        String   @id @default(cuid())
+  name      String
+  address   String   @db.Text
+  phone     String?
+  email     String?
+  mapUrl    String?  @db.Text
+  sortOrder Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactLead {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String    @db.Text
+  handled   Boolean   @default(false)
+  handledAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([handled, createdAt])
+}
+
+// ── Blog & articles ──────────────────────────────────────────────────────────
+
+model Category {
+  id    String         @id @default(cuid())
+  slug  String         @unique
+  name  String
+  posts PostCategory[]
+}
+
+model Post {
+  id              String         @id @default(cuid())
+  slug            String         @unique
+  title           String
+  teaser          String         @db.Text
+  body              String         @db.LongText
+  featuredImagePath String?
+  type              PostType
+  visibility      PostVisibility @default(PUBLIC)
+  published       Boolean        @default(false)
+  publishedAt     DateTime?
+  metaTitle       String?
+  metaDescription String?        @db.Text
+  metaKeywords    String?        @db.Text
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  categories      PostCategory[]
+
+  @@index([type, published])
+}
+
+model PostCategory {
+  postId     String
+  categoryId String
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([postId, categoryId])
+}
+
+// ── Subscriptions & newsletters ──────────────────────────────────────────────
+
+model ServiceCategory {
+  id          String                   @id @default(cuid())
+  slug        String                   @unique
+  name        String
+  sortOrder   Int                      @default(0)
+  active      Boolean                  @default(true)
+  preferences SubscriptionPreference[]
+  newsletters NewsletterServiceTag[]
+}
+
+model Subscriber {
+  id              String                @id @default(cuid())
+  email           String                @unique
+  verified        Boolean               @default(false)
+  verifyToken     String?               @unique
+  verifyExpiresAt DateTime?
+  frequency       SubscriptionFrequency @default(WEEKLY)
+  active          Boolean               @default(true)
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  preferences     SubscriptionPreference[]
+}
+
+model SubscriptionPreference {
+  id                String                @id @default(cuid())
+  userId            String?
+  subscriberId      String?
+  serviceCategoryId String
+  frequency         SubscriptionFrequency
+  user              User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriber        Subscriber?           @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
+  serviceCategory   ServiceCategory       @relation(fields: [serviceCategoryId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([subscriberId])
+  @@index([serviceCategoryId])
+}
+
+model Newsletter {
+  id             String               @id @default(cuid())
+  slug           String               @unique
+  subject        String
+  teaser         String?              @db.Text
+  bodyHtml       String               @db.LongText
+  issueNumber    String?
+  issueDate      DateTime?
+  pdfPath        String?
+  coverImagePath String?
+  published      Boolean              @default(false)
+  status         NewsletterStatus     @default(DRAFT)
+  sentAt         DateTime?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  tags           NewsletterServiceTag[]
+  sends          NewsletterSend[]
+}
+
+model NewsletterServiceTag {
+  newsletterId      String
+  serviceCategoryId String
+  newsletter        Newsletter      @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
+  serviceCategory   ServiceCategory @relation(fields: [serviceCategoryId], references: [id], onDelete: Cascade)
+
+  @@id([newsletterId, serviceCategoryId])
+}
+
+model NewsletterSend {
+  id           String   @id @default(cuid())
+  newsletterId String
+  recipient    String
+  openedAt     DateTime?
+  clickedAt    DateTime?
+  sentAt       DateTime @default(now())
+  newsletter   Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
+
+  @@index([newsletterId])
+}

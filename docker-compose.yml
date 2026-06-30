@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dsb_law
+      MYSQL_USER: dsb
+      MYSQL_PASSWORD: dsb
+    ports:
+      - '3306:3306'
+    volumes:
+      - dsb_mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+
+volumes:
+  dsb_mysql_data:

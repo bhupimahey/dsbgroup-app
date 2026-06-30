@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSB Law Group — Project Site</title>
+    <meta
+      name="description"
+      content="DSB Law Group Next.js website — source code and deployment documentation."
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --navy: #05162e;
+        --gold: #c5a059;
+        --muted: #64748b;
+        --bg: #f8fafc;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+        color: var(--navy);
+      }
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem 5rem;
+      }
+      .badge {
+        display: inline-block;
+        margin-bottom: 1rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        background: rgba(197, 160, 89, 0.15);
+        color: var(--navy);
+        font:
+          600 0.8rem/1.2 system-ui,
+          sans-serif;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: 0 0 0.75rem;
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1.1;
+      }
+      p {
+        margin: 0 0 1rem;
+        font:
+          400 1.05rem/1.7 system-ui,
+          sans-serif;
+        color: var(--muted);
+      }
+      .card {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 10px 30px rgba(5, 22, 46, 0.06);
+      }
+      .card h2 {
+        margin: 0 0 0.75rem;
+        font:
+          600 1.1rem/1.3 system-ui,
+          sans-serif;
+        color: var(--navy);
+      }
+      ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        font:
+          400 0.98rem/1.7 system-ui,
+          sans-serif;
+        color: var(--muted);
+      }
+      a.button {
+        display: inline-block;
+        margin-top: 1.5rem;
+        margin-right: 0.75rem;
+        padding: 0.85rem 1.2rem;
+        border-radius: 8px;
+        background: var(--navy);
+        color: #fff;
+        text-decoration: none;
+        font:
+          600 0.95rem/1 system-ui,
+          sans-serif;
+      }
+      a.button.secondary {
+        background: #fff;
+        color: var(--navy);
+        border: 1px solid #cbd5e1;
+      }
+      a.button:hover {
+        background: var(--gold);
+        color: var(--navy);
+      }
+      code {
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 0.92em;
+        background: #eef2f7;
+        padding: 0.1rem 0.35rem;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <span class="badge">DSB Law Group</span>
+      <h1>Next.js website repository</h1>
+      <p>
+        This GitHub Pages site hosts project documentation for the DSB Law Group website codebase.
+        The full application is a server-rendered Next.js app with MySQL, admin CMS, newsletter
+        worker, and authentication.
+      </p>
+
+      <div class="card">
+        <h2>Production deployment</h2>
+        <ul>
+          <li>Run with Docker Compose and MySQL on a VPS or cloud server.</li>
+          <li>Copy <code>.env.example</code> to <code>.env</code> and configure database, email, and Redis.</li>
+          <li>Run migrations and seed: <code>npm run db:migrate</code>, <code>npm run db:seed</code>.</li>
+          <li>Start app and newsletter worker per the repository README.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Why this is not the live public site</h2>
+        <p>
+          GitHub Pages serves static files only. It cannot run API routes, admin login, database
+          queries, or newsletter processing. Use Docker/VPS hosting for the full site.
+        </p>
+      </div>
+
+      <a class="button" href="https://github.com/bhupimahey/dsbgroup">View source on GitHub</a>
+      <a class="button secondary" href="https://www.dsblawgroup.com/">Visit dsblawgroup.com</a>
+    </main>
+  </body>
+</html>

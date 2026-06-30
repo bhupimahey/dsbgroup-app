@@ -1,0 +1,198 @@
+/* Team profile modal — /team */
+
+.team-profile-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(5, 22, 46, 0.72);
+  backdrop-filter: blur(4px);
+}
+
+.team-profile-modal {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 44rem);
+  max-height: min(90vh, 820px);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 24px 60px rgba(5, 22, 46, 0.35),
+    0 0 0 1px rgba(197, 160, 89, 0.25);
+  animation: team-profile-modal-in 0.28s ease-out;
+}
+
+@keyframes team-profile-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.team-profile-modal-head {
+  position: relative;
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+  padding: 1.25rem 3.25rem 1.25rem 1.25rem;
+  background: linear-gradient(135deg, #05162e 0%, #0a2444 55%, #1a237e 100%);
+  color: #fff;
+  border-bottom: 3px solid #c5a059;
+}
+
+.team-profile-modal-photo {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid rgba(197, 160, 89, 0.65);
+  background: #0a2444;
+}
+
+.team-profile-modal-photo-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.team-profile-modal-name {
+  margin: 0;
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+.team-profile-modal-title {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #c5a059;
+}
+
+.team-profile-modal-branch {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.team-profile-modal-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.team-profile-modal-close:hover {
+  background: rgba(197, 160, 89, 0.25);
+  border-color: rgba(197, 160, 89, 0.65);
+}
+
+.team-profile-modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.5rem 1.5rem 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: #c5a059 #eef2f6;
+}
+
+.team-profile-modal-body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.team-profile-modal-body::-webkit-scrollbar-track {
+  background: #eef2f6;
+  border-radius: 999px;
+}
+
+.team-profile-modal-body::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #c5a059, #05162e);
+  border-radius: 999px;
+  border: 2px solid #eef2f6;
+}
+
+.team-profile-modal-body .cms-html {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: #334155;
+}
+
+.team-profile-modal-body .cms-html p + p {
+  margin-top: 0.85rem;
+}
+
+.team-profile-modal-footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  padding: 1rem 1.5rem 1.25rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.team-profile-modal-contact {
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.team-profile-modal-contact a {
+  color: #05162e;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.team-profile-modal-contact a:hover {
+  color: #c5a059;
+  text-decoration: underline;
+}
+
+.team-profile-modal-contact-label {
+  font-weight: 700;
+  color: #05162e;
+}
+
+@media (max-width: 540px) {
+  .team-profile-modal-head {
+    grid-template-columns: 72px minmax(0, 1fr);
+    padding-right: 2.75rem;
+  }
+
+  .team-profile-modal-photo {
+    width: 72px;
+    height: 72px;
+  }
+
+  .team-profile-modal-name {
+    font-size: 1.15rem;
+  }
+}

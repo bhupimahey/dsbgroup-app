@@ -1,0 +1,80 @@
+# Production stack — run on VPS: docker compose -f docker-compose.prod.yml up -d
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: dsb_law
+      MYSQL_USER: dsb
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-dsb}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - dsb
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - dsb
+
+  web:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql://dsb:${MYSQL_PASSWORD:-dsb}@mysql:3306/dsb_law
+      REDIS_URL: redis://redis:6379
+      AUTH_SECRET: ${AUTH_SECRET}
+      AUTH_TRUST_HOST: "true"
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://www.dsblawgroup.com}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM_DOMAIN: ${RESEND_FROM_DOMAIN:-dsblawgroup.com}
+      EMAIL_FROM: ${EMAIL_FROM:-DSB Law Group <noreply@dsblawgroup.com>}
+      EMAIL_FROM_NAME: ${EMAIL_FROM_NAME:-DSB Law Group}
+      EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-noreply}
+      EMAIL_REPLY_TO: ${EMAIL_REPLY_TO:-info@dsblawgroup.com}
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - dsb
+
+  worker:
+    build: .
+    restart: unless-stopped
+    command: npm run worker:newsletter
+    environment:
+      DATABASE_URL: mysql://dsb:${MYSQL_PASSWORD:-dsb}@mysql:3306/dsb_law
+      REDIS_URL: redis://redis:6379
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM_DOMAIN: ${RESEND_FROM_DOMAIN:-dsblawgroup.com}
+      EMAIL_FROM: ${EMAIL_FROM:-DSB Law Group <noreply@dsblawgroup.com>}
+      EMAIL_FROM_NAME: ${EMAIL_FROM_NAME:-DSB Law Group}
+      EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-noreply}
+      EMAIL_REPLY_TO: ${EMAIL_REPLY_TO:-info@dsblawgroup.com}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://www.dsblawgroup.com}
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - dsb
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
+    networks:
+      - dsb
+
+volumes:
+  mysql_data:
+
+networks:
+  dsb:

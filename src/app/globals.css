@@ -3,11 +3,31 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* DSB Law Group brand palette */
+  --dsb-navy: #05162e;
+  --dsb-navy-mid: #0a2444;
+  --dsb-navy-light: #0a192f;
+  --dsb-gold: #c5a059;
+  --dsb-gold-dark: #b8964f;
+  --dsb-text: #1a1a1a;
+  --dsb-muted: #64748b;
+  --dsb-border: #e2e8f0;
+  --dsb-surface: #f0f2f5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-dsb-navy: var(--dsb-navy);
+  --color-dsb-navy-mid: var(--dsb-navy-mid);
+  --color-dsb-navy-light: var(--dsb-navy-light);
+  --color-dsb-gold: var(--dsb-gold);
+  --color-dsb-gold-dark: var(--dsb-gold-dark);
+  --color-dsb-text: var(--dsb-text);
+  --color-dsb-muted: var(--dsb-muted);
+  --color-dsb-border: var(--dsb-border);
+  --color-dsb-surface: var(--dsb-surface);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -22,5 +42,143 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+.admin-shell {
+  --background: #f3f6f9;
+  --foreground: var(--dsb-text);
+  background: #f3f6f9;
+  color: var(--dsb-text);
+}
+
+.admin-zynix-card {
+  animation: admin-fade-up 0.45s ease both;
+}
+
+.admin-zynix-sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(197 160 89 / 35%) transparent;
+}
+
+.admin-bar-fill {
+  animation: admin-bar-grow 0.8s ease both;
+}
+
+@keyframes admin-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes admin-bar-grow {
+  from {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+
+.cms-html img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+}
+
+.cms-html img[data-align='left'] {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.cms-html img[data-align='center'] {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cms-html img[data-align='right'] {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.cms-html p + p {
+  margin-top: 0.75rem;
+}
+
+.cms-html ul,
+.cms-html ol {
+  margin: 0.75rem 0;
+  padding-left: 1.25rem;
+}
+
+.cms-html a {
+  color: var(--dsb-navy);
+  text-decoration: underline;
+}
+
+.cms-html blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 4px solid var(--dsb-gold);
+  color: var(--dsb-muted);
+}
+
+.cms-html code {
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+  background: #f1f5f9;
+  font-size: 0.875em;
+}
+
+.cms-html pre {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: #0f172a;
+  color: #e2e8f0;
+  overflow-x: auto;
+}
+
+.cms-html pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.cms-html mark {
+  background: #fef08a;
+  padding: 0 0.15rem;
+}
+
+.cms-html hr {
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--dsb-border);
+}
+
+.cms-html table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.cms-html th,
+.cms-html td {
+  border: 1px solid var(--dsb-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.cms-html th {
+  background: #f8fafc;
+  font-weight: 600;
 }
