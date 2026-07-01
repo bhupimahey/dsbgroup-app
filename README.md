@@ -138,6 +138,16 @@ docker compose -f docker-compose.prod.yml exec web npx prisma db seed
 - **Repository:** [github.com/bhupimahey/dsbgroup](https://github.com/bhupimahey/dsbgroup)
 - **GitHub Pages:** [bhupimahey.github.io/dsbgroup](https://bhupimahey.github.io/dsbgroup/) — project documentation (static). The full Next.js app requires Docker + MySQL hosting; GitHub Pages cannot run API routes, admin, or database-backed pages.
 
+### Enable GitHub Pages (required once)
+
+The **Deploy GitHub Pages** workflow fails immediately if Pages is not turned on first.
+
+1. Open [github.com/bhupimahey/dsbgroup/settings/pages](https://github.com/bhupimahey/dsbgroup/settings/pages)
+2. Under **Build and deployment → Source**, choose **GitHub Actions** (not “Deploy from a branch”)
+3. Go to [Actions](https://github.com/bhupimahey/dsbgroup/actions) → **Deploy GitHub Pages** → **Re-run all jobs**
+
+After a successful run, the site is live at [bhupimahey.github.io/dsbgroup](https://bhupimahey.github.io/dsbgroup/).
+
 ### Push updates
 
 ```powershell
