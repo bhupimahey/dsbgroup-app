@@ -135,24 +135,21 @@ docker compose -f docker-compose.prod.yml exec web npx prisma db seed
 
 ## GitHub repository
 
-- **Repository:** [github.com/bhupimahey/dsbgroup-app](https://github.com/bhupimahey/dsbgroup-app)
-- **Database schema:** `prisma/schema.prisma` + migrations in `prisma/migrations/`
-- **GitHub Pages:** [bhupimahey.github.io/dsbgroup-app](https://bhupimahey.github.io/dsbgroup-app/) — static project docs only (`docs/`). The full Next.js app requires Docker + MySQL hosting.
+- **Repository:** [github.com/bhupimahey/dsbgroup-app](https://github.com/bhupimahey/dsbgroup-app) — full source code + Prisma schema
+- **Database schema:** `prisma/schema.prisma` + `prisma/migrations/`
+- **GitHub Pages (docs only):** [bhupimahey.github.io/dsbgroup-app](https://bhupimahey.github.io/dsbgroup-app/)
+- **Live production site:** Docker + MySQL on a VPS (see Production deploy above). GitHub Pages cannot run API routes, admin, or database pages.
 
-### Enable GitHub Pages (required once)
+### GitHub Pages setup (one time)
 
-**Do not use “GitHub Actions” as the Pages source** — `actions/deploy-pages` often hangs forever on `deployment_queued` (a GitHub platform bug).
+**Use “Deploy from a branch” — never “GitHub Actions”** (the `deploy-pages` action hangs on `deployment_queued`).
 
-Use branch deployment instead:
-
-1. Open [github.com/bhupimahey/dsbgroup-app/settings/pages](https://github.com/bhupimahey/dsbgroup-app/settings/pages)
-2. **Source:** Deploy from a branch *(not GitHub Actions)*
+1. [Settings → Pages](https://github.com/bhupimahey/dsbgroup-app/settings/pages)
+2. **Source:** Deploy from a branch
 3. **Branch:** `gh-pages` · **Folder:** `/ (root)`
 4. Save
 
-The `Publish docs to gh-pages` workflow copies `docs/` to the `gh-pages` branch on each push. After the first workflow run completes (check [Actions](https://github.com/bhupimahey/dsbgroup-app/actions)), the site is live at [bhupimahey.github.io/dsbgroup-app](https://bhupimahey.github.io/dsbgroup-app/).
-
-If you previously selected **GitHub Actions** as the source, switch to **Deploy from a branch** as above and cancel any stuck deploy workflows.
+The **Deploy docs to GitHub Pages** workflow publishes `docs/` to the `gh-pages` branch on every push to `main`.
 
 ### Push updates
 
@@ -166,10 +163,8 @@ GitHub Actions runs on every push to `main`:
 
 | Workflow | Purpose |
 |----------|---------|
-| `CI` | Install, migrate, seed, lint, and production build |
-| `Publish docs to gh-pages` | Copy `docs/` to `gh-pages` branch for GitHub Pages |
-
-GitHub Pages reads the `gh-pages` branch (not `deploy-pages`).
+| `CI` | Migrate DB, seed, lint, and build the full Next.js app |
+| `Deploy docs to GitHub Pages` | Publish static `docs/` site to `gh-pages` branch |
 
 ## Scripts
 

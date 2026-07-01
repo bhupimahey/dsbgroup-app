@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
 
 jobs:
   build:
@@ -17,12 +18,16 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=10
+          --health-retries=12
     env:
       DATABASE_URL: mysql://root:ci@127.0.0.1:3306/dsb_law
+      AUTH_SECRET: ci-github-actions-secret-min-32-chars
+      AUTH_TRUST_HOST: "true"
+      NEXT_PUBLIC_SITE_URL: https://www.dsblawgroup.com
+      REDIS_URL: redis://127.0.0.1:6379
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,5 +53,5 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Build
+      - name: Build full Next.js app
         run: npm run build
