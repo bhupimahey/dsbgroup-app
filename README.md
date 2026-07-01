@@ -140,13 +140,16 @@ docker compose -f docker-compose.prod.yml exec web npx prisma db seed
 
 ### Enable GitHub Pages (required once)
 
-The **Deploy GitHub Pages** workflow fails immediately if Pages is not turned on first.
+Static docs live in the `docs/` folder. Use **branch deployment** (more reliable than the Actions deploy workflow, which can hang on `deployment_queued`).
 
 1. Open [github.com/bhupimahey/dsbgroup/settings/pages](https://github.com/bhupimahey/dsbgroup/settings/pages)
-2. Under **Build and deployment → Source**, choose **GitHub Actions** (not “Deploy from a branch”)
-3. Go to [Actions](https://github.com/bhupimahey/dsbgroup/actions) → **Deploy GitHub Pages** → **Re-run all jobs**
+2. Under **Build and deployment → Source**, choose **Deploy from a branch**
+3. Set **Branch** to `master` and **Folder** to `/docs`
+4. Save — GitHub publishes automatically on each push (no Actions workflow needed)
 
-After a successful run, the site is live at [bhupimahey.github.io/dsbgroup](https://bhupimahey.github.io/dsbgroup/).
+If you previously chose **GitHub Actions** as the source and a deploy is stuck, cancel any running **Deploy GitHub Pages** workflows in [Actions](https://github.com/bhupimahey/dsbgroup/actions), then switch the source to **Deploy from a branch** as above.
+
+After a minute or two, the site is live at [bhupimahey.github.io/dsbgroup](https://bhupimahey.github.io/dsbgroup/).
 
 ### Push updates
 
@@ -161,9 +164,8 @@ GitHub Actions runs on every push to `master` / `main`:
 | Workflow | Purpose |
 |----------|---------|
 | `CI` | Install, migrate, seed, lint, and production build |
-| `Deploy GitHub Pages` | Publish the `docs/` site to GitHub Pages |
 
-After the first successful Pages deploy, enable **Settings → Pages → Source: GitHub Actions** if prompted.
+GitHub Pages updates automatically when you push changes under `docs/` (branch deployment).
 
 ## Scripts
 
