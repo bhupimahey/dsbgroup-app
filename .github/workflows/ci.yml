@@ -23,7 +23,7 @@ jobs:
           --health-timeout=5s
           --health-retries=12
     env:
-      DATABASE_URL: mysql://root:ci@127.0.0.1:3306/dsb_law
+      DATABASE_URL: mysql://root:ci@127.0.0.1:3306/dsb_law?allowPublicKeyRetrieval=true
       AUTH_SECRET: ci-github-actions-secret-min-32-chars
       AUTH_TRUST_HOST: "true"
       NEXT_PUBLIC_SITE_URL: https://www.dsblawgroup.com

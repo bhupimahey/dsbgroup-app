@@ -315,10 +315,11 @@ export default function AdminRichTextEditor({
   }, [editor]);
 
   useEffect(() => {
-    if (editor && defaultValue && editor.isEmpty) {
-      editor.commands.setContent(defaultValue);
+    if (!editor || !defaultValue || !editor.isEmpty) return;
+    editor.commands.setContent(defaultValue);
+    queueMicrotask(() => {
       setHtml(defaultValue);
-    }
+    });
   }, [editor, defaultValue]);
 
   const setLink = () => {

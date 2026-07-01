@@ -1,4 +1,3 @@
-import type { TeamGroup } from '@/generated/prisma/client';
 import { ensureBioHtml } from '@/lib/team/bio-html';
 import { teamTeaser } from '@/lib/team/constants';
 import { TEAM_LIVE_MEMBERS, type TeamLiveMember } from '@/lib/team/team-live-bios';
