@@ -135,31 +135,30 @@ docker compose -f docker-compose.prod.yml exec web npx prisma db seed
 
 ## GitHub repository
 
-- **Repository:** [github.com/bhupimahey/dsbgroup](https://github.com/bhupimahey/dsbgroup)
-- **GitHub Pages:** [bhupimahey.github.io/dsbgroup](https://bhupimahey.github.io/dsbgroup/) — project documentation (static). The full Next.js app requires Docker + MySQL hosting; GitHub Pages cannot run API routes, admin, or database-backed pages.
+- **Repository:** [github.com/bhupimahey/dsbgroup-app](https://github.com/bhupimahey/dsbgroup-app)
+- **Database schema:** `prisma/schema.prisma` + migrations in `prisma/migrations/`
+- **GitHub Pages:** [bhupimahey.github.io/dsbgroup-app](https://bhupimahey.github.io/dsbgroup-app/) — static project docs only (`docs/`). The full Next.js app requires Docker + MySQL hosting.
 
 ### Enable GitHub Pages (required once)
 
-Static docs live in the `docs/` folder. Use **branch deployment** (more reliable than the Actions deploy workflow, which can hang on `deployment_queued`).
+Static docs live in the `docs/` folder — **not** the repo root (root is the Next.js app).
 
-1. Open [github.com/bhupimahey/dsbgroup/settings/pages](https://github.com/bhupimahey/dsbgroup/settings/pages)
-2. Under **Build and deployment → Source**, choose **Deploy from a branch**
-3. Set **Branch** to `master` and **Folder** to `/docs`
-4. Save — GitHub publishes automatically on each push (no Actions workflow needed)
+1. Open [github.com/bhupimahey/dsbgroup-app/settings/pages](https://github.com/bhupimahey/dsbgroup-app/settings/pages)
+2. **Source:** Deploy from a branch
+3. **Branch:** `main` · **Folder:** `/docs` (change from `/ (root)` if that is selected)
+4. Save — GitHub publishes automatically on each push
 
-If you previously chose **GitHub Actions** as the source and a deploy is stuck, cancel any running **Deploy GitHub Pages** workflows in [Actions](https://github.com/bhupimahey/dsbgroup/actions), then switch the source to **Deploy from a branch** as above.
-
-After a minute or two, the site is live at [bhupimahey.github.io/dsbgroup](https://bhupimahey.github.io/dsbgroup/).
+After a minute or two, the docs site is live at [bhupimahey.github.io/dsbgroup-app](https://bhupimahey.github.io/dsbgroup-app/).
 
 ### Push updates
 
 ```powershell
 git add .
 git commit -m "Your message"
-git push origin master
+git push origin main
 ```
 
-GitHub Actions runs on every push to `master` / `main`:
+GitHub Actions runs on every push to `main`:
 
 | Workflow | Purpose |
 |----------|---------|
