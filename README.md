@@ -126,11 +126,51 @@ The `/services` index links to each page. Edit content in `/admin/pages`.
 
 ## Production deploy (VPS)
 
+First-time setup on the server:
+
 ```bash
 cp .env.example .env   # set AUTH_SECRET, NEXT_PUBLIC_SITE_URL, MYSQL_PASSWORD, RESEND_API_KEY
 docker compose -f docker-compose.prod.yml up -d --build
-docker compose -f docker-compose.prod.yml exec web npx prisma migrate deploy
-docker compose -f docker-compose.prod.yml exec web npx prisma db seed
+bash deploy/vps-deploy.sh   # pull is skipped on first run; run migrate manually if needed:
+docker run --rm -v "$(pwd):/app" -w /app --env-file .env --network checkmockup_dsb \
+  node:20-alpine sh -c "npm ci && npx prisma migrate deploy && npx prisma db seed"
+```
+
+### Manual VPS deploy (GitHub Actions)
+
+Push your changes to `main` first, then deploy when you are ready:
+
+1. Open [Actions → Deploy to VPS](https://github.com/bhupimahey/dsbgroup-app/actions/workflows/deploy-vps.yml)
+2. Click **Run workflow** → **Run workflow**
+
+The workflow SSHs into your server and runs `deploy/vps-deploy.sh` (git pull → rebuild containers → `prisma migrate deploy`). It does **not** run automatically on push.
+
+**One-time GitHub secrets** — [Settings → Secrets and variables → Actions](https://github.com/bhupimahey/dsbgroup-app/settings/secrets/actions):
+
+| Secret | Example | Required |
+|--------|---------|----------|
+| `VPS_HOST` | `66.116.239.195` or `checkmockup.co.in` | Yes |
+| `VPS_USER` | `root` | Yes |
+| `VPS_SSH_KEY` | Private key (PEM) for SSH | Yes |
+| `VPS_SSH_PORT` | `22` | No (default 22) |
+| `VPS_APP_DIR` | `/var/www/checkmockup` | No (default shown) |
+
+**One-time VPS SSH key** (on your PC or the server):
+
+```bash
+ssh-keygen -t ed25519 -C "github-deploy-dsbgroup" -f ~/.ssh/dsbgroup_deploy -N ""
+# Add the PUBLIC key to the VPS:
+ssh-copy-id -i ~/.ssh/dsbgroup_deploy.pub root@66.116.239.195
+# Paste the PRIVATE key (~/.ssh/dsbgroup_deploy) into GitHub secret VPS_SSH_KEY
+```
+
+Ensure the VPS repo is a git clone that can `git fetch origin main` (deploy key or HTTPS credentials).
+
+**Deploy on the VPS directly** (same steps as the workflow):
+
+```bash
+cd /var/www/checkmockup
+bash deploy/vps-deploy.sh
 ```
 
 ## GitHub repository
@@ -164,6 +204,7 @@ GitHub Actions runs on every push to `main`:
 | Workflow | Purpose |
 |----------|---------|
 | `CI` | Migrate DB, seed, lint, and build the full Next.js app |
+| `Deploy to VPS` | Manual — SSH to production, pull, rebuild, migrate (Run workflow button) |
 | `Deploy docs to GitHub Pages` | Publish static `docs/` site to `gh-pages` branch |
 
 ## Scripts
