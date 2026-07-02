@@ -8,6 +8,12 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Build-time placeholders — runtime env comes from docker-compose.prod.yml
+ENV DATABASE_URL="mysql://dsb:dsb@127.0.0.1:3306/dsb_law?allowPublicKeyRetrieval=true"
+ENV AUTH_SECRET="docker-build-placeholder-secret-min-32-chars"
+ENV AUTH_TRUST_HOST="true"
+ENV NEXT_PUBLIC_SITE_URL="https://www.dsblawgroup.com"
+ENV REDIS_URL="redis://127.0.0.1:6379"
 RUN npx prisma generate
 RUN npm run build
 
