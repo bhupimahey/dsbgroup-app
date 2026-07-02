@@ -73,6 +73,23 @@ services:
     networks:
       - dsb
 
+  # One-off migrations: docker compose -f docker-compose.prod.yml --profile tools run --rm migrate
+  migrate:
+    image: node:20-alpine
+    profiles: ["tools"]
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: mysql://dsb:${MYSQL_PASSWORD:-dsb}@mysql:3306/dsb_law?allowPublicKeyRetrieval=true
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@gmail.com}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-admin}
+    depends_on:
+      - mysql
+    networks:
+      - dsb
+    command: sh -c "npm ci --ignore-scripts && npx prisma migrate deploy"
+
 volumes:
   mysql_data:
 

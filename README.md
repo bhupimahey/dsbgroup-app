@@ -131,9 +131,8 @@ First-time setup on the server:
 ```bash
 cp .env.example .env   # set AUTH_SECRET, NEXT_PUBLIC_SITE_URL, MYSQL_PASSWORD, RESEND_API_KEY
 docker compose -f docker-compose.prod.yml up -d --build
-bash deploy/vps-deploy.sh   # pull is skipped on first run; run migrate manually if needed:
-docker run --rm -v "$(pwd):/app" -w /app --env-file .env --network checkmockup_dsb \
-  node:20-alpine sh -c "npm ci && npx prisma migrate deploy && npx prisma db seed"
+docker compose -f docker-compose.prod.yml --profile tools run --rm migrate
+docker compose -f docker-compose.prod.yml --profile tools run --rm migrate sh -c "npm ci --ignore-scripts && npx prisma db seed"
 ```
 
 ### Manual VPS deploy (GitHub Actions)
@@ -146,6 +145,8 @@ Push your changes to `main` first, then deploy when you are ready:
 The workflow SSHs into your server and runs `deploy/vps-deploy.sh` (git pull → rebuild containers → `prisma migrate deploy`). It does **not** run automatically on push.
 
 **Production `.env` is never modified** — the deploy script backs up and restores the server’s existing `.env`. It does not copy `.env.example` or write secrets from GitHub. Create `.env` once on the VPS and edit it only there.
+
+**Production `.env` format:** use `KEY=value` lines only (see `.env.example`). Remove any YAML-style lines like `DATABASE_URL: mysql://...` — they break Docker and migrations.
 
 **One-time GitHub secrets** — [Settings → Secrets and variables → Actions](https://github.com/bhupimahey/dsbgroup-app/settings/secrets/actions):
 
