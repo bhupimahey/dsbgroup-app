@@ -88,7 +88,7 @@ services:
       - mysql
     networks:
       - dsb
-    command: sh -c "chmod +x deploy/migrate.sh && ./deploy/migrate.sh"
+    command: sh deploy/migrate.sh
 
 volumes:
   mysql_data:

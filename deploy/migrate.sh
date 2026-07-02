@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Apply Prisma migrations. If production was previously synced via db push,
 # recover by marking the sync migration as applied when columns already exist.
 set -euo pipefail
