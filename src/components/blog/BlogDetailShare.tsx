@@ -16,10 +16,10 @@ export default function BlogDetailShare({ url, title }: BlogDetailShareProps) {
   ];
 
   return (
-    <div className="blogmiddle-share">
+    <div className="blogright-share-area">
       <ul>
         <li>
-          <span className="blogmiddle-share-label">Social Share:</span>
+          <span className="blogright-share-label">Social Share:</span>
         </li>
         {links.map((link) => (
           <li key={link.label}>

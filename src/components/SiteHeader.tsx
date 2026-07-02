@@ -86,7 +86,7 @@ export default function SiteHeader() {
       </div>
 
       <div className="theme-header-inner">
-        <DsbLogo href="/" height={44} priority onDark />
+        <DsbLogo href="/" height={44} priority />
 
         <ul className="theme-main-nav" aria-label="Main Navigation">
           {MAIN_NAV.map((item) =>

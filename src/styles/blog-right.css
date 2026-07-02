@@ -1,0 +1,350 @@
+/* Blog detail — blogright.html */
+
+.blogright-main-wrap {
+  padding: 0;
+}
+
+.blogright-afteralex {
+  margin: 1.25rem 0 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+}
+
+.blogright-alex {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1d2940;
+}
+
+.blogright-alex-icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  color: #6083a9;
+  flex-shrink: 0;
+}
+
+.blogright-title {
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.25;
+  font-weight: 600;
+  color: #1d2940;
+  margin: 0 0 1rem;
+}
+
+.blogright-teaser,
+.blogright-body.cms-html {
+  font-size: 16px;
+  line-height: 1.65;
+  font-weight: 500;
+  color: #4d5a72;
+}
+
+.blogright-body.cms-html h1,
+.blogright-body.cms-html h2,
+.blogright-body.cms-html h3 {
+  font-family: var(--font-lora), Georgia, serif;
+  color: #1d2940;
+  margin: 2rem 0 1rem;
+}
+
+.blogright-body.cms-html p {
+  margin-bottom: 1.25rem;
+}
+
+.blogright-border {
+  border-top: 1px solid rgba(29, 41, 64, 0.2);
+  margin: 2.5rem 0;
+}
+
+.blogright-border--spaced {
+  margin-top: 2.5rem;
+  margin-bottom: 3.75rem;
+}
+
+.blogright-postsocial {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.blogright-posttags ul,
+.blogright-share-area ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blogright-posttags-label,
+.blogright-share-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1d2940;
+}
+
+.blogright-posttags a {
+  display: inline-block;
+  border-radius: 2px;
+  background: #eff7ff;
+  padding: 0.65rem 0.75rem;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1d2940;
+  text-decoration: none;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+.blogright-posttags a:hover {
+  background: #1d2940;
+  color: #fff;
+}
+
+.blogright-share-area a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #eff7ff;
+  color: #1d2940;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+.blogright-share-area a:hover {
+  background: #1d2940;
+  color: #fff;
+}
+
+.blogright-comments-title {
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1d2940;
+  margin: 0;
+}
+
+.blogright-comment-empty {
+  border-radius: 2px;
+  background: #eff7ff;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  color: #4d5a72;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.blogright-reply-section {
+  border-radius: 2px;
+  background: #eff7ff;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.blogright-reply-section + .blogright-reply-section {
+  margin-top: 1rem;
+}
+
+.blogright-reply-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.blogright-reply-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.blogright-reply-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #6083a9;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.blogright-reply-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.blogright-reply-name {
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1d2940;
+  margin: 0 0 0.35rem;
+}
+
+.blogright-reply-date {
+  font-size: 16px;
+  color: #4d5a72;
+  margin: 0;
+}
+
+.blogright-reply-action {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1d2940;
+  text-decoration: none;
+}
+
+.blogright-reply-action:hover {
+  color: #6083a9;
+}
+
+.blogright-reply-text {
+  font-size: 16px;
+  line-height: 1.65;
+  color: #4d5a72;
+  margin: 0;
+}
+
+.blogright-contact-section {
+  border-radius: 4px;
+  background: #eff7ff;
+  margin-top: 3.75rem;
+  padding: 1.5rem;
+}
+
+.blogright-contact-section h2 {
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1d2940;
+  margin: 0 0 0.75rem;
+}
+
+.blogright-contact-section > p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: #4d5a72;
+  margin: 0 0 0.25rem;
+}
+
+.blogright-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1rem;
+}
+
+.blogright-input {
+  margin-top: 1.25rem;
+}
+
+.blogright-input.full {
+  grid-column: 1 / -1;
+}
+
+.blogright-input input,
+.blogright-input textarea {
+  width: 100%;
+  border: none;
+  border-radius: 2px;
+  background: #fff;
+  padding: 1.15rem 1rem;
+  margin-top: 0;
+  outline: none;
+  font-family: var(--font-kumbh-sans), sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1d2940;
+}
+
+.blogright-input textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.blogright-input input::placeholder,
+.blogright-input textarea::placeholder {
+  color: rgba(29, 41, 64, 0.7);
+}
+
+.blogright-submit-wrap {
+  grid-column: 1 / -1;
+  margin-top: 1.25rem;
+  text-align: right;
+}
+
+.blogright-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: 2px;
+  background: #1d2940;
+  color: #fff;
+  padding: 1rem 1.25rem;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.35s ease;
+}
+
+.blogright-submit:hover:not(:disabled) {
+  background: #6083a9;
+}
+
+.blogright-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.blogright-status {
+  grid-column: 1 / -1;
+  margin-top: 0.75rem;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.blogright-status--success {
+  color: #166534;
+}
+
+.blogright-status--error {
+  color: #b91c1c;
+}
+
+@media (max-width: 767px) {
+  .blogright-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .blogright-submit-wrap {
+    text-align: left;
+  }
+
+  .blogright-afteralex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

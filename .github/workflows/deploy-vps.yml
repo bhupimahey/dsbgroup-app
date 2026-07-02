@@ -25,7 +25,15 @@ jobs:
           script: |
             APP_DIR="${{ secrets.VPS_APP_DIR != '' && secrets.VPS_APP_DIR || '/var/www/checkmockup' }}"
             cd "$APP_DIR"
+            if [[ ! -f .env ]]; then
+              echo "ERROR: .env not found. Create it on the server first; deploy never overwrites or generates it."
+              exit 1
+            fi
+            ENV_BACKUP="$(mktemp)"
+            cp .env "$ENV_BACKUP"
             git fetch origin main
             git reset --hard origin/main
+            cp "$ENV_BACKUP" .env
+            rm -f "$ENV_BACKUP"
             chmod +x deploy/vps-deploy.sh
-            VPS_APP_DIR="$APP_DIR" bash deploy/vps-deploy.sh
+            SKIP_GIT_PULL=1 VPS_APP_DIR="$APP_DIR" bash deploy/vps-deploy.sh

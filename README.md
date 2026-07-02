@@ -145,6 +145,8 @@ Push your changes to `main` first, then deploy when you are ready:
 
 The workflow SSHs into your server and runs `deploy/vps-deploy.sh` (git pull → rebuild containers → `prisma migrate deploy`). It does **not** run automatically on push.
 
+**Production `.env` is never modified** — the deploy script backs up and restores the server’s existing `.env`. It does not copy `.env.example` or write secrets from GitHub. Create `.env` once on the VPS and edit it only there.
+
 **One-time GitHub secrets** — [Settings → Secrets and variables → Actions](https://github.com/bhupimahey/dsbgroup-app/settings/secrets/actions):
 
 | Secret | Example | Required |

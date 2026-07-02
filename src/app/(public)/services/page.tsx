@@ -1,10 +1,21 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { prisma } from '@/lib/db';
 import ThemePageHero from '@/components/theme/ThemePageHero';
+import '@/styles/theme-inner-pages.css';
 
 export const revalidate = 60;
 
 export const metadata = { title: 'Services' };
+
+const SERVICE_IMAGES = [
+  '/images/theme/index2/sections/about3-img.png',
+  '/images/theme/index2/sections/about4-img.png',
+  '/images/theme/index2/sections/about5-img.png',
+  '/images/theme/index2/sections/company-img1.png',
+  '/images/theme/index2/sections/welcome-img-2.png',
+  '/images/theme/index2/sections/servicebg.png',
+] as const;
 
 export default async function ServicesPage() {
   const categories = await prisma.serviceCategory.findMany({
@@ -14,34 +25,47 @@ export default async function ServicesPage() {
 
   return (
     <div className="theme-shell">
-      <ThemePageHero title="Our Services" currentLabel="Our Services" />
-      <section className="theme-content-wrap">
-        <h2 className="theme-section-title mb-8 text-center text-4xl font-semibold text-[var(--theme-navy)]">
-          A Wide Range Of Services To Help Businesses
-        </h2>
-        <ul className="theme-service-grid">
-          {categories.map((cat) => (
-            <li key={cat.id} className="theme-service-card">
-              <svg
-                aria-hidden
-                className="mx-auto h-10 w-10 text-[var(--theme-gold)]"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.7"
-              >
-                <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
-                <path d="M12 12l8-4.5" />
-                <path d="M12 12L4 7.5" />
-                <path d="M12 12v9" />
-              </svg>
-              <p>{cat.name}</p>
-              <Link href={`/pages/${cat.slug}`} className="mt-3 inline-block text-sm font-semibold text-[var(--theme-navy)] hover:text-[var(--theme-gold)]">
-                Learn More
-              </Link>
-            </li>
-          ))}
-        </ul>
+      <ThemePageHero
+        title="Our Services"
+        breadcrumbs={[{ label: 'Our Services' }]}
+      />
+
+      <section className="theme-inner-section">
+        <div className="theme-inner-container">
+          <h2 className="theme-inner-title">
+            A Wide Range Of Legal And Advisory Services To Help Businesses
+          </h2>
+
+          <div className="theme-inner-grid-2">
+            {categories.map((cat, index) => (
+              <article key={cat.id} className="servicev2-card">
+                <div className="servicev2-card-grid">
+                  <div>
+                    <h2>
+                      <Link href={`/pages/${cat.slug}`}>{cat.name}</Link>
+                    </h2>
+                    <p>
+                      Expert guidance across {cat.name.toLowerCase()} — tailored advisory for
+                      compliance, governance, and strategic decisions.
+                    </p>
+                    <Link href={`/pages/${cat.slug}`} className="servicev2-card-link">
+                      Learn More <span aria-hidden>→</span>
+                    </Link>
+                  </div>
+                  <div className="servicev2-card-image">
+                    <Image
+                      src={SERVICE_IMAGES[index % SERVICE_IMAGES.length]}
+                      alt=""
+                      fill
+                      sizes="150px"
+                      unoptimized
+                    />
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );

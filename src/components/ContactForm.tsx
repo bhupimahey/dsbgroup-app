@@ -3,7 +3,7 @@
 import { FormEvent, useState } from 'react';
 
 type ContactFormProps = {
-  variant?: 'light' | 'dark' | 'blog';
+  variant?: 'light' | 'dark' | 'blog' | 'contact2';
 };
 
 export default function ContactForm({ variant = 'light' }: ContactFormProps) {
@@ -11,9 +11,22 @@ export default function ContactForm({ variant = 'light' }: ContactFormProps) {
   const [error, setError] = useState('');
   const isDark = variant === 'dark';
   const isBlog = variant === 'blog';
-  const fieldClass = isBlog ? 'blogmiddle-field' : isDark ? 'contact1-field' : 'theme-contact-field';
-  const formClass = isBlog ? 'blogmiddle-form-grid' : isDark ? 'contact1-form-grid' : 'theme-contact-form-grid';
-  const usePlaceholderOnly = isDark || isBlog;
+  const isContact2 = variant === 'contact2';
+  const fieldClass = isContact2
+    ? 'contact2-field'
+    : isBlog
+      ? 'blogmiddle-field'
+      : isDark
+        ? 'contact1-field'
+        : 'theme-contact-field';
+  const formClass = isContact2
+    ? 'contact2-form-grid'
+    : isBlog
+      ? 'blogmiddle-form-grid'
+      : isDark
+        ? 'contact1-form-grid'
+        : 'theme-contact-form-grid';
+  const usePlaceholderOnly = isDark || isBlog || isContact2;
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -75,6 +88,17 @@ export default function ContactForm({ variant = 'light' }: ContactFormProps) {
       </div>
 
       <div className={fieldClass}>
+        <label htmlFor="phone" className={usePlaceholderOnly ? 'sr-only' : undefined}>
+          Phone
+        </label>
+        <input
+          id="phone"
+          name="phone"
+          placeholder={usePlaceholderOnly ? (isContact2 ? 'Phone Number' : 'Phone') : undefined}
+        />
+      </div>
+
+      <div className={fieldClass}>
         <label htmlFor="email" className={usePlaceholderOnly ? 'sr-only' : undefined}>
           Email
         </label>
@@ -82,23 +106,20 @@ export default function ContactForm({ variant = 'light' }: ContactFormProps) {
           id="email"
           name="email"
           type="email"
-          placeholder={usePlaceholderOnly ? 'Email' : undefined}
+          placeholder={usePlaceholderOnly ? (isContact2 ? 'Email Address' : 'Email') : undefined}
           required
         />
-      </div>
-
-      <div className={fieldClass}>
-        <label htmlFor="phone" className={usePlaceholderOnly ? 'sr-only' : undefined}>
-          Phone
-        </label>
-        <input id="phone" name="phone" placeholder={usePlaceholderOnly ? 'Phone' : undefined} />
       </div>
 
       <div className={`${fieldClass} full`}>
         <label htmlFor="subject" className={usePlaceholderOnly ? 'sr-only' : undefined}>
           Subject
         </label>
-        <input id="subject" name="subject" placeholder={usePlaceholderOnly ? 'Subject' : undefined} />
+        <input
+          id="subject"
+          name="subject"
+          placeholder={usePlaceholderOnly ? (isContact2 ? 'Service Type' : 'Subject') : undefined}
+        />
       </div>
 
       <div className={`${fieldClass} full`}>
@@ -110,13 +131,19 @@ export default function ContactForm({ variant = 'light' }: ContactFormProps) {
           name="message"
           placeholder={usePlaceholderOnly ? 'Message' : undefined}
           required
-          rows={5}
+          rows={isContact2 ? 10 : 5}
         />
       </div>
       {isBlog ? (
         <div className="blogmiddle-submit-wrap">
           <button type="submit" disabled={status === 'loading'} className="blogmiddle-submit">
             {status === 'loading' ? 'Sending...' : 'Submit Now'} <span aria-hidden>→</span>
+          </button>
+        </div>
+      ) : isContact2 ? (
+        <div className="contact2-submit-wrap">
+          <button type="submit" disabled={status === 'loading'} className="contact2-submit">
+            {status === 'loading' ? 'Sending...' : 'Schedule Consultation'} <span aria-hidden>→</span>
           </button>
         </div>
       ) : (
@@ -132,11 +159,13 @@ export default function ContactForm({ variant = 'light' }: ContactFormProps) {
       {status === 'success' ? (
         <p
           className={
-            isBlog
-              ? 'blogmiddle-status blogmiddle-status--success'
-              : isDark
-                ? 'contact1-status contact1-status--success'
-                : 'theme-contact-status text-green-700'
+            isContact2
+              ? 'contact2-status contact2-status--success'
+              : isBlog
+                ? 'blogmiddle-status blogmiddle-status--success'
+                : isDark
+                  ? 'contact1-status contact1-status--success'
+                  : 'theme-contact-status text-green-700'
           }
         >
           Thank you — we will respond shortly.
@@ -145,11 +174,13 @@ export default function ContactForm({ variant = 'light' }: ContactFormProps) {
       {status === 'error' ? (
         <p
           className={
-            isBlog
-              ? 'blogmiddle-status blogmiddle-status--error'
-              : isDark
-                ? 'contact1-status contact1-status--error'
-                : 'theme-contact-status text-red-600'
+            isContact2
+              ? 'contact2-status contact2-status--error'
+              : isBlog
+                ? 'blogmiddle-status blogmiddle-status--error'
+                : isDark
+                  ? 'contact1-status contact1-status--error'
+                  : 'theme-contact-status text-red-600'
           }
         >
           {error}

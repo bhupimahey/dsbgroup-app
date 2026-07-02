@@ -1,6 +1,8 @@
-import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
-import { SITE_CONTACT } from '@/lib/site/nav-links';
+import ContactFaq from '@/components/contact/ContactFaq';
+import ContactInfoCards from '@/components/contact/ContactInfoCards';
+import ThemePageHero from '@/components/theme/ThemePageHero';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Contact',
@@ -9,58 +11,61 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <div className="theme-shell">
-      <section className="contact1-hero">
-        <div className="theme-content-wrap" style={{ paddingTop: 0, paddingBottom: 0 }}>
-          <h1>Contact Us</h1>
-          <p className="contact1-breadcrumb">
-            <Link href="/">Home</Link>
-            <span aria-hidden>›</span>
-            <span>Contact Us</span>
-          </p>
-        </div>
-      </section>
+      <ThemePageHero title="Contact Us" breadcrumbs={[{ label: 'Contact Us' }]} />
 
-      <section className="contact1-section">
-        <div className="contact1-grid">
-          <div className="contact1-info">
-            <span className="contact1-info-label">Contact Us</span>
-            <h2>Contact Us for Expert Legal Guidance</h2>
-            <p>
-              Provide professional advice and guidance on legal matters, helping clients understand
-              their rights, obligations, and potential courses of action.
-            </p>
+      {/* ===== CONTACT FORM + INFO CARDS ===== */}
+      <section className="contact2-section">
+        <div className="theme-inner-container">
+          <div className="contact2-all-contact">
+            <div className="contact2-grid">
+              <div className="contact2-maincontact">
+                <h2>Send Us A Message</h2>
+                <p>Our response time is within 30 minutes during business hours</p>
+                <ContactForm variant="contact2" />
+              </div>
 
-            <div className="contact1-info-card">
-              <div className="contact1-info-icon" aria-hidden>
-                ☎
-              </div>
-              <div>
-                <p className="contact1-info-card-label">Give us a Call</p>
-                <a className="contact1-info-card-value" href={SITE_CONTACT.phoneHref}>
-                  {SITE_CONTACT.phone}
-                </a>
-              </div>
-            </div>
-
-            <div className="contact1-info-card">
-              <div className="contact1-info-icon" aria-hidden>
-                ✉
-              </div>
-              <div>
-                <p className="contact1-info-card-label">Send us Mail</p>
-                <a className="contact1-info-card-value" href={SITE_CONTACT.emailHref}>
-                  {SITE_CONTACT.email}
-                </a>
-              </div>
+              <ContactInfoCards />
             </div>
           </div>
 
-          <div className="contact1-form-panel">
-            <h3>Send us a Message</h3>
-            <p>
-              Share your legal requirement and our team will connect with you during business hours.
-            </p>
-            <ContactForm variant="dark" />
+          {/* ===== MAP ===== */}
+          <div className="contact2-map">
+            <iframe
+              src="https://maps.google.com/maps?width=1200&height=440&hl=en&q=Hind+Samachar+Marg,+Jalandhar,+Punjab&t=&z=14&ie=UTF8&iwloc=B&output=embed"
+              title="DSB Law Group Location"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ===== FAQ ===== */}
+      <ContactFaq />
+
+      {/* ===== CTA ===== */}
+      <section className="contact2-cta">
+        <div className="theme-inner-container">
+          <div className="contact2-cta-grid">
+            <div>
+              <h2 className="contact2-cta-title">
+                Get expert Law advice on your legal strategies
+              </h2>
+              <p className="contact2-cta-text">
+                We believe that informed clients make better decisions. As part of our service,
+                we provide personalised legal guidance to help you navigate complex matters
+                with confidence.
+              </p>
+            </div>
+            <div className="contact2-cta-btns">
+              <Link href="tel:+918727914446" className="contact2-cta-btn contact2-cta-btn--dark">
+                Get Law Advice <span>→</span>
+              </Link>
+              <Link href="/contact" className="contact2-cta-btn contact2-cta-btn--light">
+                Contact Us <span>→</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
