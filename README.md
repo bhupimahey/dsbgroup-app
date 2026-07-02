@@ -193,6 +193,15 @@ bash deploy/vps-deploy.sh
 
 The **Deploy docs to GitHub Pages** workflow publishes `docs/` to the `gh-pages` branch on every push to `main`.
 
+#### Stuck on `deployment_queued`?
+
+That happens when an old **`actions/deploy-pages`** workflow runs (or Pages source is set to **GitHub Actions**). This repo does **not** use that anymore.
+
+1. **Cancel** the stuck workflow run (it will not complete).
+2. Open [Settings → Pages](https://github.com/bhupimahey/dsbgroup-app/settings/pages) and set source to **Deploy from a branch** → `gh-pages` → `/ (root)`.
+3. Run **Actions → Deploy docs to GitHub Pages → Run workflow** (not “Deploy GitHub Pages” from old runs).
+4. After ~30 seconds, the site should be live at [bhupimahey.github.io/dsbgroup-app](https://bhupimahey.github.io/dsbgroup-app/).
+
 ### Push updates
 
 ```powershell

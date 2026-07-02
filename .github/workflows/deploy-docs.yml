@@ -30,3 +30,20 @@ jobs:
           publish_branch: gh-pages
           publish_dir: ./docs
           force_orphan: true
+          disable_nojekyll: true
+          commit_message: "docs: publish from ${{ github.sha }}"
+
+      - name: Summary
+        run: |
+          {
+            echo "## Docs published to gh-pages"
+            echo ""
+            echo "Site: https://bhupimahey.github.io/dsbgroup-app/"
+            echo ""
+            echo "### Required GitHub Pages setting (one time)"
+            echo "Settings → Pages → **Deploy from a branch** → branch \`gh-pages\` → folder \`/(root)\`"
+            echo ""
+            echo "### If another workflow is stuck on \`deployment_queued\`"
+            echo "Cancel that run. It is using \`actions/deploy-pages\`, which this repo no longer uses."
+            echo "Do **not** set Pages source to \"GitHub Actions\"."
+          } >> "$GITHUB_STEP_SUMMARY"
