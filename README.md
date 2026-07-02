@@ -184,23 +184,23 @@ bash deploy/vps-deploy.sh
 
 ### GitHub Pages setup (one time)
 
-**Use “Deploy from a branch” — never “GitHub Actions”** (the `deploy-pages` action hangs on `deployment_queued`).
+**Use “Deploy from a branch” → `main` → `/docs`** — never “GitHub Actions” (causes `deploy-pages` / `deployment_queued` hangs).
 
 1. [Settings → Pages](https://github.com/bhupimahey/dsbgroup-app/settings/pages)
 2. **Source:** Deploy from a branch
-3. **Branch:** `gh-pages` · **Folder:** `/ (root)`
+3. **Branch:** `main` · **Folder:** `/docs`
 4. Save
 
-The **Deploy docs to GitHub Pages** workflow publishes `docs/` to the `gh-pages` branch on every push to `main`.
+Docs live in the `docs/` folder on `main`. GitHub publishes them automatically when you push — **no separate deploy workflow** and no `gh-pages` branch.
 
-#### Stuck on `deployment_queued`?
+#### Stuck on `deployment_queued` / `actions/deploy-pages`?
 
-That happens when an old **`actions/deploy-pages`** workflow runs (or Pages source is set to **GitHub Actions**). This repo does **not** use that anymore.
+That is GitHub’s internal **“pages build and deployment”** job (or an old workflow re-run). It is **not** required for this repo.
 
-1. **Cancel** the stuck workflow run (it will not complete).
-2. Open [Settings → Pages](https://github.com/bhupimahey/dsbgroup-app/settings/pages) and set source to **Deploy from a branch** → `gh-pages` → `/ (root)`.
-3. Run **Actions → Deploy docs to GitHub Pages → Run workflow** (not “Deploy GitHub Pages” from old runs).
-4. After ~30 seconds, the site should be live at [bhupimahey.github.io/dsbgroup-app](https://bhupimahey.github.io/dsbgroup-app/).
+1. **Cancel** all stuck “pages build and deployment” runs (they may never finish).
+2. Open [Settings → Pages](https://github.com/bhupimahey/dsbgroup-app/settings/pages) and set source to **`main`** → **`/docs`** (not `gh-pages`, not “GitHub Actions”).
+3. Push any change to `docs/` on `main`, or click **Save** again on the Pages settings page to re-trigger.
+4. Site URL: [bhupimahey.github.io/dsbgroup-app](https://bhupimahey.github.io/dsbgroup-app/)
 
 ### Push updates
 
@@ -216,7 +216,6 @@ GitHub Actions runs on every push to `main`:
 |----------|---------|
 | `CI` | Migrate DB, seed, lint, and build the full Next.js app |
 | `Deploy to VPS` | Manual — SSH to production, pull, rebuild, migrate (Run workflow button) |
-| `Deploy docs to GitHub Pages` | Publish static `docs/` site to `gh-pages` branch |
 
 ## Scripts
 
