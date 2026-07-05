@@ -37,6 +37,28 @@ async function main() {
     },
   });
 
+  const testUserEmail = 'bhupimahey@gmail.com';
+  const testPasswordHash = await bcrypt.hash('bhupimahey', 12);
+
+  await prisma.user.upsert({
+    where: { email: testUserEmail },
+    update: {
+      passwordHash: testPasswordHash,
+      role: 'USER',
+      name: 'Bhupinder Test User',
+      active: true,
+      emailVerified: new Date(),
+    },
+    create: {
+      email: testUserEmail,
+      passwordHash: testPasswordHash,
+      role: 'USER',
+      name: 'Bhupinder Test User',
+      active: true,
+      emailVerified: new Date(),
+    },
+  });
+
   const serviceCategories = [
     { slug: 'intellectual-property', name: 'Intellectual Property Rights' },
     { slug: 'labour-law', name: 'Labor & Industrial Law' },

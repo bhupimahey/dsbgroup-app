@@ -34,7 +34,6 @@ export const MAIN_NAV: NavItem[] = [
       { href: '/resources/video-lectures', label: 'Video Lectures' },
     ],
   },
-  { href: '/achievements', label: 'Achievements' },
   { href: '/blog', label: 'Blogs' },
   {
     label: 'Contact',
@@ -52,6 +51,8 @@ export const FOOTER_LINKS: NavLink[] = [
   { href: '/blog', label: 'Blog' },
   { href: '/newsletters', label: 'Newsletters' },
   { href: '/contact', label: 'Contact' },
+  { href: '/login', label: 'Login' },
+  { href: '/register', label: 'Register' },
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms & Conditions' },
   { href: '/disclaimer', label: 'Disclaimer' },
@@ -87,6 +88,8 @@ export const FOOTER_USEFUL_LINKS: NavLink[] = [
   { href: '/blog', label: 'Blog' },
   { href: '/team', label: 'Team' },
   { href: '/contact', label: 'Contact Us' },
+  { href: '/login', label: 'Login' },
+  { href: '/register', label: 'Register' },
 ];
 
 /** Office cities shown on the homepage locations strip — matches dsblawgroup.com. */

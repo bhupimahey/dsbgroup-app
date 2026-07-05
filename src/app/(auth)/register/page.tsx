@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import AuthShell from '@/components/auth/AuthShell';
+import AuthShell, { REGISTER_PERKS } from '@/components/auth/AuthShell';
 import RegisterForm from '@/components/auth/RegisterForm';
 import { AUTH_LINK } from '@/components/auth/auth-classes';
 
@@ -18,7 +18,8 @@ export default async function RegisterPage({
     <AuthShell
       badge="Create Account"
       title="Join DSB Law Group"
-      description="Register to read premium articles and manage newsletter preferences."
+      description="Register with your email. We will send a verification link to activate your account before first login."
+      perks={[...REGISTER_PERKS]}
       footer={
         <>
           Already registered?{' '}

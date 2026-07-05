@@ -101,8 +101,8 @@ function HomeFooter() {
 }
 
 function InnerFooter() {
-  const quickLinks = FOOTER_LINKS.slice(0, 6);
-  const policyLinks = FOOTER_LINKS.slice(6);
+  const quickLinks = FOOTER_LINKS.slice(0, 8);
+  const policyLinks = FOOTER_LINKS.slice(8);
 
   return (
     <footer className="theme-footer theme-shell">

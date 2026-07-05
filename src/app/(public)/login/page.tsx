@@ -45,11 +45,14 @@ export default async function UserLoginPage({
     <AuthShell
       badge="Client Login"
       title="Welcome back"
-      description="Sign in to read premium articles and manage newsletter preferences."
+      description="Sign in to read premium articles and manage your newsletter preferences."
       footer={
         <>
           Don&apos;t have an account?{' '}
-          <Link href={`/register${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ''}`} className={AUTH_LINK}>
+          <Link
+            href={`/register${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ''}`}
+            className={AUTH_LINK}
+          >
             Register
           </Link>
         </>
@@ -75,6 +78,7 @@ export default async function UserLoginPage({
             required
             autoComplete="username"
             className={AUTH_FIELD}
+            placeholder="you@example.com"
           />
         </div>
 

@@ -39,14 +39,20 @@ export async function sendEmail(to: string, subject: string, html: string) {
 
   if (process.env.NODE_ENV === 'development') {
     console.log(`[dev email] From: ${from}\nTo: ${to}\nSubject: ${subject}\n${html}\n---`);
+    return;
   }
+
+  console.warn(`[email] RESEND_API_KEY is not set — email to ${to} was not sent.`);
 }
 
 export async function sendVerificationEmail(email: string, token: string) {
   const url = absoluteUrl(`/verify-email?token=${encodeURIComponent(token)}`);
   const html = buildEmailHtml({
     title: 'Verify your email address',
-    bodyHtml: `<p>Thank you for registering with DSB Law Group. Please confirm your email address to access premium articles and manage your preferences.</p>`,
+    bodyHtml: `<p>Thank you for registering with DSB Law Group.</p>
+<p>Please confirm your email address to activate your client account, read premium articles, and manage newsletter preferences.</p>
+<p style="margin:0;color:#64748b;font-size:14px;">This verification link expires in 24 hours.</p>
+<p style="margin:16px 0 0;color:#64748b;font-size:13px;word-break:break-all;">If the button does not work, copy this link:<br><a href="${url}">${url}</a></p>`,
     ctaUrl: url,
     ctaLabel: 'Verify email address',
   });

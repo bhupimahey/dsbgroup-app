@@ -118,11 +118,12 @@ export async function registerAction(
   const callbackUrl = String(formData.get('callbackUrl') ?? '').trim();
   const safeCallback =
     callbackUrl.startsWith('/') && !callbackUrl.startsWith('/admin') ? callbackUrl : '';
+  const emailQuery = `email=${encodeURIComponent(email)}`;
   const callbackQuery = safeCallback ? `&callbackUrl=${encodeURIComponent(safeCallback)}` : '';
-  const callbackOnlyQuery = safeCallback ? `?callbackUrl=${encodeURIComponent(safeCallback)}` : '';
+  const callbackOnlyQuery = safeCallback ? `?callbackUrl=${encodeURIComponent(safeCallback)}&${emailQuery}` : `?${emailQuery}`;
 
   if (process.env.NODE_ENV === 'development') {
-    redirect(`/register/pending?dev=${encodeURIComponent(url)}${callbackQuery}`);
+    redirect(`/register/pending?dev=${encodeURIComponent(url)}&${emailQuery}${callbackQuery}`);
   }
   redirect(`/register/pending${callbackOnlyQuery}`);
 }
