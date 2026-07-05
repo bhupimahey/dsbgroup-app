@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import DsbLogo from '@/components/brand/DsbLogo';
 import {
   isNavHrefActive,
@@ -63,7 +63,7 @@ function navButtonClass(pathname: string, item: NavItem) {
     : 'theme-main-nav-button';
 }
 
-export default function SiteHeader() {
+export default function SiteHeader({ authNav }: { authNav?: ReactNode }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -119,6 +119,8 @@ export default function SiteHeader() {
           )}
         </ul>
 
+        {authNav ? <div className="theme-header-auth-desktop">{authNav}</div> : null}
+
         <button
           type="button"
           className="theme-mobile-toggle"
@@ -159,6 +161,7 @@ export default function SiteHeader() {
               </Link>
             ),
           )}
+          {authNav ? <div className="theme-header-auth-mobile">{authNav}</div> : null}
         </div>
       </div>
     </header>

@@ -3,40 +3,40 @@
 import Link from 'next/link';
 import { useActionState } from 'react';
 import { registerAction } from '@/lib/auth/register-actions';
+import { AUTH_BUTTON, AUTH_FIELD, AUTH_LABEL, AUTH_LINK } from '@/components/auth/auth-classes';
 
 const initialState: { error?: string } = {};
 
-export default function RegisterForm() {
+type RegisterFormProps = {
+  callbackUrl?: string;
+};
+
+export default function RegisterForm({ callbackUrl }: RegisterFormProps) {
   const [state, action, pending] = useActionState(registerAction, initialState);
+  const loginHref = callbackUrl
+    ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}`
+    : '/login';
 
   return (
-    <form action={action} className="mt-8 space-y-4 rounded-xl border border-slate-200 bg-white p-6">
+    <form action={action} className="space-y-4">
+      {callbackUrl ? <input type="hidden" name="callbackUrl" value={callbackUrl} /> : null}
+
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-slate-700">
+        <label htmlFor="name" className={AUTH_LABEL}>
           Full name
         </label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          required
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-        />
+        <input id="name" name="name" type="text" required className={AUTH_FIELD} />
       </div>
+
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+        <label htmlFor="email" className={AUTH_LABEL}>
           Email
         </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-        />
+        <input id="email" name="email" type="email" required autoComplete="email" className={AUTH_FIELD} />
       </div>
+
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+        <label htmlFor="password" className={AUTH_LABEL}>
           Password
         </label>
         <input
@@ -45,11 +45,13 @@ export default function RegisterForm() {
           type="password"
           required
           minLength={8}
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+          autoComplete="new-password"
+          className={AUTH_FIELD}
         />
       </div>
+
       <div>
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700">
+        <label htmlFor="confirmPassword" className={AUTH_LABEL}>
           Confirm password
         </label>
         <input
@@ -58,20 +60,20 @@ export default function RegisterForm() {
           type="password"
           required
           minLength={8}
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+          autoComplete="new-password"
+          className={AUTH_FIELD}
         />
       </div>
-      {state.error ? <p className="text-sm text-red-600">{state.error}</p> : null}
-      <button
-        type="submit"
-        disabled={pending}
-        className="w-full rounded-md bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 disabled:opacity-60"
-      >
+
+      {state.error ? <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p> : null}
+
+      <button type="submit" disabled={pending} className={AUTH_BUTTON}>
         {pending ? 'Creating account…' : 'Create account'}
       </button>
+
       <p className="text-center text-sm text-slate-600">
         Already have an account?{' '}
-        <Link href="/login" className="text-blue-800 underline">
+        <Link href={loginHref} className={AUTH_LINK}>
           Sign in
         </Link>
       </p>

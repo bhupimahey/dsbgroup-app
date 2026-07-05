@@ -1,10 +1,10 @@
 import SiteFooter from '@/components/SiteFooter';
-import SiteHeader from '@/components/SiteHeader';
+import SiteHeaderWithAuth from '@/components/SiteHeaderWithAuth';
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <SiteHeader />
+      <SiteHeaderWithAuth />
       <main>{children}</main>
       <SiteFooter />
     </>

@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { resetPasswordAction } from '@/lib/auth/register-actions';
+import AuthShell from '@/components/auth/AuthShell';
+import { AUTH_BUTTON, AUTH_FIELD, AUTH_LABEL, AUTH_LINK } from '@/components/auth/auth-classes';
 
 export const metadata = { title: 'Reset password' };
 
@@ -12,41 +14,68 @@ export default async function ResetPasswordPage({
 
   if (!token) {
     return (
-      <div className="mx-auto max-w-md px-4 py-16">
-        <p className="text-red-600">Missing reset token.</p>
-        <Link href="/forgot-password" className="mt-4 inline-block text-blue-800 underline">
-          Request new link
-        </Link>
-      </div>
+      <AuthShell
+        badge="Password Reset"
+        title="Missing token"
+        description="This reset link is incomplete."
+        footer={
+          <Link href="/forgot-password" className={AUTH_LINK}>
+            Request new link
+          </Link>
+        }
+      >
+        <p className="text-sm text-red-600">Use the full link from your password reset email.</p>
+      </AuthShell>
     );
   }
 
   return (
-    <div className="mx-auto max-w-md px-4 py-16">
-      <h1 className="text-2xl font-semibold text-slate-900">Reset password</h1>
-      {error ? <p className="mt-2 text-sm text-red-600">Link invalid or expired.</p> : null}
-      <form action={resetPasswordAction} className="mt-6 space-y-4 rounded-xl border bg-white p-6">
+    <AuthShell
+      badge="Password Reset"
+      title="Choose a new password"
+      description="Enter and confirm your new password below."
+      footer={
+        <Link href="/login" className={AUTH_LINK}>
+          Back to login
+        </Link>
+      }
+    >
+      {error ? <p className="mb-4 text-sm text-red-600">Link invalid or expired.</p> : null}
+
+      <form action={resetPasswordAction} className="space-y-4">
         <input type="hidden" name="token" value={token} />
-        <input
-          name="password"
-          type="password"
-          required
-          minLength={8}
-          placeholder="New password"
-          className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-        />
-        <input
-          name="confirmPassword"
-          type="password"
-          required
-          minLength={8}
-          placeholder="Confirm password"
-          className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-        />
-        <button type="submit" className="w-full rounded-md bg-blue-900 px-4 py-2 text-sm font-medium text-white">
+        <div>
+          <label htmlFor="password" className={AUTH_LABEL}>
+            New password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            minLength={8}
+            autoComplete="new-password"
+            className={AUTH_FIELD}
+          />
+        </div>
+        <div>
+          <label htmlFor="confirmPassword" className={AUTH_LABEL}>
+            Confirm password
+          </label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            required
+            minLength={8}
+            autoComplete="new-password"
+            className={AUTH_FIELD}
+          />
+        </div>
+        <button type="submit" className={AUTH_BUTTON}>
           Update password
         </button>
       </form>
-    </div>
+    </AuthShell>
   );
 }

@@ -1,7 +1,12 @@
+import SiteFooter from '@/components/SiteFooter';
+import SiteHeaderWithAuth from '@/components/SiteHeaderWithAuth';
+
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-[60vh] bg-slate-50">
-      {children}
-    </div>
+    <>
+      <SiteHeaderWithAuth />
+      <main className="flex-1">{children}</main>
+      <SiteFooter />
+    </>
   );
 }

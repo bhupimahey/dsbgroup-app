@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { verifyEmailAction } from '@/lib/auth/register-actions';
+import AuthShell from '@/components/auth/AuthShell';
+import { AUTH_LINK } from '@/components/auth/auth-classes';
 
 export const metadata = { title: 'Email verification' };
 
@@ -12,27 +14,39 @@ export default async function VerifyEmailPage({
 
   if (!token) {
     return (
-      <div className="mx-auto max-w-md px-4 py-16">
-        <h1 className="text-2xl font-semibold text-slate-900">Invalid link</h1>
-        <p className="mt-2 text-sm text-slate-600">This verification link is missing a token.</p>
-        <Link href="/register" className="mt-6 inline-block text-blue-800 underline">
-          Register again
-        </Link>
-      </div>
+      <AuthShell
+        badge="Email Verification"
+        title="Invalid link"
+        description="This verification link is missing a token."
+        footer={
+          <Link href="/register" className={AUTH_LINK}>
+            Register again
+          </Link>
+        }
+      >
+        <p className="text-sm text-slate-600">Request a new account to receive a fresh verification email.</p>
+      </AuthShell>
     );
   }
 
   const result = await verifyEmailAction(token);
 
   return (
-    <div className="mx-auto max-w-md px-4 py-16">
-      <h1 className="text-2xl font-semibold text-slate-900">
-        {result.ok ? 'Email verified' : 'Verification failed'}
-      </h1>
-      <p className="mt-2 text-sm text-slate-600">{result.message}</p>
-      <Link href="/login" className="mt-6 inline-block text-blue-800 underline">
-        Continue to login
-      </Link>
-    </div>
+    <AuthShell
+      badge="Email Verification"
+      title={result.ok ? 'Email verified' : 'Verification failed'}
+      description={result.message}
+      footer={
+        <Link href="/login" className={AUTH_LINK}>
+          Continue to login
+        </Link>
+      }
+    >
+      {result.ok ? (
+        <p className="text-sm text-green-800">Your account is active. Sign in to access premium content.</p>
+      ) : (
+        <p className="text-sm text-red-700">Register again if your verification link has expired.</p>
+      )}
+    </AuthShell>
   );
 }

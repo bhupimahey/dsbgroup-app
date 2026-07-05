@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Kumbh_Sans, Lora, Outfit } from "next/font/google";
 import "./globals.css";
 import "@/styles/purchased-theme-shell.css";
 import "@/styles/theme-inner-pages.css";
+import "@/styles/user-auth.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

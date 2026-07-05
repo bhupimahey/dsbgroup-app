@@ -115,8 +115,14 @@ export async function registerAction(
   await prisma.verificationToken.create({ data: { identifier: email, token, expires } });
 
   const url = await sendVerificationEmail(email, token);
+  const callbackUrl = String(formData.get('callbackUrl') ?? '').trim();
+  const safeCallback =
+    callbackUrl.startsWith('/') && !callbackUrl.startsWith('/admin') ? callbackUrl : '';
+  const callbackQuery = safeCallback ? `&callbackUrl=${encodeURIComponent(safeCallback)}` : '';
+  const callbackOnlyQuery = safeCallback ? `?callbackUrl=${encodeURIComponent(safeCallback)}` : '';
+
   if (process.env.NODE_ENV === 'development') {
-    redirect(`/register/pending?dev=${encodeURIComponent(url)}`);
+    redirect(`/register/pending?dev=${encodeURIComponent(url)}${callbackQuery}`);
   }
-  redirect('/register/pending');
+  redirect(`/register/pending${callbackOnlyQuery}`);
 }
