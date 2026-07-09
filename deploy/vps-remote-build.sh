@@ -5,6 +5,7 @@ set -euo pipefail
 
 APP_DIR="${VPS_APP_DIR:-$(pwd)}"
 COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.prod.yml}"
+WEB_REPLICAS="${WEB_REPLICAS:-2}"
 
 cd "$APP_DIR"
 
@@ -21,14 +22,24 @@ if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/n
   fi
 fi
 
-echo "==> Rebuilding and restarting containers (${WEB_REPLICAS:-3} web replicas)"
-WEB_REPLICAS="${WEB_REPLICAS:-3}"
+echo "==> Validating nginx config"
+docker compose -f "$COMPOSE_FILE" run --rm --no-deps nginx nginx -t
+
+echo "==> Rebuilding and restarting containers (${WEB_REPLICAS} web replicas)"
 docker compose -f "$COMPOSE_FILE" up -d --build --scale "web=${WEB_REPLICAS}"
 
-echo "==> Reloading nginx upstream (avoids stale web container IP)"
-docker compose -f "$COMPOSE_FILE" restart nginx
+echo "==> Waiting for nginx to accept connections"
+for _ in $(seq 1 30); do
+  if docker compose -f "$COMPOSE_FILE" exec -T nginx wget -q -O /dev/null http://127.0.0.1/ 2>/dev/null; then
+    break
+  fi
+  sleep 2
+done
 
 echo "==> Applying database migrations"
 docker compose -f "$COMPOSE_FILE" --profile tools run --rm migrate
+
+echo "==> Container status"
+docker compose -f "$COMPOSE_FILE" ps
 
 echo "==> Remote build complete (.env untouched)"
