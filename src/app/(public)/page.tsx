@@ -4,7 +4,10 @@ import ContactForm from '@/components/ContactForm';
 import AosInit from '@/components/home/AosInit';
 import HomeCtaSubscribe from '@/components/home/HomeCtaSubscribe';
 import HomeTestimonialsShowcase from '@/components/home/HomeTestimonialsShowcase';
-import { prisma } from '@/lib/db';
+import {
+  getCachedHomeBlogPosts,
+  getCachedHomeServiceCategories,
+} from '@/lib/db/public-cache';
 import { SITE_CONTACT } from '@/lib/site/nav-links';
 import { getPublishedTextTestimonials, getPublishedVideoTestimonials } from '@/lib/site/testimonials';
 import '@/styles/home-index2.css';
@@ -106,17 +109,8 @@ function formatPostDate(date: Date | null) {
 
 export default async function HomePage() {
   const [serviceCategories, blogPosts, videoTestimonials, textTestimonials] = await Promise.all([
-    prisma.serviceCategory.findMany({
-      where: { active: true },
-      orderBy: { sortOrder: 'asc' },
-      take: 6,
-    }),
-    prisma.post.findMany({
-      where: { type: 'BLOG', published: true },
-      orderBy: { publishedAt: 'desc' },
-      take: 3,
-      include: { categories: { include: { category: true } } },
-    }),
+    getCachedHomeServiceCategories(),
+    getCachedHomeBlogPosts(),
     getPublishedVideoTestimonials(),
     getPublishedTextTestimonials(),
   ]);

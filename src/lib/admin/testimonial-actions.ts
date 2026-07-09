@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
+import { revalidateHomeCache } from '@/lib/db/revalidate-public';
 import { requireStaff } from '@/lib/admin/require-staff';
 import { normalizeYoutubeEmbedUrl } from '@/lib/youtube-embed';
 import { textTestimonialSchema, videoTestimonialSchema } from '@/lib/validations/cms';
@@ -11,6 +12,7 @@ function revalidateTestimonialPaths() {
   revalidatePath('/admin/testimonials');
   revalidatePath('/');
   revalidatePath('/testimonials');
+  revalidateHomeCache();
 }
 
 function parseVideoForm(formData: FormData) {

@@ -1,15 +1,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Blog3Pagination from '@/components/blog/Blog3Pagination';
-import { prisma } from '@/lib/db';
-import { getPaginationMeta, parsePageParam } from '@/lib/pagination';
+import { getCachedBlogIndexData } from '@/lib/db/public-cache';
+import { parsePageParam } from '@/lib/pagination';
 import '@/styles/blog-index.css';
 
 export const revalidate = 60;
 
 export const metadata = { title: 'Blog' };
 
-const BLOG_PAGE_SIZE = 9;
 const DEFAULT_BLOG_IMAGE = '/images/theme/index2/sections/blog2-img.png';
 
 function formatPostDate(date: Date | null) {
@@ -31,26 +30,10 @@ export default async function BlogIndexPage({
   searchParams: Promise<{ category?: string; page?: string }>;
 }) {
   const { category: categorySlug, page: pageParam } = await searchParams;
-
-  const where = {
-    type: 'BLOG' as const,
-    published: true,
-    ...(categorySlug ? { categories: { some: { category: { slug: categorySlug } } } } : {}),
-  };
-
-  const [categories, totalPosts] = await Promise.all([
-    prisma.category.findMany({ orderBy: { name: 'asc' } }),
-    prisma.post.count({ where }),
-  ]);
-
-  const pagination = getPaginationMeta(totalPosts, parsePageParam(pageParam), BLOG_PAGE_SIZE);
-  const posts = await prisma.post.findMany({
-    where,
-    orderBy: { publishedAt: 'desc' },
-    include: { categories: { include: { category: true } } },
-    skip: pagination.skip,
-    take: pagination.take,
-  });
+  const { categories, posts, pagination } = await getCachedBlogIndexData(
+    categorySlug ?? '',
+    parsePageParam(pageParam),
+  );
 
   return (
     <div className="theme-shell">

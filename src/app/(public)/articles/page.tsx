@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Pagination from '@/components/Pagination';
-import { prisma } from '@/lib/db';
-import { getPaginationMeta, parsePageParam } from '@/lib/pagination';
+import { getCachedArticlesIndexData } from '@/lib/db/public-cache';
+import { DEFAULT_PAGE_SIZE, parsePageParam } from '@/lib/pagination';
 
 export const revalidate = 60;
 
@@ -13,14 +13,10 @@ export default async function ArticlesIndexPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
-  const where = { type: 'ARTICLE' as const, published: true };
-  const pagination = getPaginationMeta(await prisma.post.count({ where }), parsePageParam(pageParam));
-  const posts = await prisma.post.findMany({
-    where,
-    orderBy: { publishedAt: 'desc' },
-    skip: pagination.skip,
-    take: pagination.take,
-  });
+  const { pagination, posts } = await getCachedArticlesIndexData(
+    parsePageParam(pageParam),
+    DEFAULT_PAGE_SIZE,
+  );
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">

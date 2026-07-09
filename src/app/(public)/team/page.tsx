@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { prisma } from '@/lib/db';
+import { getCachedTeamMembers } from '@/lib/db/public-cache';
 import TeamMemberCard from '@/components/team/TeamMemberCard';
 import { TEAM_GROUP_LABELS, TEAM_GROUP_ORDER } from '@/lib/team/constants';
 
@@ -8,10 +8,7 @@ export const revalidate = 60;
 export const metadata = { title: 'Our Team' };
 
 export default async function TeamPage() {
-  const members = await prisma.teamMember.findMany({
-    where: { published: true },
-    orderBy: [{ group: 'asc' }, { sortOrder: 'asc' }],
-  });
+  const members = await getCachedTeamMembers();
 
   const grouped = TEAM_GROUP_ORDER.map((group) => ({
     group,

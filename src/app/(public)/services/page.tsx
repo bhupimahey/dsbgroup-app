@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { prisma } from '@/lib/db';
+import { getCachedServiceCategories } from '@/lib/db/public-cache';
 import ThemePageHero from '@/components/theme/ThemePageHero';
 import '@/styles/theme-inner-pages.css';
 
@@ -18,10 +18,7 @@ const SERVICE_IMAGES = [
 ] as const;
 
 export default async function ServicesPage() {
-  const categories = await prisma.serviceCategory.findMany({
-    where: { active: true },
-    orderBy: { sortOrder: 'asc' },
-  });
+  const categories = await getCachedServiceCategories();
 
   return (
     <div className="theme-shell">

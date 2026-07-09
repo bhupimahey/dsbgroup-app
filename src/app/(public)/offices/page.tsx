@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Pagination from '@/components/Pagination';
-import { prisma } from '@/lib/db';
-import { getPaginationMeta, parsePageParam } from '@/lib/pagination';
+import { getCachedOfficesIndexData } from '@/lib/db/public-cache';
+import { DEFAULT_PAGE_SIZE, parsePageParam } from '@/lib/pagination';
 
 export const revalidate = 60;
 
@@ -13,14 +13,10 @@ export default async function OfficesPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
-  const where = { published: true };
-  const pagination = getPaginationMeta(await prisma.office.count({ where }), parsePageParam(pageParam));
-  const offices = await prisma.office.findMany({
-    where,
-    orderBy: { sortOrder: 'asc' },
-    skip: pagination.skip,
-    take: pagination.take,
-  });
+  const { pagination, offices } = await getCachedOfficesIndexData(
+    parsePageParam(pageParam),
+    DEFAULT_PAGE_SIZE,
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">

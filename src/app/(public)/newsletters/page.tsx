@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Pagination from '@/components/Pagination';
-import { prisma } from '@/lib/db';
+import { getCachedNewslettersIndexData } from '@/lib/db/public-cache';
 import { formatNewsletterIssueLabel } from '@/lib/newsletter/email-context';
-import { getPaginationMeta, parsePageParam } from '@/lib/pagination';
+import { DEFAULT_PAGE_SIZE, parsePageParam } from '@/lib/pagination';
 
 export const revalidate = 60;
 
@@ -15,14 +15,10 @@ export default async function NewslettersArchivePage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
-  const where = { published: true, status: 'SENT' as const };
-  const pagination = getPaginationMeta(await prisma.newsletter.count({ where }), parsePageParam(pageParam));
-  const issues = await prisma.newsletter.findMany({
-    where,
-    orderBy: [{ issueDate: 'desc' }, { sentAt: 'desc' }],
-    skip: pagination.skip,
-    take: pagination.take,
-  });
+  const { pagination, issues } = await getCachedNewslettersIndexData(
+    parsePageParam(pageParam),
+    DEFAULT_PAGE_SIZE,
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
