@@ -126,27 +126,51 @@ The `/services` index links to each page. Edit content in `/admin/pages`.
 
 ## Production deploy (VPS)
 
-First-time setup on the server:
+Deploy uses **rsync** to sync code to the server, then **Docker Compose** rebuilds on the VPS. Production `.env` stays on the server only — it is never copied or overwritten by deploy.
+
+### First-time VPS setup
 
 ```bash
-cp .env.example .env   # set AUTH_SECRET, NEXT_PUBLIC_SITE_URL, MYSQL_PASSWORD, RESEND_API_KEY
+mkdir -p /var/www/checkmockup
+cd /var/www/checkmockup
+# Create production secrets once (not synced by rsync):
+nano .env   # AUTH_SECRET, NEXT_PUBLIC_SITE_URL, MYSQL_PASSWORD, RESEND_API_KEY, etc.
+```
+
+Use `KEY=value` lines only in `.env` (see `.env.example`). Remove YAML-style lines like `DATABASE_URL: mysql://...`.
+
+After the first rsync deploy (below), start the stack if it is not running yet:
+
+```bash
 docker compose -f docker-compose.prod.yml up -d --build
 docker compose -f docker-compose.prod.yml --profile tools run --rm migrate
 docker compose -f docker-compose.prod.yml --profile tools run --rm migrate sh -c "npm ci --ignore-scripts && npx prisma db seed"
 ```
 
-### Manual VPS deploy (GitHub Actions)
+### Deploy from your PC (rsync)
 
-Push your changes to `main` first, then deploy when you are ready:
+Requires **Git Bash**, **WSL**, or macOS/Linux (`rsync` + `ssh`).
+
+```bash
+cp deploy/rsync.env.example deploy/rsync.env
+# Edit deploy/rsync.env with your VPS host, user, and SSH key path
+
+bash deploy/rsync-to-vps.sh
+# or: npm run deploy:rsync
+```
+
+This rsyncs the repo (excluding `node_modules`, `.next`, `.env`, `public/uploads/`, etc.) to the VPS, then SSH runs `deploy/vps-remote-build.sh` (Docker rebuild + migrations).
+
+### Deploy via GitHub Actions (rsync)
 
 1. Open [Actions → Deploy to VPS](https://github.com/bhupimahey/dsbgroup-app/actions/workflows/deploy-vps.yml)
 2. Click **Run workflow** → **Run workflow**
 
-The workflow SSHs into your server and runs `deploy/vps-deploy.sh` (git pull → rebuild containers → `prisma migrate deploy`). It does **not** run automatically on push.
+The workflow rsyncs the checked-out `main` tree to your VPS, then SSH runs the same remote build script. It does **not** run automatically on push.
 
-**Production `.env` is never modified** — the deploy script backs up and restores the server’s existing `.env`. It does not copy `.env.example` or write secrets from GitHub. Create `.env` once on the VPS and edit it only there.
+**Alternative (git pull on server):** `bash deploy/vps-deploy.sh` on the VPS if the app directory is a git clone.
 
-**Production `.env` format:** use `KEY=value` lines only (see `.env.example`). Remove any YAML-style lines like `DATABASE_URL: mysql://...` — they break Docker and migrations.
+**Production `.env` is never modified** — create `.env` once on the VPS and edit it only there. Rsync excludes `.env` so local secrets never upload.
 
 **One-time GitHub secrets** — [Settings → Secrets and variables → Actions](https://github.com/bhupimahey/dsbgroup-app/settings/secrets/actions):
 
@@ -167,9 +191,9 @@ ssh-copy-id -i ~/.ssh/dsbgroup_deploy.pub root@66.116.239.195
 # Paste the PRIVATE key (~/.ssh/dsbgroup_deploy) into GitHub secret VPS_SSH_KEY
 ```
 
-Ensure the VPS repo is a git clone that can `git fetch origin main` (deploy key or HTTPS credentials).
+Ensure the VPS has Docker and SSH access. A git clone on the server is optional (rsync is the primary deploy path).
 
-**Deploy on the VPS directly** (same steps as the workflow):
+**Deploy on the VPS directly** (git-based fallback):
 
 ```bash
 cd /var/www/checkmockup

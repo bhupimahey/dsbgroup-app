@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Run on the VPS (manually or via GitHub Actions SSH) to update the live site.
+# Uses git pull — prefer deploy/rsync-to-vps.sh for rsync-based deploys.
 # Never creates, copies, or overwrites the server .env — production secrets stay on the VPS.
 set -euo pipefail
 
@@ -33,10 +34,5 @@ if [[ "${SKIP_GIT_PULL:-}" != "1" ]]; then
   echo "==> Restored production .env (unchanged)"
 fi
 
-echo "==> Rebuilding and restarting containers"
-docker compose -f "$COMPOSE_FILE" up -d --build
-
-echo "==> Applying database migrations"
-docker compose -f "$COMPOSE_FILE" --profile tools run --rm migrate
-
-echo "==> Deploy complete (.env untouched)"
+chmod +x deploy/vps-remote-build.sh deploy/migrate.sh
+VPS_APP_DIR="$APP_DIR" COMPOSE_FILE="$COMPOSE_FILE" bash deploy/vps-remote-build.sh

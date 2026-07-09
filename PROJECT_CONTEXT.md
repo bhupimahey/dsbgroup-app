@@ -42,7 +42,11 @@ npm run worker:newsletter
 # WordPress import
 npm run migrate:wordpress -- path\to\export.xml
 
-# Production (VPS)
+# Production (VPS) — rsync from PC or GitHub Actions Deploy to VPS
+cp deploy/rsync.env.example deploy/rsync.env
+bash deploy/rsync-to-vps.sh
+
+# Or on server (git clone fallback)
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 
@@ -81,6 +85,8 @@ D:\Bhupinder\nextjs\
 ├── src/config/redirects.json
 ├── docker-compose.yml / docker-compose.prod.yml
 ├── Dockerfile / deploy/nginx.conf
+├── deploy/rsync-to-vps.sh   # rsync + remote Docker build
+├── deploy/vps-remote-build.sh
 └── README.md
 ```
 

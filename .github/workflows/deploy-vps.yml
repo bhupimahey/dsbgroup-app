@@ -1,5 +1,6 @@
 # Manual production deploy — run from GitHub Actions → Deploy to VPS → Run workflow.
-# One-time setup: add repository secrets (see README → Manual VPS deploy).
+# Syncs code with rsync (no git pull on server), then rebuilds Docker on the VPS.
+# One-time setup: add repository secrets (see README → Production deploy).
 
 name: Deploy to VPS
 
@@ -14,7 +15,35 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy over SSH
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          PORT="${{ secrets.VPS_SSH_PORT != '' && secrets.VPS_SSH_PORT || 22 }}"
+          ssh-keyscan -p "$PORT" -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Rsync to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_APP_DIR: ${{ secrets.VPS_APP_DIR != '' && secrets.VPS_APP_DIR || '/var/www/checkmockup' }}
+          VPS_SSH_PORT: ${{ secrets.VPS_SSH_PORT != '' && secrets.VPS_SSH_PORT || '22' }}
+        run: |
+          set -euo pipefail
+          REMOTE="${VPS_USER}@${VPS_HOST}"
+          RSYNC_RSH="ssh -p ${VPS_SSH_PORT} -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes"
+          ssh -p "$VPS_SSH_PORT" -i ~/.ssh/deploy_key "$REMOTE" "mkdir -p '$VPS_APP_DIR'"
+          rsync -avz --delete \
+            --exclude-from=deploy/rsync-excludes.txt \
+            -e "$RSYNC_RSH" \
+            ./ \
+            "$REMOTE:$VPS_APP_DIR/"
+
+      - name: Remote Docker build and migrations
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -29,11 +58,5 @@ jobs:
               echo "ERROR: .env not found. Create it on the server first; deploy never overwrites or generates it."
               exit 1
             fi
-            ENV_BACKUP="$(mktemp)"
-            cp .env "$ENV_BACKUP"
-            git fetch origin main
-            git reset --hard origin/main
-            cp "$ENV_BACKUP" .env
-            rm -f "$ENV_BACKUP"
-            chmod +x deploy/vps-deploy.sh
-            SKIP_GIT_PULL=1 VPS_APP_DIR="$APP_DIR" bash deploy/vps-deploy.sh
+            chmod +x deploy/vps-remote-build.sh deploy/migrate.sh
+            VPS_APP_DIR="$APP_DIR" bash deploy/vps-remote-build.sh
