@@ -12,7 +12,7 @@ import { prisma } from '@/lib/db';
 import '@/styles/blog-right.css';
 import '@/styles/blog-detail.css';
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 const DEFAULT_BLOG_IMAGE = '/images/theme/index2/sections/blog2-img.png';
 

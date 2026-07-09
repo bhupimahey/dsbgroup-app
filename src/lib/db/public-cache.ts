@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import { PUBLIC_CACHE_TAGS } from '@/lib/db/cache-tags';
 import { getPaginationMeta } from '@/lib/pagination';
 
-export const PUBLIC_CACHE_SECONDS = 60;
+export const PUBLIC_CACHE_SECONDS = 300;
 export const BLOG_PAGE_SIZE = 9;
 
 export const getCachedBlogIndexData = unstable_cache(

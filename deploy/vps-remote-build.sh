@@ -21,8 +21,9 @@ if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/n
   fi
 fi
 
-echo "==> Rebuilding and restarting containers"
-docker compose -f "$COMPOSE_FILE" up -d --build
+echo "==> Rebuilding and restarting containers (${WEB_REPLICAS:-3} web replicas)"
+WEB_REPLICAS="${WEB_REPLICAS:-3}"
+docker compose -f "$COMPOSE_FILE" up -d --build --scale "web=${WEB_REPLICAS}"
 
 echo "==> Reloading nginx upstream (avoids stale web container IP)"
 docker compose -f "$COMPOSE_FILE" restart nginx

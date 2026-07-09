@@ -5,7 +5,7 @@ import { getCachedNewslettersIndexData } from '@/lib/db/public-cache';
 import { formatNewsletterIssueLabel } from '@/lib/newsletter/email-context';
 import { DEFAULT_PAGE_SIZE, parsePageParam } from '@/lib/pagination';
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export const metadata = { title: 'Newsletters' };
 

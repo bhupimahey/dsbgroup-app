@@ -1,0 +1,13 @@
+[mysqld]
+# Tuned for a single VPS serving ~1000-2000 concurrent site visitors.
+max_connections = 400
+innodb_buffer_pool_size = 256M
+innodb_log_file_size = 64M
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
+table_open_cache = 400
+thread_cache_size = 32
+wait_timeout = 120
+interactive_timeout = 120
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci

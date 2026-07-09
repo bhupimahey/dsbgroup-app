@@ -11,7 +11,7 @@ export function getDatabasePoolConfig(databaseUrl: string) {
 
   const connectionLimit = readPositiveInt(
     process.env.DATABASE_POOL_SIZE,
-    process.env.NODE_ENV === 'production' ? 20 : 5,
+    process.env.NODE_ENV === 'production' ? 15 : 5,
   );
 
   return {

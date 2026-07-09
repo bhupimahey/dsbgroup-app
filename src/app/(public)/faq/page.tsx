@@ -6,7 +6,7 @@ import { unstable_cache } from 'next/cache';
 import { PUBLIC_CACHE_TAGS } from '@/lib/db/cache-tags';
 import { PUBLIC_CACHE_SECONDS } from '@/lib/db/public-cache';
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export const metadata = { title: 'FAQ' };
 

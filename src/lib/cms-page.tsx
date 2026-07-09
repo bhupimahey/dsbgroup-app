@@ -38,7 +38,7 @@ export async function cmsPageMetadata(slug: string) {
 /** Shared exports for thin App Router pages backed by a CMS slug. */
 export function cmsPageRoute(slug: string) {
   return {
-    revalidate: 60 as const,
+    revalidate: 300 as const,
     generateMetadata: () => cmsPageMetadata(slug),
     Page: () => renderCmsPage(slug),
   };

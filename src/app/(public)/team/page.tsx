@@ -3,7 +3,7 @@ import { getCachedTeamMembers } from '@/lib/db/public-cache';
 import TeamMemberCard from '@/components/team/TeamMemberCard';
 import { TEAM_GROUP_LABELS, TEAM_GROUP_ORDER } from '@/lib/team/constants';
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export const metadata = { title: 'Our Team' };
 

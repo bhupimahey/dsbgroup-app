@@ -6,7 +6,7 @@ import ThemePageHero from '@/components/theme/ThemePageHero';
 import { getPublishedPageBySlug } from '@/lib/cms/cache';
 import { prisma } from '@/lib/db';
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

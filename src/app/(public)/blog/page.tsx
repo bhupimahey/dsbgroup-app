@@ -5,7 +5,7 @@ import { getCachedBlogIndexData } from '@/lib/db/public-cache';
 import { parsePageParam } from '@/lib/pagination';
 import '@/styles/blog-index.css';
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export const metadata = { title: 'Blog' };
 

@@ -3,7 +3,7 @@ import Pagination from '@/components/Pagination';
 import { getCachedOfficesIndexData } from '@/lib/db/public-cache';
 import { DEFAULT_PAGE_SIZE, parsePageParam } from '@/lib/pagination';
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export const metadata = { title: 'Offices' };
 

@@ -4,7 +4,7 @@ import { getCachedServiceCategories } from '@/lib/db/public-cache';
 import ThemePageHero from '@/components/theme/ThemePageHero';
 import '@/styles/theme-inner-pages.css';
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export const metadata = { title: 'Services' };
 

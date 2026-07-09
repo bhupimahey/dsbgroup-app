@@ -27,6 +27,17 @@ const nextConfig: NextConfig = {
   },
   images: {
     unoptimized: process.env.NODE_ENV === 'development',
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+  },
+  async headers() {
+    return [
+      {
+        source: '/images/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=2592000, immutable' },
+        ],
+      },
+    ];
   },
   async redirects() {
     return (redirects as Array<{ from: string; to: string }>).map((rule) => ({

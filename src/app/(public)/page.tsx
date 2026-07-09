@@ -31,7 +31,7 @@ const SERVICE_CARD_AOS = [
 const COUNTER_AOS = [800, 1000, 1200, 1400] as const;
 const CLIENT_STEP_AOS = [1000, 1200, 1400] as const;
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 const PROCESS_STEPS = [
   {

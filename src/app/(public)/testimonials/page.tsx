@@ -8,7 +8,7 @@ export const metadata = {
   description: 'Video and written client testimonials for DSB Law Group.',
 };
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export default async function TestimonialsPage() {
   const [videos, reviews] = await Promise.all([
