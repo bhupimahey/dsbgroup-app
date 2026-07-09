@@ -26,7 +26,7 @@ services:
       target: runner
     restart: unless-stopped
     environment:
-      DATABASE_URL: mysql://dsb:${MYSQL_PASSWORD:-dsb}@mysql:3306/dsb_law
+      DATABASE_URL: mysql://dsb:${MYSQL_PASSWORD:-dsb}@mysql:3306/dsb_law?allowPublicKeyRetrieval=true
       REDIS_URL: redis://redis:6379
       AUTH_SECRET: ${AUTH_SECRET}
       AUTH_TRUST_HOST: "true"
@@ -50,7 +50,7 @@ services:
     restart: unless-stopped
     command: npm run worker:newsletter
     environment:
-      DATABASE_URL: mysql://dsb:${MYSQL_PASSWORD:-dsb}@mysql:3306/dsb_law
+      DATABASE_URL: mysql://dsb:${MYSQL_PASSWORD:-dsb}@mysql:3306/dsb_law?allowPublicKeyRetrieval=true
       REDIS_URL: redis://redis:6379
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       RESEND_FROM_DOMAIN: ${RESEND_FROM_DOMAIN:-dsblawgroup.com}

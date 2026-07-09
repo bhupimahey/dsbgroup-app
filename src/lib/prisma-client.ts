@@ -3,6 +3,9 @@ import { PrismaClient } from '@/generated/prisma/client';
 
 function parseDatabaseUrl(databaseUrl: string) {
   const url = new URL(databaseUrl);
+  const allowPublicKeyRetrieval =
+    url.searchParams.get('allowPublicKeyRetrieval') === 'true' ||
+    process.env.NODE_ENV === 'production';
 
   return {
     host: url.hostname,
@@ -10,7 +13,9 @@ function parseDatabaseUrl(databaseUrl: string) {
     user: decodeURIComponent(url.username),
     password: decodeURIComponent(url.password),
     database: url.pathname.replace(/^\//, ''),
-    connectionLimit: 5,
+    connectionLimit: 10,
+    connectTimeout: 10_000,
+    allowPublicKeyRetrieval,
   };
 }
 

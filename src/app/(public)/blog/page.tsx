@@ -32,18 +32,18 @@ export default async function BlogIndexPage({
 }) {
   const { category: categorySlug, page: pageParam } = await searchParams;
 
-  const categories = await prisma.category.findMany({ orderBy: { name: 'asc' } });
   const where = {
     type: 'BLOG' as const,
     published: true,
     ...(categorySlug ? { categories: { some: { category: { slug: categorySlug } } } } : {}),
   };
 
-  const pagination = getPaginationMeta(
-    await prisma.post.count({ where }),
-    parsePageParam(pageParam),
-    BLOG_PAGE_SIZE,
-  );
+  const [categories, totalPosts] = await Promise.all([
+    prisma.category.findMany({ orderBy: { name: 'asc' } }),
+    prisma.post.count({ where }),
+  ]);
+
+  const pagination = getPaginationMeta(totalPosts, parsePageParam(pageParam), BLOG_PAGE_SIZE);
   const posts = await prisma.post.findMany({
     where,
     orderBy: { publishedAt: 'desc' },
