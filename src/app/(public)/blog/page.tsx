@@ -11,13 +11,14 @@ export const metadata = { title: 'Blog' };
 
 const DEFAULT_BLOG_IMAGE = '/images/theme/index2/sections/blog2-img.png';
 
-function formatPostDate(date: Date | null) {
+function formatPostDate(date: Date | string | null | undefined) {
   if (!date) return 'Latest update';
+  const d = typeof date === 'string' ? new Date(date) : date;
   return new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-  }).format(date);
+  }).format(d);
 }
 
 function getPostImage(path: string | null) {
@@ -86,7 +87,7 @@ export default async function BlogIndexPage({
                         <span className="blog3-card-date-icon" aria-hidden>
                           ◷
                         </span>
-                        <time dateTime={post.publishedAt?.toISOString()}>
+                        <time dateTime={post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined}>
                           {formatPostDate(post.publishedAt)}
                         </time>
                       </p>

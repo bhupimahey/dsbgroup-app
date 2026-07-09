@@ -98,13 +98,14 @@ function getPostImage(post: { featuredImagePath: string | null }) {
   return post.featuredImagePath?.trim() || DEFAULT_BLOG_IMAGE;
 }
 
-function formatPostDate(date: Date | null) {
+function formatPostDate(date: Date | string | null | undefined) {
   if (!date) return 'Latest update';
+  const d = typeof date === 'string' ? new Date(date) : date;
   return new Intl.DateTimeFormat('en-IN', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
-  }).format(date);
+  }).format(d);
 }
 
 export default async function HomePage() {
