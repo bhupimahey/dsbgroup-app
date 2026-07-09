@@ -32,3 +32,15 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 CMD ["node", "server.js"]
+
+FROM node:20-alpine AS worker
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+COPY prisma.config.ts tsconfig.json ./
+COPY prisma ./prisma
+COPY worker ./worker
+COPY src/lib ./src/lib
+RUN npx prisma generate
+ENV NODE_ENV=production
+CMD ["npx", "tsx", "worker/newsletter-worker.ts"]

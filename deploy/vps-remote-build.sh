@@ -24,6 +24,9 @@ fi
 echo "==> Rebuilding and restarting containers"
 docker compose -f "$COMPOSE_FILE" up -d --build
 
+echo "==> Reloading nginx upstream (avoids stale web container IP)"
+docker compose -f "$COMPOSE_FILE" restart nginx
+
 echo "==> Applying database migrations"
 docker compose -f "$COMPOSE_FILE" --profile tools run --rm migrate
 

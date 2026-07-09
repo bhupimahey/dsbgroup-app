@@ -21,7 +21,9 @@ services:
       - dsb
 
   web:
-    build: .
+    build:
+      context: .
+      target: runner
     restart: unless-stopped
     environment:
       DATABASE_URL: mysql://dsb:${MYSQL_PASSWORD:-dsb}@mysql:3306/dsb_law
@@ -42,7 +44,9 @@ services:
       - dsb
 
   worker:
-    build: .
+    build:
+      context: .
+      target: worker
     restart: unless-stopped
     command: npm run worker:newsletter
     environment:
