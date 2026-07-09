@@ -142,13 +142,6 @@ export default async function UserLoginPage({
         <UserSubmitButton pendingLabel="Signing in…">Sign in</UserSubmitButton>
         <UserFormPendingOverlay message="Signing in…" />
       </form>
-
-      <p className="mt-6 text-center text-xs text-gray-500">
-        DSB staff?{' '}
-        <Link href="/admin/login" className={AUTH_LINK}>
-          Sign in to the admin portal
-        </Link>
-      </p>
     </AuthShell>
   );
 }
