@@ -1,60 +1,67 @@
-import { updatePreferencesAction } from '@/lib/account/actions';
-import { AUTH_BUTTON, AUTH_FIELD, AUTH_LABEL } from '@/components/auth/auth-classes';
+import { updatePreferencesAction, unsubscribeNewsletterAction } from '@/lib/account/actions';
+import NewsletterInterestFields, {
+  type NewsletterCategory,
+} from '@/components/subscription/NewsletterInterestFields';
+import UserFormPendingOverlay from '@/components/auth/UserFormPendingOverlay';
+import UserSubmitButton from '@/components/auth/UserSubmitButton';
+import { AUTH_BUTTON } from '@/components/auth/auth-classes';
+import { formatSubscriptionFrequency } from '@/lib/subscription/labels';
 
-type Category = { id: string; name: string };
 type Preference = { serviceCategoryId: string; frequency: string };
 
-export default function PreferencesForm({
-  categories,
-  preferences,
-  defaultFrequency,
-}: {
-  categories: Category[];
+type Props = {
+  categories: NewsletterCategory[];
   preferences: Preference[];
   defaultFrequency: string;
-}) {
-  const selected = new Set(preferences.map((p) => p.serviceCategoryId));
+};
+
+export default function PreferencesForm({ categories, preferences, defaultFrequency }: Props) {
+  const isSubscribed = preferences.length > 0;
+  const selectedCategoryIds = preferences.map((pref) => pref.serviceCategoryId);
 
   return (
-    <form action={updatePreferencesAction} className="user-account-card">
+    <div className="user-account-card user-account-card--preferences">
       <h2 className="user-account-card-title">Newsletter preferences</h2>
-      <p className="user-account-card-desc">
-        Choose practice areas and how often you want legal updates by email.
-      </p>
+      {isSubscribed ? (
+        <p className="user-account-card-desc">
+          You are receiving legal updates for {preferences.length} practice area
+          {preferences.length === 1 ? '' : 's'} on a{' '}
+          <strong>{formatSubscriptionFrequency(defaultFrequency).toLowerCase()}</strong> schedule.
+        </p>
+      ) : (
+        <div className="user-account-empty-subscribe">
+          <p className="user-account-empty-subscribe-title">You are not subscribed yet</p>
+          <p className="user-account-empty-subscribe-desc">
+            Choose the practice areas you want legal updates for. You can change these anytime.
+          </p>
+        </div>
+      )}
 
-      <div className="mt-5">
-        <label htmlFor="frequency" className={AUTH_LABEL}>
-          Delivery frequency
-        </label>
-        <select id="frequency" name="frequency" defaultValue={defaultFrequency} className={AUTH_FIELD}>
-          <option value="WEEKLY">Weekly</option>
-          <option value="TWICE_WEEKLY">Twice per week</option>
-          <option value="MONTHLY">Monthly</option>
-        </select>
-      </div>
+      <form action={updatePreferencesAction} className="mt-5">
+        <NewsletterInterestFields
+          categories={categories}
+          defaultFrequency={defaultFrequency as 'WEEKLY' | 'TWICE_WEEKLY' | 'MONTHLY'}
+          selectedCategoryIds={selectedCategoryIds}
+          compact
+          hint="Select at least one practice area to start receiving legal updates."
+        />
 
-      <div className="mt-5 space-y-2">
-        <p className={AUTH_LABEL}>Practice areas</p>
-        {categories.map((cat) => (
-          <label
-            key={cat.id}
-            className="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"
-          >
-            <input
-              type="checkbox"
-              name="serviceCategoryIds"
-              value={cat.id}
-              defaultChecked={selected.has(cat.id)}
-              className="accent-[#05162e]"
-            />
-            {cat.name}
-          </label>
-        ))}
-      </div>
+        <UserSubmitButton pendingLabel="Saving preferences…" className={`mt-5 max-w-xs ${AUTH_BUTTON}`}>
+          {isSubscribed ? 'Save preferences' : 'Subscribe to updates'}
+        </UserSubmitButton>
+        <UserFormPendingOverlay message="Saving preferences…" />
+      </form>
 
-      <button type="submit" className={`${AUTH_BUTTON} mt-5 max-w-xs`}>
-        Save preferences
-      </button>
-    </form>
+      {isSubscribed ? (
+        <form action={unsubscribeNewsletterAction} className="user-account-unsubscribe-form">
+          <p className="user-account-unsubscribe-copy">
+            Stop all newsletter emails from your account. You can subscribe again later from this page.
+          </p>
+          <button type="submit" className="user-account-unsubscribe-btn">
+            Unsubscribe from all updates
+          </button>
+        </form>
+      ) : null}
+    </div>
   );
 }

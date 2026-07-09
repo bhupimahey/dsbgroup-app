@@ -4,6 +4,6 @@ export const AUTH_FIELD =
 export const AUTH_LABEL = 'block text-sm font-semibold text-[#05162e]';
 
 export const AUTH_BUTTON =
-  'w-full rounded-md bg-[#05162e] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0a2444] disabled:opacity-60';
+  'w-full rounded-md bg-[#c5a059] px-4 py-2.5 text-sm font-semibold text-[#05162e] transition hover:bg-[#9a7b3f] hover:text-white disabled:opacity-60';
 
 export const AUTH_LINK = 'font-semibold text-[#c5a059] hover:underline';

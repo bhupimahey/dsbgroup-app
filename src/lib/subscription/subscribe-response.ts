@@ -12,7 +12,7 @@ export type SubscribeResult =
 export type SubscriberCheckResult =
   | { ok: false; error: string }
   | { ok: true; action: 'pick_services' }
-  | { ok: true; action: 'done'; message: string };
+  | { ok: true; action: 'done'; message: string; accountUrl?: string };
 
 export function sameIdSet(a: string[], b: string[]) {
   if (a.length !== b.length) return false;

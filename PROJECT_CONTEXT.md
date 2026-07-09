@@ -50,7 +50,7 @@ docker compose -f docker-compose.prod.yml up -d --build
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | `admin@dsblaw.local` | `Admin@12345` |
+| Admin | `admin@gmail.com` | `Admin@12345` |
 
 ## Dummy email domain (no real domain required for dev)
 
@@ -120,7 +120,7 @@ Read PROJECT_CONTEXT.md and README.md in that folder before making changes.
 
 Stack: Next.js 16 App Router, MySQL/Prisma 7, Auth.js, Redis/BullMQ, Resend (dummy domain dsblawgroup.com).
 
-PRD Upgrade.pdf scope (phases 1–4) is implemented in code. Admin: admin@dsblaw.local / Admin@12345.
+PRD Upgrade.pdf scope (phases 1–4) is implemented in code. Admin: admin@gmail.com / Admin@12345.
 
 My request: [DESCRIBE YOUR TASK HERE]
 ```

@@ -68,6 +68,22 @@ export const faqItemSchema = z.object({
   published: z.coerce.boolean().optional(),
 });
 
+export const videoTestimonialSchema = z.object({
+  title: z.string().min(1).max(200),
+  embedUrl: z.string().min(1).max(2000),
+  sortOrder: z.coerce.number().int().min(0).max(9999).optional(),
+  published: z.coerce.boolean().optional(),
+});
+
+export const textTestimonialSchema = z.object({
+  quote: z.string().min(1).max(5000),
+  name: z.string().min(1).max(120),
+  role: z.string().min(1).max(200),
+  imagePath: z.string().max(500).optional().or(z.literal('')),
+  sortOrder: z.coerce.number().int().min(0).max(9999).optional(),
+  published: z.coerce.boolean().optional(),
+});
+
 export const categorySchema = z.object({
   slug: z.string().min(1).max(120).regex(/^[a-z0-9-]+$/),
   name: z.string().min(1).max(200),
@@ -116,15 +132,31 @@ export const preferencesSchema = z.object({
   serviceCategoryIds: z.array(z.string()).min(1),
 });
 
-export const registerSchema = z.object({
-  name: z.string().min(2).max(120),
-  email: z.string().email().max(200),
-  password: z.string().min(8).max(128),
-  confirmPassword: z.string().min(8).max(128),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-});
+export const registerSchema = z
+  .object({
+    name: z.string().min(2).max(120),
+    email: z.string().email().max(200),
+    password: z.string().min(8).max(128),
+    confirmPassword: z.string().min(8).max(128),
+    subscribeNewsletter: z.enum(['on']).optional(),
+    frequency: z.enum(['WEEKLY', 'TWICE_WEEKLY', 'MONTHLY']).optional(),
+    serviceCategoryIds: z.array(z.string()).optional(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
+  .superRefine((data, ctx) => {
+    if (data.subscribeNewsletter !== 'on') return;
+
+    if (!data.serviceCategoryIds?.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Select at least one practice area for newsletter updates.',
+        path: ['serviceCategoryIds'],
+      });
+    }
+  });
 
 export const resetRequestSchema = z.object({
   email: z.string().email().max(200),

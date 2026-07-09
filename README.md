@@ -38,7 +38,7 @@ npm run worker:newsletter
 | `/account` | Preferences & deactivate |
 | `/forgot-password` | Password reset |
 
-**Admin:** `admin@dsblaw.local` / `Admin@12345`
+**Admin:** `admin@gmail.com` / `Admin@12345` (set via `SEED_ADMIN_*` in `.env`, then `npm run db:seed`)
 
 ## PRD feature checklist
 

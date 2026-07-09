@@ -2,6 +2,8 @@ import { AuthError } from 'next-auth';
 
 import { redirect } from 'next/navigation';
 
+import bcrypt from 'bcryptjs';
+
 import { auth, signIn } from '@/lib/auth';
 
 import { isStaffRole } from '@/lib/auth-utils';
@@ -9,6 +11,8 @@ import { isStaffRole } from '@/lib/auth-utils';
 import DsbLogo from '@/components/brand/DsbLogo';
 
 import AdminLoginForm from '@/components/admin/AdminLoginForm';
+
+import { prisma } from '@/lib/db';
 
 
 
@@ -74,15 +78,35 @@ export default async function AdminLoginPage({
 
       target.startsWith('/admin') && !target.startsWith('/admin/login') ? target : '/admin';
 
+    const email = String(formData.get('email') ?? '').trim().toLowerCase();
+
+    const password = String(formData.get('password') ?? '');
+
+    const existing = await prisma.user.findUnique({ where: { email } });
+
+    if (existing?.passwordHash && existing.active) {
+
+      const matches = await bcrypt.compare(password, existing.passwordHash);
+
+      if (matches && !isStaffRole(existing.role)) {
+
+        redirect(`/admin/login?error=NotStaff&callbackUrl=${encodeURIComponent(safeTarget)}`);
+
+      }
+
+    }
+
 
 
     try {
 
       await signIn('credentials', {
 
-        email: String(formData.get('email') ?? ''),
+        email,
 
-        password: String(formData.get('password') ?? ''),
+        password,
+
+        portal: 'admin',
 
         redirectTo: safeTarget,
 

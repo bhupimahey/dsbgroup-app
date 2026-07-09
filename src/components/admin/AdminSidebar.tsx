@@ -40,7 +40,7 @@ const NAV_GROUPS = [
 
   },
 
-  { title: 'Organization', hrefs: ['/admin/team', '/admin/faq', '/admin/offices'] },
+  { title: 'Organization', hrefs: ['/admin/team', '/admin/faq', '/admin/testimonials', '/admin/offices'] },
 
   { title: 'Communications', hrefs: ['/admin/newsletters', '/admin/subscribers', '/admin/users', '/admin/staff', '/admin/leads'] },
 

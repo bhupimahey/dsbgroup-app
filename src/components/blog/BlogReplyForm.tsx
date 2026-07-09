@@ -1,6 +1,8 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
+import UserBusyOverlay from '@/components/auth/UserBusyOverlay';
+import UserSpinner from '@/components/auth/UserSpinner';
 
 export default function BlogReplyForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -41,6 +43,7 @@ export default function BlogReplyForm() {
 
   return (
     <div className="blogright-contact-section">
+      <UserBusyOverlay active={status === 'loading'} message="Sending your message…" />
       <h2>Leave a Reply</h2>
       <p>Provide clear contact information, including phone number, email, and address.</p>
 
@@ -66,7 +69,16 @@ export default function BlogReplyForm() {
 
         <div className="blogright-submit-wrap">
           <button type="submit" disabled={status === 'loading'} className="blogright-submit">
-            {status === 'loading' ? 'Sending...' : 'Submit Now'} <span aria-hidden>→</span>
+            {status === 'loading' ? (
+              <>
+                <UserSpinner className="user-spinner user-spinner--inline user-spinner--light" />
+                Sending…
+              </>
+            ) : (
+              <>
+                Submit Now <span aria-hidden>→</span>
+              </>
+            )}
           </button>
         </div>
 

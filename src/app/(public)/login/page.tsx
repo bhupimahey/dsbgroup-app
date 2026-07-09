@@ -1,11 +1,21 @@
 import Link from 'next/link';
 import { AuthError } from 'next-auth';
 import { redirect } from 'next/navigation';
+import bcrypt from 'bcryptjs';
 import { auth, signIn } from '@/lib/auth';
+import { isStaffRole } from '@/lib/auth-utils';
+import UserFormPendingOverlay from '@/components/auth/UserFormPendingOverlay';
+import UserSubmitButton from '@/components/auth/UserSubmitButton';
 import AuthShell from '@/components/auth/AuthShell';
-import { AUTH_BUTTON, AUTH_FIELD, AUTH_LABEL, AUTH_LINK } from '@/components/auth/auth-classes';
+import { AUTH_FIELD, AUTH_LABEL, AUTH_LINK } from '@/components/auth/auth-classes';
+import { prisma } from '@/lib/db';
 
 export const metadata = { title: 'Client Login' };
+
+const ERROR_MESSAGES: Record<string, string> = {
+  CredentialsSignin: 'Invalid email or password. If you just registered, verify your email first.',
+  StaffUseAdmin: 'Staff accounts cannot sign in here. Use the admin portal instead.',
+};
 
 export default async function UserLoginPage({
   searchParams,
@@ -18,6 +28,9 @@ export default async function UserLoginPage({
     callbackUrl?.startsWith('/') && !callbackUrl.startsWith('/admin') ? callbackUrl : '/account';
 
   if (session?.user) {
+    if (isStaffRole(session.user.role)) {
+      redirect('/admin');
+    }
     redirect(redirectTo);
   }
 
@@ -26,11 +39,22 @@ export default async function UserLoginPage({
     const target = String(formData.get('callbackUrl') ?? '/account');
     const safeTarget =
       target.startsWith('/') && !target.startsWith('/admin') ? target : '/account';
+    const email = String(formData.get('email') ?? '').trim().toLowerCase();
+    const password = String(formData.get('password') ?? '');
+
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing?.passwordHash && existing.active) {
+      const matches = await bcrypt.compare(password, existing.passwordHash);
+      if (matches && isStaffRole(existing.role)) {
+        redirect(`/login?error=StaffUseAdmin&callbackUrl=${encodeURIComponent(safeTarget)}`);
+      }
+    }
 
     try {
       await signIn('credentials', {
-        email: String(formData.get('email') ?? ''),
-        password: String(formData.get('password') ?? ''),
+        email,
+        password,
+        portal: 'client',
         redirectTo: safeTarget,
       });
     } catch (err) {
@@ -103,14 +127,28 @@ export default async function UserLoginPage({
 
         {error ? (
           <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
-            Invalid email or password. If you just registered, verify your email first.
+            {ERROR_MESSAGES[error] ?? ERROR_MESSAGES.CredentialsSignin}
+            {error === 'StaffUseAdmin' ? (
+              <>
+                {' '}
+                <Link href="/admin/login" className={AUTH_LINK}>
+                  Go to admin login
+                </Link>
+              </>
+            ) : null}
           </p>
         ) : null}
 
-        <button type="submit" className={AUTH_BUTTON}>
-          Sign in
-        </button>
+        <UserSubmitButton pendingLabel="Signing in…">Sign in</UserSubmitButton>
+        <UserFormPendingOverlay message="Signing in…" />
       </form>
+
+      <p className="mt-6 text-center text-xs text-gray-500">
+        DSB staff?{' '}
+        <Link href="/admin/login" className={AUTH_LINK}>
+          Sign in to the admin portal
+        </Link>
+      </p>
     </AuthShell>
   );
 }

@@ -65,7 +65,12 @@ export async function resetPasswordAction(formData: FormData) {
   redirect('/login?reset=1');
 }
 
-export async function verifyEmailAction(token: string): Promise<{ ok: boolean; message: string }> {
+export async function verifyEmailAction(token: string): Promise<{
+  ok: boolean;
+  message: string;
+  categories?: string[];
+  frequency?: string;
+}> {
   const record = await prisma.verificationToken.findUnique({ where: { token } });
   if (!record || record.identifier.startsWith('reset:')) {
     return { ok: false, message: 'Invalid or expired verification link.' };
@@ -81,7 +86,24 @@ export async function verifyEmailAction(token: string): Promise<{ ok: boolean; m
   });
   await prisma.verificationToken.delete({ where: { token } });
 
-  return { ok: true, message: 'Your email is verified. You can now log in.' };
+  const user = await prisma.user.findUnique({
+    where: { email: record.identifier },
+    include: {
+      subscriptionPreferences: {
+        include: { serviceCategory: { select: { name: true } } },
+      },
+    },
+  });
+
+  const categories = user?.subscriptionPreferences.map((pref) => pref.serviceCategory.name) ?? [];
+  const frequency = user?.subscriptionPreferences[0]?.frequency;
+
+  return {
+    ok: true,
+    message: 'Your email is verified. You can now log in.',
+    categories: categories.length ? categories : undefined,
+    frequency,
+  };
 }
 
 export async function registerAction(
@@ -94,6 +116,9 @@ export async function registerAction(
     email: String(formData.get('email') ?? ''),
     password: String(formData.get('password') ?? ''),
     confirmPassword: String(formData.get('confirmPassword') ?? ''),
+    subscribeNewsletter: formData.get('subscribeNewsletter') === 'on' ? 'on' : undefined,
+    frequency: String(formData.get('frequency') ?? 'WEEKLY'),
+    serviceCategoryIds: formData.getAll('serviceCategoryIds').map(String),
   });
 
   if (!parsed.success) {
@@ -105,16 +130,41 @@ export async function registerAction(
   if (existing) return { error: 'An account with this email already exists.' };
 
   const passwordHash = await bcrypt.hash(parsed.data.password, 12);
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: { name: parsed.data.name.trim(), email, passwordHash, role: 'USER', active: true },
   });
+
+  let categoryNames: string[] = [];
+  let newsletterFrequency: 'WEEKLY' | 'TWICE_WEEKLY' | 'MONTHLY' | undefined;
+
+  if (parsed.data.subscribeNewsletter === 'on' && parsed.data.serviceCategoryIds?.length) {
+    const frequency = parsed.data.frequency ?? 'WEEKLY';
+    newsletterFrequency = frequency;
+    const categories = await prisma.serviceCategory.findMany({
+      where: { id: { in: parsed.data.serviceCategoryIds } },
+      select: { id: true, name: true },
+    });
+    categoryNames = categories.map((category) => category.name);
+
+    await prisma.subscriptionPreference.createMany({
+      data: parsed.data.serviceCategoryIds.map((serviceCategoryId) => ({
+        userId: user.id,
+        serviceCategoryId,
+        frequency,
+      })),
+    });
+  }
 
   const token = randomBytes(32).toString('hex');
   const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
   await prisma.verificationToken.deleteMany({ where: { identifier: email } });
   await prisma.verificationToken.create({ data: { identifier: email, token, expires } });
 
-  const url = await sendVerificationEmail(email, token);
+  const url = await sendVerificationEmail(email, token, {
+    name: parsed.data.name.trim(),
+    categoryNames,
+    frequency: newsletterFrequency,
+  });
   const callbackUrl = String(formData.get('callbackUrl') ?? '').trim();
   const safeCallback =
     callbackUrl.startsWith('/') && !callbackUrl.startsWith('/admin') ? callbackUrl : '';

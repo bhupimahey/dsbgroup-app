@@ -1,4 +1,6 @@
 import { changePasswordAction } from '@/lib/account/actions';
+import UserFormPendingOverlay from '@/components/auth/UserFormPendingOverlay';
+import UserSubmitButton from '@/components/auth/UserSubmitButton';
 import { AUTH_BUTTON, AUTH_FIELD, AUTH_LABEL } from '@/components/auth/auth-classes';
 
 export default function ChangePasswordForm() {
@@ -49,9 +51,10 @@ export default function ChangePasswordForm() {
           />
         </div>
       </div>
-      <button type="submit" className={`${AUTH_BUTTON} mt-5 max-w-xs`}>
+      <UserSubmitButton pendingLabel="Updating password…" className={`mt-5 max-w-xs ${AUTH_BUTTON}`}>
         Update password
-      </button>
+      </UserSubmitButton>
+      <UserFormPendingOverlay message="Updating password…" />
     </form>
   );
 }

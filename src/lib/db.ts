@@ -1,9 +1,35 @@
 import { createPrismaClient } from '@/lib/prisma-client';
 
-const globalForPrisma = globalThis as unknown as { prisma: ReturnType<typeof createPrismaClient> | undefined };
+type PrismaClientInstance = ReturnType<typeof createPrismaClient>;
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClientInstance | undefined;
+};
 
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
+function hasTestimonialDelegates(client: PrismaClientInstance): boolean {
+  return (
+    typeof client.videoTestimonial?.findMany === 'function' &&
+    typeof client.textTestimonial?.findMany === 'function'
+  );
 }
+
+function resolvePrisma(): PrismaClientInstance {
+  const cached = globalForPrisma.prisma;
+  if (cached && hasTestimonialDelegates(cached)) {
+    return cached;
+  }
+
+  const client = createPrismaClient();
+  if (process.env.NODE_ENV !== 'production') {
+    globalForPrisma.prisma = client;
+  }
+  return client;
+}
+
+export const prisma = new Proxy({} as PrismaClientInstance, {
+  get(_target, property, receiver) {
+    const client = resolvePrisma();
+    const value = Reflect.get(client, property, receiver);
+    return typeof value === 'function' ? value.bind(client) : value;
+  },
+});

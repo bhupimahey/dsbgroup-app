@@ -2,6 +2,13 @@
 
 .theme-inner-section {
   padding: 4rem 0 5rem;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.theme-inner-section p,
+.theme-inner-section li {
+  text-align: justify;
 }
 
 .theme-inner-container {
@@ -18,6 +25,8 @@
   text-align: center;
   max-width: 760px;
   margin: 0 auto 3rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--theme-gold);
 }
 
 .theme-inner-grid-2 {
@@ -178,8 +187,8 @@
 
 .theme-sidebar-link-row:hover,
 .theme-sidebar-link-row.is-active {
-  background: #1d2940;
-  color: #fff;
+  background: var(--theme-gold);
+  color: var(--theme-navy);
 }
 
 .theme-sidebar-link-row span[aria-hidden] {
@@ -197,7 +206,7 @@
   gap: 0.5rem;
   margin-top: 1rem;
   border-radius: 2px;
-  background: #6083a9;
+  background: var(--theme-gold);
   color: #fff;
   font-size: 16px;
   font-weight: 700;
@@ -206,7 +215,8 @@
 }
 
 .theme-sidebar-help a:hover {
-  background: #1d2940;
+  background: var(--theme-gold-dark);
+  color: #fff;
 }
 
 /* blogright */
@@ -312,9 +322,9 @@
 }
 
 .blogmiddle-share a:hover {
-  background: #1d2940;
-  color: #fff;
-  border-color: #1d2940;
+  background: var(--theme-gold);
+  color: var(--theme-navy);
+  border-color: var(--theme-gold);
 }
 
 .blogright-tags ul {
@@ -422,8 +432,8 @@
 }
 
 .blogright-tag-cloud a:hover {
-  background: #1d2940;
-  color: #fff;
+  background: var(--theme-gold);
+  color: var(--theme-navy);
 }
 
 /* contact2 — contact2.html */
@@ -481,6 +491,7 @@
 
 .contact2-auhtor-section--dark {
   background: #1d2940;
+  border-top: 3px solid var(--theme-gold);
 }
 
 .contact2-auhtor-section--dark .contact2-location h3,
@@ -494,7 +505,8 @@
 }
 
 .contact2-auhtor-section:not(.contact2-auhtor-section--dark):hover {
-  background: #1d2940;
+  background: var(--theme-gold);
+  color: var(--theme-navy);
 }
 
 .contact2-auhtor-section:not(.contact2-auhtor-section--dark):hover .contact2-location h3,
@@ -597,7 +609,7 @@
   margin-top: 2rem;
   border: 0;
   border-radius: 2px;
-  background: #6083a9;
+  background: var(--theme-gold);
   color: #fff;
   font-size: 16px;
   font-weight: 700;
@@ -612,8 +624,8 @@
 }
 
 .contact2-submit:hover:not(:disabled) {
-  background: #fff;
-  color: #1d2940;
+  background: var(--theme-gold-dark);
+  color: #fff;
 }
 
 .contact2-submit:disabled {
@@ -700,7 +712,7 @@
 }
 
 .contact2-accordion-btn[data-open='true'] {
-  color: #6083a9;
+  color: var(--theme-gold);
 }
 
 .contact2-accordion-indicator {
@@ -712,7 +724,7 @@
 }
 
 .contact2-accordion-btn[data-open='true'] .contact2-accordion-indicator {
-  color: #6083a9;
+  color: var(--theme-gold);
 }
 
 .contact2-accordion-body {
@@ -725,7 +737,7 @@
 
 /* contact2 CTA */
 .contact2-cta {
-  background: #6083a9;
+  background: var(--theme-gold);
   position: relative;
   padding: 5rem 0;
   overflow: hidden;
@@ -775,8 +787,8 @@
 }
 
 .contact2-cta-btn--dark {
-  background: #1d2940;
-  color: #fff;
+  background: var(--theme-gold);
+  color: var(--theme-navy);
 }
 
 .contact2-cta-btn--dark:hover {
@@ -790,8 +802,8 @@
 }
 
 .contact2-cta-btn--light:hover {
-  background: #1d2940;
-  color: #fff;
+  background: var(--theme-gold);
+  color: var(--theme-navy);
 }
 
 @media (max-width: 991px) {

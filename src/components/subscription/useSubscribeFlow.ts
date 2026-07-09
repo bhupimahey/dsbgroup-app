@@ -16,6 +16,7 @@ type SubscribeState = {
   loading: boolean;
   checking: boolean;
   message: string;
+  accountUrl: string | null;
   categories: ServiceCategory[];
 };
 
@@ -27,6 +28,7 @@ const DEFAULT_STATE: SubscribeState = {
   loading: false,
   checking: false,
   message: '',
+  accountUrl: null,
   categories: [],
 };
 
@@ -66,6 +68,7 @@ export function useSubscribeFlow() {
           open: false,
           selectedCategoryIds: [],
           message: result.message,
+          accountUrl: result.accountUrl ?? null,
         }));
         return;
       }
@@ -114,6 +117,7 @@ export function useSubscribeFlow() {
         open: false,
         selectedCategoryIds: [],
         message: result.message ?? 'Check your email to confirm your subscription.',
+        accountUrl: null,
       }));
     } catch (error) {
       setState((prev) => ({

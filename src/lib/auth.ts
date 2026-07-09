@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
 import { authConfig } from '@/lib/auth.config';
+import { isStaffRole } from '@/lib/auth-utils';
 import { prisma } from '@/lib/db';
 import type { UserRole } from '@/generated/prisma/client';
 
@@ -38,10 +39,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
+        portal: { label: 'Portal', type: 'text' },
       },
       async authorize(credentials) {
         const email = String(credentials?.email ?? '').trim().toLowerCase();
         const password = String(credentials?.password ?? '');
+        const portal = String(credentials?.portal ?? 'client');
         if (!email || !password) return null;
 
         const user = await prisma.user.findUnique({ where: { email } });
@@ -49,6 +52,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const ok = await bcrypt.compare(password, user.passwordHash);
         if (!ok) return null;
+
+        if (portal === 'client' && isStaffRole(user.role)) return null;
+        if (portal === 'admin' && !isStaffRole(user.role)) return null;
 
         if (user.role === 'USER' && !user.emailVerified) return null;
 

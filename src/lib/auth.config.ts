@@ -35,6 +35,9 @@ export const authConfig = {
           loginUrl.searchParams.set('callbackUrl', pathname);
           return Response.redirect(loginUrl);
         }
+        if (isStaffRole(auth.user.role as UserRole)) {
+          return Response.redirect(new URL('/admin', request.nextUrl));
+        }
         return true;
       }
 

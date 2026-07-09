@@ -2,6 +2,7 @@
 
 import { randomBytes } from 'crypto';
 import { prisma } from '@/lib/db';
+import { auth } from '@/lib/auth';
 import { sendSubscriberVerifyEmail } from '@/lib/email/mailer';
 import { subscribeSchema } from '@/lib/validations/cms';
 import {
@@ -11,6 +12,16 @@ import {
   type SubscriberCheckResult,
 } from '@/lib/subscription/subscribe-response';
 import { z } from 'zod';
+
+async function guestAccountMessage(email: string): Promise<SubscriberCheckResult> {
+  return {
+    ok: true,
+    action: 'done',
+    message:
+      'This email has a client account. Sign in to manage newsletter preferences from your profile.',
+    accountUrl: `/login?callbackUrl=${encodeURIComponent('/account')}`,
+  };
+}
 
 async function syncPreferences(
   subscriberId: string,
@@ -32,6 +43,21 @@ export async function checkSubscriberEmailAction(email: string): Promise<Subscri
   const parsed = z.string().email().safeParse(normalized);
   if (!parsed.success) {
     return { ok: false, error: 'Please enter a valid email address.' };
+  }
+
+  const session = await auth();
+  if (session?.user) {
+    return {
+      ok: true,
+      action: 'done',
+      message: 'You are signed in. Manage newsletter preferences from your account profile.',
+      accountUrl: '/account',
+    };
+  }
+
+  const existingUser = await prisma.user.findUnique({ where: { email: normalized } });
+  if (existingUser) {
+    return guestAccountMessage(normalized);
   }
 
   const existing = await prisma.subscriber.findUnique({ where: { email: normalized } });
@@ -92,6 +118,15 @@ export async function subscribeGuestAction(formData: FormData): Promise<Subscrib
 
   const email = parsed.data.email.trim().toLowerCase();
   const { frequency, serviceCategoryIds } = parsed.data;
+
+  const existingUser = await prisma.user.findUnique({ where: { email } });
+  if (existingUser) {
+    return {
+      ok: false,
+      error:
+        'This email has a client account. Sign in and manage newsletter preferences from your account page.',
+    };
+  }
 
   const existing = await prisma.subscriber.findUnique({
     where: { email },
@@ -175,9 +210,16 @@ export async function subscribeGuestAction(formData: FormData): Promise<Subscrib
 }
 
 export async function verifySubscriberAction(token: string) {
-  const subscriber = await prisma.subscriber.findFirst({ where: { verifyToken: token } });
+  const subscriber = await prisma.subscriber.findFirst({
+    where: { verifyToken: token },
+    include: {
+      preferences: {
+        include: { serviceCategory: { select: { name: true } } },
+      },
+    },
+  });
   if (!subscriber || !subscriber.verifyExpiresAt || subscriber.verifyExpiresAt < new Date()) {
-    return { ok: false, message: 'Invalid or expired subscription link.' };
+    return { ok: false as const, message: 'Invalid or expired subscription link.' };
   }
 
   await prisma.subscriber.update({
@@ -185,7 +227,15 @@ export async function verifySubscriberAction(token: string) {
     data: { verified: true, verifyToken: null, verifyExpiresAt: null },
   });
 
-  return { ok: true, message: 'Your subscription is confirmed. Thank you!' };
+  const categories = subscriber.preferences.map((pref) => pref.serviceCategory.name);
+
+  return {
+    ok: true as const,
+    message: 'Your subscription is confirmed. Thank you!',
+    email: subscriber.email,
+    frequency: subscriber.frequency,
+    categories,
+  };
 }
 
 export async function unsubscribeAction(email: string) {

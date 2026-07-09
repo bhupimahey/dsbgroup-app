@@ -23,6 +23,7 @@ function resolveSearchRoute(q: string): string {
   if (q.includes('newsletter')) return '/admin/newsletters';
   if (q.includes('team')) return '/admin/team';
   if (q.includes('faq')) return '/admin/faq';
+  if (q.includes('testimonial')) return '/admin/testimonials';
   if (q.includes('office')) return '/admin/offices';
   if (q.includes('subscriber')) return '/admin/subscribers';
   if (q.includes('staff')) return '/admin/staff';

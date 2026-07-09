@@ -3,12 +3,13 @@ import bcrypt from 'bcryptjs';
 import { createPrismaClient } from '../src/lib/prisma-client';
 import { CMS_PAGES, SERVICE_CATEGORY_PAGES } from './seed-content';
 import { TEAM_SEED_MEMBERS, teamSeedPayload } from '../src/lib/team/team-seed-data';
+import { TEXT_TESTIMONIALS, VIDEO_TESTIMONIALS } from '../src/lib/site/testimonials-content';
 
 const prisma = createPrismaClient();
 
 async function main() {
   const adminEmail = process.env.SEED_ADMIN_EMAIL ?? 'admin@gmail.com';
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? 'admin';
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? 'Admin@12345';
   const passwordHash = await bcrypt.hash(adminPassword, 12);
 
   const legacyDefaultEmail = 'admin@dsblaw.local';
@@ -258,6 +259,48 @@ async function main() {
       published: true,
     },
   });
+
+  for (const [index, video] of VIDEO_TESTIMONIALS.entries()) {
+    const id = `seed-video-testimonial-${index + 1}`;
+    await prisma.videoTestimonial.upsert({
+      where: { id },
+      update: {
+        title: video.title,
+        embedUrl: video.embedUrl,
+        sortOrder: index,
+        published: true,
+      },
+      create: {
+        id,
+        title: video.title,
+        embedUrl: video.embedUrl,
+        sortOrder: index,
+        published: true,
+      },
+    });
+  }
+
+  for (const [index, review] of TEXT_TESTIMONIALS.entries()) {
+    const id = `seed-text-testimonial-${index + 1}`;
+    await prisma.textTestimonial.upsert({
+      where: { id },
+      update: {
+        quote: review.quote,
+        name: review.name,
+        role: review.role,
+        sortOrder: index,
+        published: true,
+      },
+      create: {
+        id,
+        quote: review.quote,
+        name: review.name,
+        role: review.role,
+        sortOrder: index,
+        published: true,
+      },
+    });
+  }
 
   console.log('Seed complete.');
   console.log(`Admin login: ${adminEmail} / ${adminPassword}`);

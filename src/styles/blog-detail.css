@@ -319,17 +319,18 @@
   gap: 0.5rem;
   border: 0;
   border-radius: 2px;
-  background: #1d2940;
-  color: #fff;
+  background: var(--theme-gold);
+  color: var(--theme-navy);
   padding: 0.9rem 1.25rem;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.35s ease;
+  transition: background 0.35s ease, color 0.35s ease;
 }
 
 .blogmiddle-submit:hover:not(:disabled) {
-  background: #6083a9;
+  background: var(--theme-gold-dark);
+  color: #fff;
 }
 
 .blogmiddle-submit:disabled {

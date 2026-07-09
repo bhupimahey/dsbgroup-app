@@ -1,4 +1,6 @@
 import { updateProfileAction } from '@/lib/account/actions';
+import UserFormPendingOverlay from '@/components/auth/UserFormPendingOverlay';
+import UserSubmitButton from '@/components/auth/UserSubmitButton';
 import { AUTH_BUTTON, AUTH_FIELD, AUTH_LABEL } from '@/components/auth/auth-classes';
 
 type ProfileFormProps = {
@@ -23,9 +25,10 @@ export default function ProfileForm({ name }: ProfileFormProps) {
           className={AUTH_FIELD}
         />
       </div>
-      <button type="submit" className={`${AUTH_BUTTON} mt-5 max-w-xs`}>
+      <UserSubmitButton pendingLabel="Saving profile…" className={`mt-5 max-w-xs ${AUTH_BUTTON}`}>
         Save profile
-      </button>
+      </UserSubmitButton>
+      <UserFormPendingOverlay message="Saving profile…" />
     </form>
   );
 }

@@ -67,6 +67,13 @@ export default function AdminNavIcon({ icon, className = 'h-5 w-5' }: Props) {
           <circle cx="12" cy="17" r="0.75" fill={stroke} />
         </svg>
       );
+    case 'testimonials':
+      return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="M7 8h10M7 12h7M7 16h8" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M5 4h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-4 3v-3H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z" stroke={stroke} strokeWidth="1.5" strokeLinejoin="round" />
+        </svg>
+      );
     case 'offices':
       return (
         <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>

@@ -8,48 +8,33 @@ import {
   isNavHrefActive,
   isNavItemActive,
   MAIN_NAV,
+  OFFICE_LOCATIONS,
   SITE_CONTACT,
   type NavItem,
 } from '@/lib/site/nav-links';
+import { SITE_SOCIAL_LINKS } from '@/lib/site/social-links';
 
-const SOCIAL_LINKS = [
-  {
-    label: 'Facebook',
-    href: '#',
-    icon: (
-      <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-        <path
-          fill="currentColor"
-          d="M13.5 8.5V6.9c0-.8.5-.9.8-.9h1.6V3h-2.2C11.1 3 10.5 5 10.5 6.4v2.1H9v2.8h1.5V21h3V11.3h2l.3-2.8h-2.3z"
-        />
-      </svg>
-    ),
-  },
-  {
-    label: 'LinkedIn',
-    href: '#',
-    icon: (
-      <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-        <path
-          fill="currentColor"
-          d="M6.5 8.5A1.75 1.75 0 1 1 6.5 5a1.75 1.75 0 0 1 0 3.5zM5 9.8h3V19H5V9.8zm4.8 0h2.8v1.3h.1c.4-.8 1.4-1.6 2.8-1.6 3 0 3.5 1.9 3.5 4.4V19h-3v-4.3c0-1 0-2.3-1.4-2.3s-1.6 1.1-1.6 2.2V19h-3V9.8z"
-        />
-      </svg>
-    ),
-  },
-  {
-    label: 'YouTube',
-    href: '#',
-    icon: (
-      <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-        <path
-          fill="currentColor"
-          d="M21 8.4a2.5 2.5 0 0 0-1.8-1.8C17.7 6.2 12 6.2 12 6.2s-5.7 0-7.2.4A2.5 2.5 0 0 0 3 8.4 26 26 0 0 0 2.6 12c0 1.3.1 2.6.4 3.6a2.5 2.5 0 0 0 1.8 1.8c1.5.4 7.2.4 7.2.4s5.7 0 7.2-.4a2.5 2.5 0 0 0 1.8-1.8c.3-1 .4-2.3.4-3.6s-.1-2.6-.4-3.6zM10.2 14.8V9.2L15 12l-4.8 2.8z"
-        />
-      </svg>
-    ),
-  },
-] as const;
+function PhoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="theme-topbar-contact-icon" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.3 21 3 13.7 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"
+      />
+    </svg>
+  );
+}
+
+function EmailIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="theme-topbar-contact-icon" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"
+      />
+    </svg>
+  );
+}
 
 function navLinkClass(pathname: string, href: string, base = 'theme-main-nav-link') {
   return isNavHrefActive(pathname, href)
@@ -63,7 +48,7 @@ function navButtonClass(pathname: string, item: NavItem) {
     : 'theme-main-nav-button';
 }
 
-export default function SiteHeader({ authNav }: { authNav?: ReactNode }) {
+export default function SiteHeader({ socialAuth }: { socialAuth?: ReactNode }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -71,16 +56,43 @@ export default function SiteHeader({ authNav }: { authNav?: ReactNode }) {
     <header className="theme-header theme-shell">
       <div className="theme-topbar">
         <div className="theme-topbar-inner">
-          <div className="theme-topbar-links">
-            <a href={SITE_CONTACT.phoneHref}>{SITE_CONTACT.phone}</a>
-            <a href={SITE_CONTACT.emailHref}>{SITE_CONTACT.email}</a>
+          <div className="theme-topbar-start">
+            <div className="theme-topbar-contact">
+              <a href={SITE_CONTACT.phoneHref} className="theme-topbar-contact-link">
+                <PhoneIcon />
+                {SITE_CONTACT.phone}
+              </a>
+              <a href={SITE_CONTACT.emailHref} className="theme-topbar-contact-link">
+                <EmailIcon />
+                {SITE_CONTACT.email}
+              </a>
+            </div>
+
+            <div className="theme-topbar-locations" aria-label="Our locations">
+              <span className="theme-locations-badge">Our Locations</span>
+              <ul className="theme-locations-list">
+                {OFFICE_LOCATIONS.map((city) => (
+                  <li key={city}>{city}</li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className="theme-header-social" aria-label="Social Links">
-            {SOCIAL_LINKS.map((social) => (
-              <a key={social.label} href={social.href} aria-label={social.label}>
+
+          <div className="theme-header-social" aria-label="Social and account links">
+            {SITE_SOCIAL_LINKS.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                className="theme-header-social-link"
+                aria-label={social.label}
+                {...(social.href.startsWith('http')
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+              >
                 {social.icon}
               </a>
             ))}
+            {socialAuth}
           </div>
         </div>
       </div>
@@ -118,8 +130,6 @@ export default function SiteHeader({ authNav }: { authNav?: ReactNode }) {
             ),
           )}
         </ul>
-
-        {authNav ? <div className="theme-header-auth-desktop">{authNav}</div> : null}
 
         <button
           type="button"
@@ -161,7 +171,6 @@ export default function SiteHeader({ authNav }: { authNav?: ReactNode }) {
               </Link>
             ),
           )}
-          {authNav ? <div className="theme-header-auth-mobile">{authNav}</div> : null}
         </div>
       </div>
     </header>

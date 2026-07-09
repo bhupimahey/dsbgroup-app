@@ -3,7 +3,7 @@ export type NavItem =
   | (NavLink & { children?: undefined })
   | { label: string; href?: string; children: NavLink[] };
 
-/** Primary header navigation — matches live dsblawgroup.com structure. */
+/** Primary header navigation — matches dsblawgroup.com structure. */
 export const MAIN_NAV: NavItem[] = [
   { href: '/', label: 'Home' },
   {
@@ -15,11 +15,11 @@ export const MAIN_NAV: NavItem[] = [
       { href: '/achievements', label: 'Achievements' },
     ],
   },
-  { href: '/services', label: 'Our Services' },
-  { href: '/nbfc', label: 'NBFC' },
+  { href: '/services', label: 'Services' },
   {
-    label: 'HR & Labour Law',
+    label: "NBFC's HR & Labour Laws",
     children: [
+      { href: '/nbfc', label: 'NBFC' },
       { href: '/hr-labour-law/about', label: 'About HR & Labour Law' },
       { href: '/hr-labour-law/new-labour-codes', label: 'New Labour Codes Compliance' },
     ],
@@ -34,14 +34,9 @@ export const MAIN_NAV: NavItem[] = [
       { href: '/resources/video-lectures', label: 'Video Lectures' },
     ],
   },
+  { href: '/testimonials', label: 'Testimonials' },
   { href: '/blog', label: 'Blogs' },
-  {
-    label: 'Contact',
-    children: [
-      { href: '/contact', label: 'Contact Us' },
-      { href: '/careers', label: 'Career' },
-    ],
-  },
+  { href: '/contact', label: 'Contact' },
 ];
 
 export const FOOTER_LINKS: NavLink[] = [
@@ -92,18 +87,14 @@ export const FOOTER_USEFUL_LINKS: NavLink[] = [
   { href: '/register', label: 'Register' },
 ];
 
-/** Office cities shown on the homepage locations strip — matches dsblawgroup.com. */
+/** Office cities shown in the top bar locations strip. */
 export const OFFICE_LOCATIONS = [
+  'Jalandhar',
+  'Ludhiana',
   'Mumbai',
   'New Delhi',
   'Pune',
   'Gurugram',
-  'Noida',
-  'Bengaluru',
-  'Chennai',
-  'Kolkata',
-  'Jalandhar',
-  'Ludhiana',
   'Jaipur',
 ] as const;
 
@@ -115,6 +106,9 @@ export function isNavHrefActive(pathname: string, href: string): boolean {
   }
   if (href === '/blog') {
     return pathname === '/blog' || pathname.startsWith('/blog/');
+  }
+  if (href === '/testimonials') {
+    return pathname === '/testimonials';
   }
   if (href === '/newsletters') {
     return pathname === '/newsletters' || pathname.startsWith('/newsletters/');

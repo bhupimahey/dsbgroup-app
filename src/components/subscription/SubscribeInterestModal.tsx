@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import UserBusyOverlay from '@/components/auth/UserBusyOverlay';
+import UserSpinner from '@/components/auth/UserSpinner';
 
 type ServiceCategory = {
   id: string;
@@ -67,12 +69,14 @@ export default function SubscribeInterestModal({
   if (!open || typeof document === 'undefined') return null;
 
   return createPortal(
-    <div
-      className="theme-subscribe-modal-backdrop"
-      onClick={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
+    <>
+      <UserBusyOverlay active={loading} message="Subscribing…" />
+      <div
+        className="theme-subscribe-modal-backdrop"
+        onClick={(event) => {
+          if (event.target === event.currentTarget) onClose();
+        }}
+      >
       <div
         className="theme-subscribe-modal"
         role="dialog"
@@ -141,11 +145,19 @@ export default function SubscribeInterestModal({
             disabled={!canSubmit}
             onClick={onSubmit}
           >
-            {loading ? 'Subscribing...' : submitLabel}
+            {loading ? (
+              <>
+                <UserSpinner className="user-spinner user-spinner--inline user-spinner--light" />
+                Subscribing…
+              </>
+            ) : (
+              submitLabel
+            )}
           </button>
         </div>
       </div>
-    </div>,
+    </div>
+    </>,
     document.body,
   );
 }

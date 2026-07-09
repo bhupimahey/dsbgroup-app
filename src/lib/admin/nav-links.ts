@@ -24,6 +24,8 @@ export type AdminNavLink = {
 
     | 'faq'
 
+    | 'testimonials'
+
     | 'offices'
 
     | 'newsletters'
@@ -71,6 +73,13 @@ export const ADMIN_NAV_LINKS: AdminNavLink[] = [
   { href: '/admin/team', label: 'Team', description: 'Professional directory', icon: 'team' },
 
   { href: '/admin/faq', label: 'FAQ', description: 'Categorized questions', icon: 'faq' },
+
+  {
+    href: '/admin/testimonials',
+    label: 'Testimonials',
+    description: 'Video and written client reviews',
+    icon: 'testimonials',
+  },
 
   { href: '/admin/offices', label: 'Offices', description: 'Office locations', icon: 'offices' },
 

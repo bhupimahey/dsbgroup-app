@@ -3,9 +3,10 @@ import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
 import AosInit from '@/components/home/AosInit';
 import HomeCtaSubscribe from '@/components/home/HomeCtaSubscribe';
-import PanIndiaPresence from '@/components/home/PanIndiaPresence';
+import HomeTestimonialsShowcase from '@/components/home/HomeTestimonialsShowcase';
 import { prisma } from '@/lib/db';
 import { SITE_CONTACT } from '@/lib/site/nav-links';
+import { getPublishedTextTestimonials, getPublishedVideoTestimonials } from '@/lib/site/testimonials';
 import '@/styles/home-index2.css';
 
 function aos(animation: string, duration?: number, easing?: string) {
@@ -77,65 +78,6 @@ const CASE_STUDIES = [
   },
 ] as const;
 
-const PRICING_PLANS = [
-  {
-    name: 'Starter Advisory',
-    price: '₹29,000',
-    period: '/month',
-    features: [
-      'Legal consultation',
-      'Basic compliance review',
-      'Email support',
-      'Business planning guidance',
-    ],
-    extraFeatures: ['Document review', 'Regulatory updates', 'Quarterly check-ins', 'Policy templates'],
-  },
-  {
-    name: 'Growth Advisory',
-    price: '₹49,000',
-    period: '/month',
-    features: [
-      'Regulatory strategy',
-      'Document drafting',
-      'Priority support',
-      'Compliance roadmap',
-    ],
-    extraFeatures: ['Dedicated counsel hours', 'Board reporting support', 'Risk assessments', 'Training sessions'],
-  },
-  {
-    name: 'Enterprise Advisory',
-    price: '₹99,000',
-    period: '/month',
-    features: [
-      'Dedicated counsel',
-      'Complex transaction support',
-      'Executive reviews',
-      'Cross-border advisory',
-    ],
-    extraFeatures: ['On-site workshops', 'Crisis response support', 'Custom playbooks', 'Leadership briefings'],
-  },
-] as const;
-
-const TESTIMONIALS = [
-  {
-    quote:
-      'DSB Law Group gave us practical direction on compliance and helped us move faster with confidence.',
-    name: 'Financial Services Client',
-    role: 'Managing Director',
-  },
-  {
-    quote:
-      'Their advisory is sharp, business-focused, and always responsive when regulations change.',
-    name: 'Corporate Client',
-    role: 'Head of Legal',
-  },
-  {
-    quote: 'From licensing to governance, the team handled every legal milestone with clarity.',
-    name: 'NBFC Founder',
-    role: 'CEO',
-  },
-] as const;
-
 const SERVICE_ICONS = [
   '/images/theme/index2/icons/icon2.svg',
   '/images/theme/index2/icons/icon1.svg',
@@ -163,7 +105,7 @@ function formatPostDate(date: Date | null) {
 }
 
 export default async function HomePage() {
-  const [serviceCategories, blogPosts] = await Promise.all([
+  const [serviceCategories, blogPosts, videoTestimonials, textTestimonials] = await Promise.all([
     prisma.serviceCategory.findMany({
       where: { active: true },
       orderBy: { sortOrder: 'asc' },
@@ -175,6 +117,8 @@ export default async function HomePage() {
       take: 3,
       include: { categories: { include: { category: true } } },
     }),
+    getPublishedVideoTestimonials(),
+    getPublishedTextTestimonials(),
   ]);
 
   const [featuredPost, ...otherPosts] = blogPosts;
@@ -213,8 +157,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      <PanIndiaPresence />
 
       <section className="home2-section">
         <div className="home2-container home2-about-grid">
@@ -434,64 +376,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="home2-section home2-section--compact-bottom">
-        <div className="home2-container">
-          <div className="home2-section-head" {...aos('fade-down', 800)}>
-            <span className="home2-label">Pricing Plan</span>
-            <h2 className="home2-title-lg">Smart solution for your legal business needs</h2>
-          </div>
-
-          {PRICING_PLANS.map((plan, index) => (
-            <article key={plan.name} className="home2-pricing-card" {...aos('fade-down', 1000 + index * 200)}>
-              <div className="home2-pricing-row">
-                <div>
-                  <h3 className="home2-title-md" style={{ marginBottom: '20px' }}>
-                    {plan.name}
-                  </h3>
-                  <p className="home2-pricing-price">
-                    {plan.price}
-                    <span>{plan.period}</span>
-                  </p>
-                  <p className="home2-text-muted">
-                    Tailored legal advisory packages designed for your stage of growth and
-                    compliance complexity.
-                  </p>
-                  <Link href="/contact" className="home2-btn" style={{ marginTop: '32px' }}>
-                    Choose a Plan <span className="home2-btn-arrow">→</span>
-                  </Link>
-                </div>
-
-                <div className="home2-feature-grid">
-                  <div>
-                    <h4 className="home2-title-md" style={{ marginBottom: '24px' }}>
-                      Our Features
-                    </h4>
-                    <ul className="home2-feature-list">
-                      {plan.features.map((feature) => (
-                        <li key={feature}>
-                          <span>✓</span>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div style={{ marginTop: '45px' }}>
-                    <ul className="home2-feature-list">
-                      {plan.extraFeatures.map((feature) => (
-                        <li key={feature}>
-                          <span>✓</span>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className="home2-section home2-testimonials">
         <div className="home2-container">
           <div className="home2-section-head" {...aos('fade-down', 800)}>
@@ -499,20 +383,7 @@ export default async function HomePage() {
             <h2 className="home2-title-lg">Some words from our clients</h2>
           </div>
 
-          <div className="home2-testimonial-grid">
-            {TESTIMONIALS.map((testimonial) => (
-              <article key={testimonial.name} className="home2-testimonial-card">
-                <p className="home2-testimonial-quote">“{testimonial.quote}”</p>
-                <div className="home2-testimonial-author">
-                  <div className="home2-testimonial-avatar" />
-                  <div>
-                    <p className="home2-testimonial-name">{testimonial.name}</p>
-                    <p className="home2-testimonial-role">{testimonial.role}</p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+          <HomeTestimonialsShowcase videos={videoTestimonials} reviews={textTestimonials} />
         </div>
       </section>
 

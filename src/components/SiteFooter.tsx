@@ -1,5 +1,6 @@
 'use client';
 
+import SiteSocialLinks from '@/components/site/SiteSocialLinks';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import DsbLogo from '@/components/brand/DsbLogo';
@@ -11,28 +12,6 @@ import {
   HEAD_OFFICE,
   SITE_CONTACT,
 } from '@/lib/site/nav-links';
-
-const SOCIAL_LINKS = [
-  { label: 'Facebook', href: '#', icon: 'f' },
-  { label: 'LinkedIn', href: '#', icon: 'in' },
-  { label: 'YouTube', href: '#', icon: '▶' },
-] as const;
-
-function FooterSocialLinks({ className }: { className?: string }) {
-  return (
-    <div className={className} aria-label="Social links">
-      <ul>
-        {SOCIAL_LINKS.map((social) => (
-          <li key={social.label}>
-            <a href={social.href} aria-label={social.label}>
-              {social.icon}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
 
 function HomeFooter() {
   return (
@@ -46,7 +25,7 @@ function HomeFooter() {
                 Full-service legal and regulatory advisory for businesses, NBFCs, and institutions
                 across India.
               </p>
-              <FooterSocialLinks className="theme-footer-home-social" />
+              <SiteSocialLinks className="theme-footer-home-social" />
             </div>
 
             <div>
@@ -115,7 +94,7 @@ function InnerFooter() {
                 Full-service legal and regulatory advisory for businesses, NBFCs, and institutions
                 across India.
               </p>
-              <FooterSocialLinks className="theme-footer-social mt-4" />
+              <SiteSocialLinks className="theme-footer-social mt-4" />
             </div>
 
             <div>

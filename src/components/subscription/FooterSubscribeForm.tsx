@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import SubscribeInterestModal from '@/components/subscription/SubscribeInterestModal';
 import { useSubscribeFlow } from '@/components/subscription/useSubscribeFlow';
 
@@ -19,6 +20,9 @@ export default function FooterSubscribeForm({ variant = 'inline' }: { variant?: 
     e.preventDefault();
     await handleEmailSubmit(state.email);
   }
+
+  const messageClass =
+    variant === 'boxed' ? 'theme-footer-subscribe-message' : 'mt-2 text-xs text-white/80';
 
   return (
     <>
@@ -40,8 +44,16 @@ export default function FooterSubscribeForm({ variant = 'inline' }: { variant?: 
         </button>
       </form>
       {state.message ? (
-        <p className={variant === 'boxed' ? 'theme-footer-subscribe-message' : 'mt-2 text-xs text-white/80'}>
+        <p className={messageClass}>
           {state.message}
+          {state.accountUrl ? (
+            <>
+              {' '}
+              <Link href={state.accountUrl} className="theme-footer-subscribe-account-link">
+                Open account
+              </Link>
+            </>
+          ) : null}
         </p>
       ) : null}
 

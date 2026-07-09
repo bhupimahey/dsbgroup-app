@@ -7,11 +7,15 @@ export default async function SiteHeaderWithAuth() {
 
   return (
     <SiteHeader
-      authNav={
+      socialAuth={
         <HeaderAuthNav
           user={
             session?.user?.email
-              ? { email: session.user.email, name: session.user.name }
+              ? {
+                  email: session.user.email,
+                  name: session.user.name,
+                  role: session.user.role,
+                }
               : null
           }
         />

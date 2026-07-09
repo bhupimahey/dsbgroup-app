@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { requestPasswordResetAction } from '@/lib/auth/register-actions';
+import UserFormPendingOverlay from '@/components/auth/UserFormPendingOverlay';
+import UserSubmitButton from '@/components/auth/UserSubmitButton';
 import AuthShell from '@/components/auth/AuthShell';
-import { AUTH_BUTTON, AUTH_FIELD, AUTH_LABEL, AUTH_LINK } from '@/components/auth/auth-classes';
+import { AUTH_FIELD, AUTH_LABEL, AUTH_LINK } from '@/components/auth/auth-classes';
 
 export const metadata = { title: 'Forgot password' };
 
@@ -43,9 +45,8 @@ export default async function ForgotPasswordPage({
           </label>
           <input id="email" name="email" type="email" required className={AUTH_FIELD} />
         </div>
-        <button type="submit" className={AUTH_BUTTON}>
-          Send reset link
-        </button>
+        <UserSubmitButton pendingLabel="Sending reset link…">Send reset link</UserSubmitButton>
+        <UserFormPendingOverlay message="Sending reset link…" />
       </form>
     </AuthShell>
   );

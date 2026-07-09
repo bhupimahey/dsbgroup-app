@@ -1,6 +1,8 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
+import UserBusyOverlay from '@/components/auth/UserBusyOverlay';
+import UserSpinner from '@/components/auth/UserSpinner';
 
 type ContactFormProps = {
   variant?: 'light' | 'dark' | 'blog' | 'contact2';
@@ -62,7 +64,9 @@ export default function ContactForm({ variant = 'light' }: ContactFormProps) {
   }
 
   return (
-    <form onSubmit={onSubmit} className={formClass}>
+    <>
+      <UserBusyOverlay active={status === 'loading'} message="Sending your message…" />
+      <form onSubmit={onSubmit} className={formClass}>
       <div className={fieldClass}>
         <label htmlFor="firstName" className={usePlaceholderOnly ? 'sr-only' : undefined}>
           First Name
@@ -137,13 +141,31 @@ export default function ContactForm({ variant = 'light' }: ContactFormProps) {
       {isBlog ? (
         <div className="blogmiddle-submit-wrap">
           <button type="submit" disabled={status === 'loading'} className="blogmiddle-submit">
-            {status === 'loading' ? 'Sending...' : 'Submit Now'} <span aria-hidden>→</span>
+            {status === 'loading' ? (
+              <>
+                <UserSpinner className="user-spinner user-spinner--inline user-spinner--light" />
+                Sending…
+              </>
+            ) : (
+              <>
+                Submit Now <span aria-hidden>→</span>
+              </>
+            )}
           </button>
         </div>
       ) : isContact2 ? (
         <div className="contact2-submit-wrap">
           <button type="submit" disabled={status === 'loading'} className="contact2-submit">
-            {status === 'loading' ? 'Sending...' : 'Schedule Consultation'} <span aria-hidden>→</span>
+            {status === 'loading' ? (
+              <>
+                <UserSpinner className="user-spinner user-spinner--inline user-spinner--light" />
+                Sending…
+              </>
+            ) : (
+              <>
+                Schedule Consultation <span aria-hidden>→</span>
+              </>
+            )}
           </button>
         </div>
       ) : (
@@ -152,7 +174,14 @@ export default function ContactForm({ variant = 'light' }: ContactFormProps) {
           disabled={status === 'loading'}
           className={isDark ? 'contact1-submit' : 'theme-contact-submit'}
         >
-          {status === 'loading' ? 'Sending...' : 'Submit Now'}
+          {status === 'loading' ? (
+            <>
+              <UserSpinner className="user-spinner user-spinner--inline user-spinner--light" />
+              Sending…
+            </>
+          ) : (
+            'Submit Now'
+          )}
         </button>
       )}
 
@@ -187,5 +216,6 @@ export default function ContactForm({ variant = 'light' }: ContactFormProps) {
         </p>
       ) : null}
     </form>
+    </>
   );
 }

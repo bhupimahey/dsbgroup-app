@@ -78,6 +78,16 @@ export async function updatePreferencesAction(formData: FormData) {
   redirect('/account?saved=preferences');
 }
 
+export async function unsubscribeNewsletterAction() {
+  const session = await auth();
+  if (!session?.user?.id) redirect('/login');
+
+  await prisma.subscriptionPreference.deleteMany({ where: { userId: session.user.id } });
+
+  revalidatePath('/account');
+  redirect('/account?saved=unsubscribed');
+}
+
 export async function deactivateAccountAction() {
   const session = await auth();
   if (!session?.user?.id) redirect('/login');

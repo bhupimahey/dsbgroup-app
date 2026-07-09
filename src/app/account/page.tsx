@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { auth } from '@/lib/auth';
+import LogoutButton from '@/components/LogoutButton';
 import ChangePasswordForm from '@/components/account/ChangePasswordForm';
 import DeactivateAccountForm from '@/components/account/DeactivateAccountForm';
 import PreferencesForm from '@/components/account/PreferencesForm';
@@ -12,6 +13,7 @@ const SAVED_MESSAGES: Record<string, string> = {
   profile: 'Profile updated successfully.',
   password: 'Password updated successfully.',
   preferences: 'Newsletter preferences saved.',
+  unsubscribed: 'You have been unsubscribed from all newsletter updates.',
 };
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -54,6 +56,9 @@ export default async function AccountPage({
             Manage your profile, password, and newsletter preferences. Access premium articles after signing in.
           </p>
           <p className="user-account-hero-email">{session?.user?.email}</p>
+          <div className="user-account-hero-actions">
+            <LogoutButton className="user-account-logout-btn" />
+          </div>
         </div>
       </section>
 
@@ -72,7 +77,11 @@ export default async function AccountPage({
           </div>
           <div>
             <span className="user-account-summary-label">Newsletter topics</span>
-            <strong>{user?.subscriptionPreferences.length ?? 0} selected</strong>
+            <strong>
+              {user?.subscriptionPreferences.length
+                ? `${user.subscriptionPreferences.length} selected`
+                : 'Not subscribed'}
+            </strong>
           </div>
         </div>
 

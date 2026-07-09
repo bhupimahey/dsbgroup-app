@@ -45,12 +45,36 @@ export async function sendEmail(to: string, subject: string, html: string) {
   console.warn(`[email] RESEND_API_KEY is not set — email to ${to} was not sent.`);
 }
 
-export async function sendVerificationEmail(email: string, token: string) {
+export async function sendVerificationEmail(
+  email: string,
+  token: string,
+  options?: {
+    name?: string;
+    categoryNames?: string[];
+    frequency?: string;
+  },
+) {
   const url = absoluteUrl(`/verify-email?token=${encodeURIComponent(token)}`);
+  const {
+    formatCategoryList,
+    formatSubscriptionFrequency,
+  } = await import('@/lib/subscription/labels');
+
+  const newsletterBlock =
+    options?.categoryNames?.length && options.frequency
+      ? `<p><strong>Newsletter preferences</strong></p>
+<ul style="margin:0 0 16px;padding-left:20px;color:#334155;">
+  <li>Practice areas: ${formatCategoryList(options.categoryNames)}</li>
+  <li>Frequency: ${formatSubscriptionFrequency(options.frequency)}</li>
+</ul>`
+      : '';
+
+  const greeting = options?.name ? `<p>Hello ${options.name},</p>` : '';
+
   const html = buildEmailHtml({
     title: 'Verify your email address',
-    bodyHtml: `<p>Thank you for registering with DSB Law Group.</p>
-<p>Please confirm your email address to activate your client account, read premium articles, and manage newsletter preferences.</p>
+    bodyHtml: `${greeting}<p>Thank you for registering with DSB Law Group.</p>
+${newsletterBlock}<p>Please confirm your email address to activate your client account, read premium articles, and manage newsletter preferences.</p>
 <p style="margin:0;color:#64748b;font-size:14px;">This verification link expires in 24 hours.</p>
 <p style="margin:16px 0 0;color:#64748b;font-size:13px;word-break:break-all;">If the button does not work, copy this link:<br><a href="${url}">${url}</a></p>`,
     ctaUrl: url,
