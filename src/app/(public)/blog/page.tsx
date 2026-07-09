@@ -55,11 +55,11 @@ export default async function BlogIndexPage({
   return (
     <div className="theme-shell">
       <section className="blog3-hero">
-        <h1>Blog Grid 3</h1>
+        <h1>Blog</h1>
         <p className="blog3-breadcrumb">
           <Link href="/">Home</Link>
           <span aria-hidden>›</span>
-          <span>Blog Grid 3</span>
+          <span>Blog</span>
         </p>
       </section>
 
