@@ -62,59 +62,73 @@ export default function HomeTestimonialsShowcase({ videos, reviews }: HomeTestim
   const activeVideo = videos[videoIndex];
   const activeReview = reviews[reviewIndex];
 
+  if (!activeVideo && !activeReview) {
+    return (
+      <p className="home2-text text-center">Client testimonials will appear here once published.</p>
+    );
+  }
+
   return (
     <div className="home2-testimonial-split">
-      <div className="home2-testimonial-video-panel">
-        <p className="home2-testimonial-panel-label">Video testimonials</p>
-        <div className="home2-testimonial-video-frame">
-          <iframe
-            key={activeVideo.embedUrl}
-            src={activeVideo.embedUrl}
-            title={activeVideo.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-        <p className="home2-testimonial-video-title">{activeVideo.title}</p>
-        <CarouselControls
-          label="video testimonial"
-          index={videoIndex}
-          total={videos.length}
-          onPrev={() => setVideoIndex((current) => (current - 1 + videos.length) % videos.length)}
-          onNext={() => setVideoIndex((current) => (current + 1) % videos.length)}
-        />
-      </div>
-
-      <div className="home2-testimonial-review-panel">
-        <p className="home2-testimonial-panel-label">Client reviews</p>
-        <article className="home2-testimonial-card home2-testimonial-card--carousel">
-          <p className="home2-testimonial-quote">“{activeReview.quote}”</p>
-          <div className="home2-testimonial-author">
-            {activeReview.imagePath ? (
-              <Image
-                src={activeReview.imagePath}
-                alt=""
-                width={60}
-                height={60}
-                className="home2-testimonial-avatar home2-testimonial-avatar--photo"
-              />
-            ) : (
-              <div className="home2-testimonial-avatar" />
-            )}
-            <div>
-              <p className="home2-testimonial-name">{activeReview.name}</p>
-              <p className="home2-testimonial-role">{activeReview.role}</p>
-            </div>
+      {activeVideo ? (
+        <div className="home2-testimonial-video-panel">
+          <p className="home2-testimonial-panel-label">Video testimonials</p>
+          <div className="home2-testimonial-video-frame">
+            <iframe
+              key={activeVideo.embedUrl}
+              src={activeVideo.embedUrl}
+              title={activeVideo.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
-        </article>
-        <CarouselControls
-          label="client review"
-          index={reviewIndex}
-          total={reviews.length}
-          onPrev={() => setReviewIndex((current) => (current - 1 + reviews.length) % reviews.length)}
-          onNext={() => setReviewIndex((current) => (current + 1) % reviews.length)}
-        />
-      </div>
+          <p className="home2-testimonial-video-title">{activeVideo.title}</p>
+          {videos.length > 1 ? (
+            <CarouselControls
+              label="video testimonial"
+              index={videoIndex}
+              total={videos.length}
+              onPrev={() => setVideoIndex((current) => (current - 1 + videos.length) % videos.length)}
+              onNext={() => setVideoIndex((current) => (current + 1) % videos.length)}
+            />
+          ) : null}
+        </div>
+      ) : null}
+
+      {activeReview ? (
+        <div className="home2-testimonial-review-panel">
+          <p className="home2-testimonial-panel-label">Client reviews</p>
+          <article className="home2-testimonial-card home2-testimonial-card--carousel">
+            <p className="home2-testimonial-quote">“{activeReview.quote}”</p>
+            <div className="home2-testimonial-author">
+              {activeReview.imagePath ? (
+                <Image
+                  src={activeReview.imagePath}
+                  alt=""
+                  width={60}
+                  height={60}
+                  className="home2-testimonial-avatar home2-testimonial-avatar--photo"
+                />
+              ) : (
+                <div className="home2-testimonial-avatar" />
+              )}
+              <div>
+                <p className="home2-testimonial-name">{activeReview.name}</p>
+                <p className="home2-testimonial-role">{activeReview.role}</p>
+              </div>
+            </div>
+          </article>
+          {reviews.length > 1 ? (
+            <CarouselControls
+              label="client review"
+              index={reviewIndex}
+              total={reviews.length}
+              onPrev={() => setReviewIndex((current) => (current - 1 + reviews.length) % reviews.length)}
+              onNext={() => setReviewIndex((current) => (current + 1) % reviews.length)}
+            />
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

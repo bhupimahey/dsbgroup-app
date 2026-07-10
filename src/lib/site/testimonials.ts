@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/db';
 import type { TextTestimonial, VideoTestimonial } from '@/lib/site/testimonials-content';
-import { TEXT_TESTIMONIALS, VIDEO_TESTIMONIALS } from '@/lib/site/testimonials-content';
 
 function hasTestimonialModels(): boolean {
   return (
@@ -10,24 +9,21 @@ function hasTestimonialModels(): boolean {
 }
 
 export async function getPublishedVideoTestimonials(): Promise<VideoTestimonial[]> {
-  if (!hasTestimonialModels()) return [...VIDEO_TESTIMONIALS];
+  if (!hasTestimonialModels()) return [];
 
   try {
-    const rows = await prisma.videoTestimonial.findMany({
+    return await prisma.videoTestimonial.findMany({
       where: { published: true },
       orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
       select: { title: true, embedUrl: true },
     });
-
-    if (rows.length === 0) return [...VIDEO_TESTIMONIALS];
-    return rows;
   } catch {
-    return [...VIDEO_TESTIMONIALS];
+    return [];
   }
 }
 
 export async function getPublishedTextTestimonials(): Promise<TextTestimonial[]> {
-  if (!hasTestimonialModels()) return [...TEXT_TESTIMONIALS];
+  if (!hasTestimonialModels()) return [];
 
   try {
     const rows = await prisma.textTestimonial.findMany({
@@ -36,7 +32,6 @@ export async function getPublishedTextTestimonials(): Promise<TextTestimonial[]>
       select: { quote: true, name: true, role: true, imagePath: true },
     });
 
-    if (rows.length === 0) return [...TEXT_TESTIMONIALS];
     return rows.map(({ quote, name, role, imagePath }) => ({
       quote,
       name,
@@ -44,6 +39,6 @@ export async function getPublishedTextTestimonials(): Promise<TextTestimonial[]>
       imagePath: imagePath ?? undefined,
     }));
   } catch {
-    return [...TEXT_TESTIMONIALS];
+    return [];
   }
 }
