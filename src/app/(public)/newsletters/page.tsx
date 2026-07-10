@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Pagination from '@/components/Pagination';
-import { getCachedNewslettersIndexData } from '@/lib/db/public-cache';
+import { getNewslettersIndexData } from '@/lib/db/public-data';
 import { formatNewsletterIssueLabel } from '@/lib/newsletter/email-context';
 import { DEFAULT_PAGE_SIZE, parsePageParam } from '@/lib/pagination';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export const metadata = { title: 'Newsletters' };
 
@@ -15,7 +15,7 @@ export default async function NewslettersArchivePage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
-  const { pagination, issues } = await getCachedNewslettersIndexData(
+  const { pagination, issues } = await getNewslettersIndexData(
     parsePageParam(pageParam),
     DEFAULT_PAGE_SIZE,
   );

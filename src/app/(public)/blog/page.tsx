@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Blog3Pagination from '@/components/blog/Blog3Pagination';
-import { getCachedBlogIndexData } from '@/lib/db/public-cache';
+import { getBlogIndexData } from '@/lib/db/public-data';
 import { parsePageParam } from '@/lib/pagination';
 import '@/styles/blog-index.css';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export const metadata = { title: 'Blog' };
 
@@ -31,7 +31,7 @@ export default async function BlogIndexPage({
   searchParams: Promise<{ category?: string; page?: string }>;
 }) {
   const { category: categorySlug, page: pageParam } = await searchParams;
-  const { categories, posts, pagination } = await getCachedBlogIndexData(
+  const { categories, posts, pagination } = await getBlogIndexData(
     categorySlug ?? '',
     parsePageParam(pageParam),
   );

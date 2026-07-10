@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import { revalidateOfficesCache } from '@/lib/db/revalidate-public';
 import { requireStaff } from '@/lib/admin/require-staff';
 import { officeSchema } from '@/lib/validations/cms';
 
@@ -35,7 +34,6 @@ export async function createOfficeAction(formData: FormData) {
   });
   revalidatePath('/admin/offices');
   revalidatePath('/offices');
-  revalidateOfficesCache();
   redirect('/admin/offices');
 }
 
@@ -56,7 +54,6 @@ export async function updateOfficeAction(id: string, formData: FormData) {
   });
   revalidatePath('/admin/offices');
   revalidatePath('/offices');
-  revalidateOfficesCache();
   redirect('/admin/offices');
 }
 
@@ -65,6 +62,5 @@ export async function deleteOfficeAction(id: string) {
   await prisma.office.delete({ where: { id } });
   revalidatePath('/admin/offices');
   revalidatePath('/offices');
-  revalidateOfficesCache();
   redirect('/admin/offices');
 }

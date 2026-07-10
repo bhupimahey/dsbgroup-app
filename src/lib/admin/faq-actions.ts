@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import { revalidateFaqCache } from '@/lib/db/revalidate-public';
 import { requireStaff } from '@/lib/admin/require-staff';
 import { faqCategorySchema, faqItemSchema } from '@/lib/validations/cms';
 
@@ -11,7 +10,6 @@ function revalidateFaqPaths() {
   revalidatePath('/admin/faq');
   revalidatePath('/admin/faq/categories');
   revalidatePath('/faq');
-  revalidateFaqCache();
 }
 
 export async function createFaqCategoryAction(formData: FormData) {

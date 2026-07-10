@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import { revalidateTeamCache } from '@/lib/db/revalidate-public';
 import { requireStaff } from '@/lib/admin/require-staff';
 import { ensureBioHtml } from '@/lib/team/bio-html';
 import { teamTeaser } from '@/lib/team/constants';
@@ -49,7 +48,6 @@ export async function createTeamAction(formData: FormData) {
   await prisma.teamMember.create({ data: teamData(data) });
   revalidatePath('/admin/team');
   revalidatePath('/team');
-  revalidateTeamCache();
   redirect('/admin/team');
 }
 
@@ -59,7 +57,6 @@ export async function updateTeamAction(id: string, formData: FormData) {
   await prisma.teamMember.update({ where: { id }, data: teamData(data) });
   revalidatePath('/admin/team');
   revalidatePath('/team');
-  revalidateTeamCache();
   redirect('/admin/team');
 }
 
@@ -68,6 +65,5 @@ export async function deleteTeamAction(id: string) {
   await prisma.teamMember.delete({ where: { id } });
   revalidatePath('/admin/team');
   revalidatePath('/team');
-  revalidateTeamCache();
   redirect('/admin/team');
 }

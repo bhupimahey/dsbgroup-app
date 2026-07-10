@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { getCachedServiceCategories } from '@/lib/db/public-cache';
+import { getServiceCategories } from '@/lib/db/public-data';
 import ThemePageHero from '@/components/theme/ThemePageHero';
 import '@/styles/theme-inner-pages.css';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export const metadata = { title: 'Services' };
 
@@ -18,7 +18,7 @@ const SERVICE_IMAGES = [
 ] as const;
 
 export default async function ServicesPage() {
-  const categories = await getCachedServiceCategories();
+  const categories = await getServiceCategories();
 
   return (
     <div className="theme-shell">

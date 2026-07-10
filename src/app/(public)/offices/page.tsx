@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import Pagination from '@/components/Pagination';
-import { getCachedOfficesIndexData } from '@/lib/db/public-cache';
+import { getOfficesIndexData } from '@/lib/db/public-data';
 import { DEFAULT_PAGE_SIZE, parsePageParam } from '@/lib/pagination';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export const metadata = { title: 'Offices' };
 
@@ -13,7 +13,7 @@ export default async function OfficesPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
-  const { pagination, offices } = await getCachedOfficesIndexData(
+  const { pagination, offices } = await getOfficesIndexData(
     parsePageParam(pageParam),
     DEFAULT_PAGE_SIZE,
   );

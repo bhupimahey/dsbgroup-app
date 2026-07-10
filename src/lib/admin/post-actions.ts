@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import { revalidateArticlesCache, revalidateBlogCache } from '@/lib/db/revalidate-public';
 import { requireStaff } from '@/lib/admin/require-staff';
 import { adminPostListPath, typeToPostKind } from '@/lib/admin/post-routes';
 import { postSchema } from '@/lib/validations/cms';
@@ -43,8 +42,7 @@ function revalidatePostPaths() {
   revalidatePath('/admin/posts');
   revalidatePath('/blog');
   revalidatePath('/articles');
-  revalidateBlogCache();
-  revalidateArticlesCache();
+  revalidatePath('/');
 }
 
 export async function createPostAction(formData: FormData) {

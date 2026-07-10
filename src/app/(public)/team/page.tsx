@@ -1,14 +1,14 @@
 import Link from 'next/link';
-import { getCachedTeamMembers } from '@/lib/db/public-cache';
+import { getTeamMembers } from '@/lib/db/public-data';
 import TeamMemberCard from '@/components/team/TeamMemberCard';
 import { TEAM_GROUP_LABELS, TEAM_GROUP_ORDER } from '@/lib/team/constants';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export const metadata = { title: 'Our Team' };
 
 export default async function TeamPage() {
-  const members = await getCachedTeamMembers();
+  const members = await getTeamMembers();
 
   const grouped = TEAM_GROUP_ORDER.map((group) => ({
     group,

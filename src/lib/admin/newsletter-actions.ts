@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import { revalidateNewslettersCache } from '@/lib/db/revalidate-public';
 import { requireStaff } from '@/lib/admin/require-staff';
 import { parseNewsletterFormData } from '@/lib/admin/newsletter-form';
 import { enqueueNewsletterSend } from '@/lib/queue/newsletter-queue';
@@ -12,7 +11,6 @@ function revalidateNewsletterPaths(slug?: string) {
   revalidatePath('/admin/newsletters');
   revalidatePath('/newsletters');
   if (slug) revalidatePath(`/newsletters/${slug}`);
-  revalidateNewslettersCache();
 }
 
 export async function createNewsletterAction(formData: FormData) {

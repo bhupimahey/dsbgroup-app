@@ -5,9 +5,9 @@ import AosInit from '@/components/home/AosInit';
 import HomeCtaSubscribe from '@/components/home/HomeCtaSubscribe';
 import HomeTestimonialsShowcase from '@/components/home/HomeTestimonialsShowcase';
 import {
-  getCachedHomeBlogPosts,
-  getCachedHomeServiceCategories,
-} from '@/lib/db/public-cache';
+  getHomeBlogPosts,
+  getHomeServiceCategories,
+} from '@/lib/db/public-data';
 import { SITE_CONTACT } from '@/lib/site/nav-links';
 import { getPublishedTextTestimonials, getPublishedVideoTestimonials } from '@/lib/site/testimonials';
 import '@/styles/home-index2.css';
@@ -31,7 +31,7 @@ const SERVICE_CARD_AOS = [
 const COUNTER_AOS = [800, 1000, 1200, 1400] as const;
 const CLIENT_STEP_AOS = [1000, 1200, 1400] as const;
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 const PROCESS_STEPS = [
   {
@@ -110,8 +110,8 @@ function formatPostDate(date: Date | string | null | undefined) {
 
 export default async function HomePage() {
   const [serviceCategories, blogPosts, videoTestimonials, textTestimonials] = await Promise.all([
-    getCachedHomeServiceCategories(),
-    getCachedHomeBlogPosts(),
+    getHomeServiceCategories(),
+    getHomeBlogPosts(),
     getPublishedVideoTestimonials(),
     getPublishedTextTestimonials(),
   ]);

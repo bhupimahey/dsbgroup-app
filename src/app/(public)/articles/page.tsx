@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import Pagination from '@/components/Pagination';
-import { getCachedArticlesIndexData } from '@/lib/db/public-cache';
+import { getArticlesIndexData } from '@/lib/db/public-data';
 import { DEFAULT_PAGE_SIZE, parsePageParam } from '@/lib/pagination';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export const metadata = { title: 'Articles' };
 
@@ -13,7 +13,7 @@ export default async function ArticlesIndexPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
-  const { pagination, posts } = await getCachedArticlesIndexData(
+  const { pagination, posts } = await getArticlesIndexData(
     parsePageParam(pageParam),
     DEFAULT_PAGE_SIZE,
   );

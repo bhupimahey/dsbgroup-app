@@ -3,14 +3,14 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import { revalidateServicesCache } from '@/lib/db/revalidate-public';
 import { requireStaff } from '@/lib/admin/require-staff';
 import { serviceCategorySchema } from '@/lib/validations/cms';
 
 function revalidateServiceCategoryPaths() {
   revalidatePath('/admin/service-categories');
   revalidatePath('/admin/newsletters');
-  revalidateServicesCache();
+  revalidatePath('/services');
+  revalidatePath('/');
 }
 
 export async function createServiceCategoryAction(formData: FormData) {
