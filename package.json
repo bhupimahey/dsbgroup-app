@@ -12,6 +12,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
+    "db:demo-client": "tsx scripts/ensure-demo-client.ts",
     "db:studio": "prisma studio",
     "worker:newsletter": "tsx worker/newsletter-worker.ts",
     "migrate:wordpress": "tsx scripts/migrate-from-wordpress.ts",
