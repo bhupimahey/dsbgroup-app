@@ -54,6 +54,6 @@ rsync -avz --delete \
   "$REMOTE:$VPS_APP_DIR/"
 
 echo "==> Running remote Docker build and migrations"
-"${SSH_BASE[@]}" "$REMOTE" "cd '$VPS_APP_DIR' && chmod +x deploy/vps-remote-build.sh deploy/migrate.sh && VPS_APP_DIR='$VPS_APP_DIR' bash deploy/vps-remote-build.sh"
+"${SSH_BASE[@]}" "$REMOTE" "cd '$VPS_APP_DIR' && chmod +x deploy/vps-remote-build.sh deploy/migrate.sh deploy/seed.sh && VPS_APP_DIR='$VPS_APP_DIR' bash deploy/vps-remote-build.sh"
 
 echo "==> Rsync deploy complete"
