@@ -3,9 +3,23 @@ export type NavItem =
   | (NavLink & { children?: undefined })
   | { label: string; href?: string; children: NavLink[] };
 
-/** Primary header navigation — matches dsblawgroup.com structure. */
+/** Primary header navigation — matches client homepage mockup. */
 export const MAIN_NAV: NavItem[] = [
   { href: '/', label: 'Home' },
+  { href: '/nbfc', label: 'NBFCs' },
+  { href: '/ucbs', label: 'UCBs' },
+  { href: '/hr-labour-law/about', label: 'HR & Labour Laws' },
+  {
+    label: 'Others Services',
+    children: [
+      { href: '/services', label: 'All Services' },
+      { href: '/pages/banking-finance', label: 'Banking & Finance' },
+      { href: '/pages/corporate-advisory', label: 'Corporate Laws' },
+      { href: '/pages/taxation', label: 'Taxation' },
+      { href: '/pages/intellectual-property', label: 'Intellectual Property' },
+      { href: '/pages/mergers-acquisitions', label: 'Mergers & Acquisitions' },
+    ],
+  },
   {
     label: 'About Us',
     children: [
@@ -15,16 +29,6 @@ export const MAIN_NAV: NavItem[] = [
       { href: '/achievements', label: 'Achievements' },
     ],
   },
-  { href: '/services', label: 'Services' },
-  {
-    label: "NBFC's HR & Labour Laws",
-    children: [
-      { href: '/nbfc', label: 'NBFC' },
-      { href: '/hr-labour-law/about', label: 'About HR & Labour Law' },
-      { href: '/hr-labour-law/new-labour-codes', label: 'New Labour Codes Compliance' },
-    ],
-  },
-  { href: '/ucbs', label: "UCB's" },
   {
     label: 'Resources',
     children: [
@@ -35,8 +39,15 @@ export const MAIN_NAV: NavItem[] = [
     ],
   },
   { href: '/testimonials', label: 'Testimonials' },
-  { href: '/blog', label: 'Blogs' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/blog', label: 'Blog' },
+  {
+    label: 'Career',
+    children: [
+      { href: '/careers', label: 'Careers' },
+      { href: '/team', label: 'Our Team' },
+    ],
+  },
+  { href: '/contact', label: 'Contact Us' },
 ];
 
 export const FOOTER_LINKS: NavLink[] = [
@@ -87,16 +98,22 @@ export const FOOTER_USEFUL_LINKS: NavLink[] = [
   { href: '/register', label: 'Register' },
 ];
 
-/** Office cities shown in the top bar locations strip. */
-export const OFFICE_LOCATIONS = [
+/** Main offices shown in the top bar (gold badge). */
+export const OUR_OFFICES = [
+  'Delhi',
+  'Jaipur',
+  'Mumbai',
   'Jalandhar',
   'Ludhiana',
-  'Mumbai',
-  'New Delhi',
   'Pune',
-  'Gurugram',
-  'Jaipur',
+  'Noida',
 ] as const;
+
+/** Spoke offices shown in the top bar (navy badge). */
+export const SPOKE_OFFICES = ['Hyderabad', 'Kolkata', 'Bangalore'] as const;
+
+/** @deprecated Prefer OUR_OFFICES — kept for any older references. */
+export const OFFICE_LOCATIONS = OUR_OFFICES;
 
 /** Returns true when a nav href matches the current pathname. */
 export function isNavHrefActive(pathname: string, href: string): boolean {

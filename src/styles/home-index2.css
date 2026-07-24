@@ -50,13 +50,13 @@
 
 .home2-label {
   display: inline-block;
-  border-radius: 2px;
-  background: rgba(24, 78, 119, 0.1);
+  border-radius: 4px;
+  background: rgba(24, 78, 119, 0.12);
   color: var(--home2-label);
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 15px;
+  line-height: 1.35;
   font-weight: 500;
-  padding: 10px;
+  padding: 10px 14px;
   margin-bottom: 20px;
 }
 
@@ -165,94 +165,163 @@
   gap: 12px;
 }
 
-/* Welcome */
+/* Welcome / Hero — pixel-matched to client mockup */
 .home2-welcome {
+  position: relative;
+  min-height: 620px;
+  display: flex;
+  align-items: center;
   background:
-    radial-gradient(circle at 85% 20%, rgba(26, 35, 126, 0.08), transparent 42%),
-    linear-gradient(135deg, #f4f6fa 0%, #ffffff 58%, #eef2f7 100%);
-  padding: clamp(48px, 6vw, 80px) 0 clamp(56px, 7vw, 96px);
-  overflow: hidden;
+    linear-gradient(
+      90deg,
+      rgba(245, 248, 252, 0.78) 0%,
+      rgba(245, 248, 252, 0.45) 36%,
+      rgba(245, 248, 252, 0.12) 62%,
+      rgba(245, 248, 252, 0.05) 100%
+    ),
+    url('/images/Hero-bg.png') left center / cover no-repeat;
+  padding: 48px 0 56px;
+  overflow: visible;
 }
 
-.home2-welcome-grid {
+.home2-welcome-inner {
+  width: min(1200px, calc(100% - 3rem));
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 1fr) minmax(0, 6fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
   align-items: center;
-  gap: 1.5rem;
+  column-gap: 1.5rem;
 }
 
 .home2-welcome-copy {
-  max-width: 560px;
+  position: relative;
+  z-index: 3;
+  max-width: 460px;
+  padding-left: 0.25rem;
+}
+
+.home2-welcome-heading {
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 52px;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1a237e;
+  margin: 0 0 28px;
+  text-align: left;
+}
+
+.home2-welcome-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 16px;
+  margin: 0 0 28px;
+  max-width: 440px;
+}
+
+.home2-welcome-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: 0;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(26, 35, 126, 0.1);
+  color: #c5a059;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.home2-welcome-chip:hover {
+  background: #c5a059;
+  color: #1a237e;
+  box-shadow: 0 10px 24px rgba(197, 160, 89, 0.35);
+}
+
+.home2-welcome-cta {
+  margin-top: 4px;
+  border-radius: 4px;
+  padding: 16px 22px;
+  font-size: 15px;
 }
 
 .home2-welcome-visual {
   position: relative;
-  min-height: 420px;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 48px 8px 20px 60px;
+}
+
+.home2-welcome-frame {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
 }
 
 .home2-welcome-main {
   position: relative;
   z-index: 2;
-  border-radius: 5px;
+  border-radius: 2px;
   overflow: hidden;
-  min-height: 380px;
-  background: linear-gradient(145deg, #dce4ea 0%, #f8fafc 100%);
-  box-shadow: 0 24px 50px rgba(20, 27, 44, 0.12);
+  width: 100%;
+  height: 420px;
+  background: #d5dde6;
+  box-shadow: 0 20px 44px rgba(20, 27, 44, 0.18);
 }
 
-.home2-welcome-main::after {
-  content: '';
+.home2-welcome-photo {
+  object-fit: cover;
+  object-position: 60% center;
+}
+
+.home2-welcome-anniversary {
   position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(20, 27, 44, 0.04), rgba(20, 27, 44, 0.16)),
-    url('/images/theme/index2/sections/welcome-img-2.png') center/cover no-repeat;
+  top: -58px;
+  left: -58px;
+  z-index: 5;
+  width: 156px;
+  height: auto;
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.32));
+  pointer-events: none;
 }
 
 .home2-welcome-badge {
   position: absolute;
-  left: -70px;
-  bottom: 40px;
-  z-index: 3;
-  width: min(220px, 46%);
-  border-radius: 5px;
-  padding: 18px;
-  background: var(--home2-accent);
+  left: -48px;
+  bottom: 42px;
+  z-index: 4;
+  width: 196px;
+  border-radius: 0;
+  padding: 18px 16px 16px;
+  background: #1a237e;
   color: #fff;
-  box-shadow: 0 16px 34px rgba(26, 35, 126, 0.28);
+  box-shadow: 0 16px 32px rgba(26, 35, 126, 0.32);
 }
 
 .home2-welcome-badge strong {
   display: block;
-  font-size: 28px;
-  line-height: 1.1;
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 36px;
+  line-height: 1;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #fff;
 }
 
 .home2-welcome-badge span {
+  display: block;
   font-size: 14px;
-  opacity: 0.9;
-}
-
-.home2-shape {
-  position: absolute;
-  border-radius: 999px;
-  pointer-events: none;
-}
-
-.home2-shape--one {
-  width: 120px;
-  height: 120px;
-  top: -40px;
-  right: -30px;
-  background: rgba(26, 35, 126, 0.12);
-}
-
-.home2-shape--two {
-  width: 90px;
-  height: 90px;
-  right: -40px;
-  bottom: -30px;
-  background: rgba(24, 78, 119, 0.16);
+  line-height: 1.35;
+  font-weight: 500;
+  color: #fff;
 }
 
 /* About */
@@ -1262,7 +1331,7 @@
 }
 
 @media (max-width: 1024px) {
-  .home2-welcome-grid,
+  .home2-welcome-inner,
   .home2-about-grid,
   .home2-company-grid,
   .home2-client-grid,
@@ -1285,8 +1354,60 @@
     margin-top: -72px;
   }
 
-  .home2-welcome-grid {
-    gap: 2.5rem;
+  .home2-welcome {
+    min-height: 0;
+    padding: 42px 0 56px;
+  }
+
+  .home2-welcome-inner {
+    gap: 3rem;
+  }
+
+  .home2-welcome-copy {
+    max-width: none;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .home2-welcome-heading {
+    text-align: center;
+  }
+
+  .home2-welcome-chips {
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .home2-welcome-cta {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .home2-welcome-visual {
+    justify-content: center;
+    padding: 40px 12px 12px 40px;
+  }
+
+  .home2-welcome-frame {
+    width: min(100%, 440px);
+    margin: 0 auto;
+  }
+
+  .home2-welcome-main {
+    height: 340px;
+  }
+
+  .home2-welcome-anniversary {
+    top: -36px;
+    left: -36px;
+    width: 120px;
+  }
+
+  .home2-welcome-badge {
+    left: -20px;
+    bottom: 28px;
+    width: 170px;
   }
 
   .home2-about-copy,
@@ -1310,11 +1431,6 @@
 
   .home2-contact-cards {
     padding-left: 0;
-  }
-
-  .home2-welcome-badge {
-    left: 16px;
-    bottom: 16px;
   }
 }
 

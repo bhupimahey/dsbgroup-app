@@ -8,8 +8,9 @@ import {
   isNavHrefActive,
   isNavItemActive,
   MAIN_NAV,
-  OFFICE_LOCATIONS,
+  OUR_OFFICES,
   SITE_CONTACT,
+  SPOKE_OFFICES,
   type NavItem,
 } from '@/lib/site/nav-links';
 import { SITE_SOCIAL_LINKS } from '@/lib/site/social-links';
@@ -36,6 +37,17 @@ function EmailIcon() {
   );
 }
 
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="site-social-icon" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M10.5 3a7.5 7.5 0 0 1 5.9 12.1l4 4a1 1 0 0 1 -1.4 1.4l-4 -4A7.5 7.5 0 1 1 10.5 3zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0 -11z"
+      />
+    </svg>
+  );
+}
+
 function navLinkClass(pathname: string, href: string, base = 'theme-main-nav-link') {
   return isNavHrefActive(pathname, href)
     ? `${base} theme-main-nav-link--active`
@@ -56,22 +68,30 @@ export default function SiteHeader({ socialAuth }: { socialAuth?: ReactNode }) {
     <header className="theme-header theme-shell">
       <div className="theme-topbar">
         <div className="theme-topbar-inner">
-          <div className="theme-topbar-start">
-            <div className="theme-topbar-contact">
-              <a href={SITE_CONTACT.phoneHref} className="theme-topbar-contact-link">
-                <PhoneIcon />
-                {SITE_CONTACT.phone}
-              </a>
-              <a href={SITE_CONTACT.emailHref} className="theme-topbar-contact-link">
-                <EmailIcon />
-                {SITE_CONTACT.email}
-              </a>
-            </div>
+          <div className="theme-topbar-contact">
+            <a href={SITE_CONTACT.phoneHref} className="theme-topbar-contact-link">
+              <PhoneIcon />
+              {SITE_CONTACT.phone}
+            </a>
+            <a href={SITE_CONTACT.emailHref} className="theme-topbar-contact-link">
+              <EmailIcon />
+              {SITE_CONTACT.email}
+            </a>
+          </div>
 
-            <div className="theme-topbar-locations" aria-label="Our locations">
-              <span className="theme-locations-badge">Our Locations</span>
+          <div className="theme-topbar-locations" aria-label="Our office locations">
+            <div className="theme-locations-row">
+              <span className="theme-locations-badge theme-locations-badge--gold">Our Offices</span>
               <ul className="theme-locations-list">
-                {OFFICE_LOCATIONS.map((city) => (
+                {OUR_OFFICES.map((city) => (
+                  <li key={city}>{city}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="theme-locations-row">
+              <span className="theme-locations-badge theme-locations-badge--navy">Spoke Offices</span>
+              <ul className="theme-locations-list">
+                {SPOKE_OFFICES.map((city) => (
                   <li key={city}>{city}</li>
                 ))}
               </ul>
@@ -79,20 +99,32 @@ export default function SiteHeader({ socialAuth }: { socialAuth?: ReactNode }) {
           </div>
 
           <div className="theme-header-social" aria-label="Social and account links">
-            {SITE_SOCIAL_LINKS.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                className="theme-header-social-link"
-                aria-label={social.label}
-                {...(social.href.startsWith('http')
-                  ? { target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
+            <div className="theme-header-social-row">
+              {SITE_SOCIAL_LINKS.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  className="theme-header-social-link"
+                  aria-label={social.label}
+                  {...(social.href.startsWith('http')
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+            <div className="theme-header-social-row theme-header-social-row--tools">
+              {socialAuth}
+              <Link
+                href="/blog"
+                className="theme-header-social-icon"
+                aria-label="Search resources"
+                title="Search"
               >
-                {social.icon}
-              </a>
-            ))}
-            {socialAuth}
+                <SearchIcon />
+              </Link>
+            </div>
           </div>
         </div>
       </div>

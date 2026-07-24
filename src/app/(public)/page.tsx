@@ -87,6 +87,16 @@ const SERVICE_ICONS = [
   '/images/theme/index2/icons/icon3.svg',
 ] as const;
 
+const HERO_SERVICE_CHIPS = [
+  { label: 'BANKING', href: '/pages/banking-finance' },
+  { label: 'NBFCs', href: '/nbfc' },
+  { label: 'UCBs', href: '/ucbs' },
+  { label: 'CORPORATE LAWS', href: '/pages/corporate-advisory' },
+  { label: 'TAXATION', href: '/pages/taxation' },
+  { label: 'HR & LABOUR LAWS', href: '/hr-labour-law/about' },
+  { label: 'OTHER SERVICES', href: '/services' },
+] as const;
+
 const DEFAULT_BLOG_IMAGE = '/images/theme/index2/sections/blog2-img.png';
 
 function getPostTeaser(post: { teaser: string | null }) {
@@ -122,33 +132,49 @@ export default async function HomePage() {
     <div className="theme-shell home2-page">
       <AosInit />
       <section className="home2-welcome">
-        <div className="home2-container home2-welcome-grid">
+        <div className="home2-welcome-inner">
           <div className="home2-welcome-copy" {...aos('fade-right', 1000)}>
-            <span className="home2-label">Maximize Your Potential with Expert Consultation</span>
-            <h1 className="home2-title-xl">
-              Consulting driving growth and scale for your business.
-            </h1>
-            <p className="home2-lead">
-              DSB Law Group provides integrated legal, regulatory, and strategic advisory across
-              banking, NBFC, corporate, labour, and dispute-focused practice areas.
-            </p>
-            <div {...aos('fade-up', 1200)}>
-              <Link href="/contact" className="home2-btn" style={{ marginTop: '32px' }}>
-                Contact <span className="home2-btn-arrow">→</span>
+            <h1 className="home2-welcome-heading">Services We Offer</h1>
+            <div className="home2-welcome-chips" {...aos('fade-up', 1100)}>
+              {HERO_SERVICE_CHIPS.map((chip) => (
+                <Link key={chip.label} href={chip.href} className="home2-welcome-chip">
+                  {chip.label}
+                </Link>
+              ))}
+            </div>
+            <div {...aos('fade-up', 1300)}>
+              <Link href="/services" className="home2-btn home2-welcome-cta">
+                View All Services <span className="home2-btn-arrow">→</span>
               </Link>
             </div>
           </div>
 
-          <div aria-hidden />
-
           <div className="home2-welcome-visual" {...aos('zoom-out', 1200)}>
-            <div className="home2-welcome-main" />
-            <div className="home2-welcome-badge">
-              <strong>1967</strong>
-              <span>Trusted legal advisory since</span>
+            <div className="home2-welcome-frame">
+              <div className="home2-welcome-main">
+                <Image
+                  src="/images/hero-Right-side-img.png"
+                  alt="DSB Law Group legal advisors in consultation"
+                  fill
+                  priority
+                  className="home2-welcome-photo"
+                  sizes="(max-width: 1024px) 90vw, 480px"
+                />
+              </div>
+              <Image
+                src="/images/59-yr-badge.png"
+                alt="59th Anniversary"
+                width={170}
+                height={170}
+                className="home2-welcome-anniversary"
+                unoptimized
+                priority
+              />
+              <div className="home2-welcome-badge">
+                <strong>1967</strong>
+                <span>Trusted legal advisory since</span>
+              </div>
             </div>
-            <span className="home2-shape home2-shape--one" />
-            <span className="home2-shape home2-shape--two" />
           </div>
         </div>
       </section>
