@@ -185,10 +185,6 @@ export default function AboutPageContent({ content, teamMembers }: Props) {
                   </li>
                 ))}
               </ul>
-
-              <Link href="/services" className="about-btn">
-                Learn More <span aria-hidden>→</span>
-              </Link>
             </div>
           </div>
         </div>

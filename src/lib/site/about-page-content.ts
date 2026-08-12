@@ -93,6 +93,8 @@ export const DEFAULT_ABOUT_CONTENT: AboutPageContent = {
   missionHeading: 'Our Mission',
   missionParagraphs: [
     'Our mission is to stand alongside small and medium enterprises as they navigate growth, compliance and business transformation. More than consultants, we serve as long-term partners by bringing together legal expertise, strategic insight and technology-enabled business solutions under one roof.',
+    'We help SMEs strengthen their operations through intelligent digital tools, streamlined compliance systems and practical automation frameworks. By combining professional guidance with technology, we enable businesses to improve internal processes, make informed decisions and prepare for sustainable expansion.',
+    'DSB Law Group also provides comprehensive legal, regulatory and strategic support to Non-Banking Financial Companies throughout their business lifecycle. From licensing and regulatory compliance to governance, restructuring and ongoing advisory, we assist NBFCs at every stage with experience, precision and innovation.',
     'Every engagement is focused on creating lasting value. Through deep sector knowledge, digital capability and a collaborative approach, we help enterprises operate more efficiently, manage risk confidently and scale with clarity.',
   ],
   missionBullets: [
@@ -327,6 +329,8 @@ export function buildAboutSeedBody(): string {
 <h2>Our Mission</h2>
 <p>${DEFAULT_ABOUT_CONTENT.missionParagraphs[0]}</p>
 <p>${DEFAULT_ABOUT_CONTENT.missionParagraphs[1]}</p>
+<p>${DEFAULT_ABOUT_CONTENT.missionParagraphs[2]}</p>
+<p>${DEFAULT_ABOUT_CONTENT.missionParagraphs[3]}</p>
 <h2>Our Vision</h2>
 <p>${DEFAULT_ABOUT_CONTENT.tabs[0].paragraphs[0].text}</p>
 <h2>Our History</h2>
