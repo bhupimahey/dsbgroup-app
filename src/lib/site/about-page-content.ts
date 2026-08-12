@@ -1,4 +1,8 @@
 import type { getPublishedPageBySlug } from '@/lib/cms/cache';
+import {
+  aboutJsonToPageContent,
+  parseAboutPageJson,
+} from '@/lib/site/about-page-json';
 
 type AboutCmsPage = NonNullable<Awaited<ReturnType<typeof getPublishedPageBySlug>>>;
 
@@ -202,11 +206,16 @@ function parseSectionMap(body: string): Map<string, string> {
 }
 
 export function resolveAboutPageContent(page: AboutCmsPage | null): AboutPageContent {
-  const content = { ...DEFAULT_ABOUT_CONTENT };
-
   if (!page) {
-    return content;
+    return { ...DEFAULT_ABOUT_CONTENT };
   }
+
+  const structured = parseAboutPageJson(page.contentJson);
+  if (structured) {
+    return aboutJsonToPageContent(structured, page.imagePath);
+  }
+
+  const content = { ...DEFAULT_ABOUT_CONTENT };
 
   if (page.metaTitle?.trim()) {
     content.heroTitle = page.metaTitle.trim();

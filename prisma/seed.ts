@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import bcrypt from 'bcryptjs';
+import type { Prisma } from '../src/generated/prisma/client';
 import { createPrismaClient } from '../src/lib/prisma-client';
 import { CMS_PAGES, SERVICE_CATEGORY_PAGES } from './seed-content';
 import { TEAM_SEED_MEMBERS, teamSeedPayload } from '../src/lib/team/team-seed-data';
@@ -60,6 +61,11 @@ async function main() {
   }
 
   for (const page of CMS_PAGES) {
+    const contentJson =
+      'contentJson' in page && page.contentJson
+        ? (page.contentJson as Prisma.InputJsonValue)
+        : undefined;
+
     await prisma.page.upsert({
       where: { slug: page.slug },
       update: {
@@ -69,8 +75,18 @@ async function main() {
         metaDescription: page.metaDescription,
         metaKeywords: page.metaKeywords,
         published: true,
+        ...(contentJson !== undefined ? { contentJson } : {}),
       },
-      create: { ...page, published: true },
+      create: {
+        slug: page.slug,
+        title: page.title,
+        body: page.body,
+        metaTitle: page.metaTitle,
+        metaDescription: page.metaDescription,
+        metaKeywords: page.metaKeywords,
+        published: true,
+        ...(contentJson !== undefined ? { contentJson } : {}),
+      },
     });
   }
 

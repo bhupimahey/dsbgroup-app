@@ -102,6 +102,7 @@ model Page {
   slug            String   @unique
   title           String
   body            String   @db.LongText
+  contentJson     Json?
   imagePath       String?
   metaTitle       String?
   metaDescription String?  @db.Text
