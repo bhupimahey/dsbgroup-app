@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import ServicesIndexContent from '@/components/services/ServicesIndexContent';
 import { getServicesIndexData } from '@/lib/db/public-data';
 import {
@@ -26,10 +25,6 @@ function teaserFromPage(page: { contentJson: unknown; title: string } | undefine
 
 export default async function ServicesPage() {
   const { indexPage, categories, pagesBySlug } = await getServicesIndexData();
-
-  if (!indexPage) {
-    notFound();
-  }
 
   const content = resolveServicesIndexJson(indexPage);
   const services = categories.map((category) => ({
