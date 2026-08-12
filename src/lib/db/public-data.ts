@@ -100,6 +100,24 @@ export async function getTeamMembers() {
   });
 }
 
+export async function getServicesIndexData() {
+  const [indexPage, categories] = await Promise.all([
+    prisma.page.findFirst({ where: { slug: 'services', published: true } }),
+    getServiceCategories(),
+  ]);
+
+  const pages = await prisma.page.findMany({
+    where: {
+      slug: { in: categories.map((category) => category.slug) },
+      published: true,
+    },
+  });
+
+  const pagesBySlug = new Map(pages.map((page) => [page.slug, page]));
+
+  return { indexPage, categories, pagesBySlug };
+}
+
 export async function getFaqCategoriesPage(categoryPage: number, pageSize: number) {
   const total = await prisma.faqCategory.count();
   const pagination = getPaginationMeta(total, categoryPage, pageSize);

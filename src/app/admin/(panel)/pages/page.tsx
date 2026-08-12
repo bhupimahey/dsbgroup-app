@@ -25,7 +25,9 @@ export const metadata = { title: 'Pages' };
 const FILTER_KEYS = ['q', 'status'] as const;
 
 function previewHref(slug: string) {
-  return slug === 'about' ? '/about' : `/pages/${slug}`;
+  if (slug === 'about') return '/about';
+  if (slug === 'services') return '/services';
+  return `/pages/${slug}`;
 }
 
 export default async function AdminPagesPage({

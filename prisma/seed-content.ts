@@ -2,31 +2,14 @@ import {
   ABOUT_PAGE_BODY_PLACEHOLDER,
   defaultAboutPageJson,
 } from '../src/lib/site/about-page-json';
+import {
+  defaultServicesIndexJson,
+  SERVICES_INDEX_BODY_PLACEHOLDER,
+} from '../src/lib/site/service-page-json';
+import { buildServiceCategoryPages } from '../src/lib/site/service-seed-data';
 
-function servicePageBody(name: string): string {
-  return `<p>DSB Law Group advises clients on <strong>${name}</strong> — regulatory compliance, documentation, dispute resolution, and strategic counsel tailored to your business.</p>
-<p>Contact us to discuss your requirements or subscribe to ${name.toLowerCase()} updates via our newsletter.</p>`;
-}
-
-const SERVICE_CATEGORY_PAGES = [
-  { slug: 'intellectual-property', name: 'Intellectual Property Rights' },
-  { slug: 'labour-law', name: 'Labor & Industrial Law' },
-  { slug: 'joint-ventures', name: 'Joint Ventures' },
-  { slug: 'taxation', name: 'Taxation' },
-  { slug: 'business-advisory', name: 'Business Advisory' },
-  { slug: 'banking-finance', name: 'Banking & Finance' },
-  { slug: 'private-equity', name: 'Private Equity' },
-  { slug: 'audit', name: 'Audit' },
-  { slug: 'mergers-acquisitions', name: 'Mergers & Acquisitions' },
-  { slug: 'corporate-advisory', name: 'Corporate Advisory' },
-].map((cat) => ({
-  slug: cat.slug,
-  title: cat.name,
-  body: servicePageBody(cat.name),
-  metaTitle: `${cat.name} | DSB Law Group`,
-  metaDescription: `${cat.name} legal advisory and compliance services from DSB Law Group.`,
-  metaKeywords: `${cat.slug.replace(/-/g, ', ')}, DSB Law, legal services`,
-}));
+const SERVICE_CATEGORY_PAGES = buildServiceCategoryPages();
+const SERVICES_INDEX_JSON = defaultServicesIndexJson();
 
 const ABOUT_PAGE_JSON = defaultAboutPageJson();
 
@@ -40,6 +23,16 @@ const CMS_PAGES = [
     metaDescription:
       'About DSB Law Group — corporate and financial consulting with expertise in banking, NBFC, corporate law and regulatory advisory across India.',
     metaKeywords: 'DSB Law, about us, legal firm, NBFC, corporate advisory',
+  },
+  {
+    slug: 'services',
+    title: SERVICES_INDEX_JSON.heroTitle,
+    body: SERVICES_INDEX_BODY_PLACEHOLDER,
+    contentJson: SERVICES_INDEX_JSON,
+    metaTitle: 'Our Services | DSB Law Group',
+    metaDescription:
+      'Legal, regulatory, financial and business advisory services from DSB Law Group — corporate advisory, banking, taxation, audit, M&A and more.',
+    metaKeywords: 'services, legal services, corporate advisory, DSB Law',
   },
   {
     slug: 'achievements',

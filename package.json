@@ -13,6 +13,7 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
     "db:seed-about": "tsx scripts/seed-about-page.ts",
+    "db:seed-services": "tsx scripts/seed-services-pages.ts",
     "db:demo-client": "tsx scripts/ensure-demo-client.ts",
     "db:studio": "prisma studio",
     "worker:newsletter": "tsx worker/newsletter-worker.ts",
