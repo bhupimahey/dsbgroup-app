@@ -1,3 +1,5 @@
+import { buildAboutSeedBody } from '../src/lib/site/about-page-content';
+
 function servicePageBody(name: string): string {
   return `<p>DSB Law Group advises clients on <strong>${name}</strong> — regulatory compliance, documentation, dispute resolution, and strategic counsel tailored to your business.</p>
 <p>Contact us to discuss your requirements or subscribe to ${name.toLowerCase()} updates via our newsletter.</p>`;
@@ -26,11 +28,12 @@ const SERVICE_CATEGORY_PAGES = [
 const CMS_PAGES = [
   {
     slug: 'about',
-    title: 'About DSB Law Group',
-    body: '<p>DSB Law Group is a full-service Indian law firm offering legal and business solutions across banking, NBFC regulations, corporate law, taxation, audit, and strategic advisory.</p><p>Founded in 1967, we serve clients pan India from eleven offices.</p>',
+    title: 'About DSB Law Group — Corporate and Management Consulting Profile',
+    body: buildAboutSeedBody(),
     metaTitle: 'About Us',
-    metaDescription: 'About DSB Law Group — legal advisory and corporate services.',
-    metaKeywords: 'DSB Law, about us, legal firm',
+    metaDescription:
+      'About DSB Law Group — corporate and financial consulting with expertise in banking, NBFC, corporate law and regulatory advisory across India.',
+    metaKeywords: 'DSB Law, about us, legal firm, NBFC, corporate advisory',
   },
   {
     slug: 'achievements',
