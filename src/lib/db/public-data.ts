@@ -106,7 +106,28 @@ export async function getServicesIndexData() {
     getServiceCategories(),
   ]);
 
-  return { indexPage, categories };
+  const pages =
+    categories.length > 0
+      ? await prisma.page.findMany({
+          where: {
+            slug: { in: categories.map((c) => c.slug) },
+            published: true,
+          },
+          select: { slug: true, contentJson: true, imagePath: true },
+        })
+      : [];
+
+  const pagesBySlug = new Map(pages.map((page) => [page.slug, page]));
+  return { indexPage, categories, pagesBySlug };
+}
+
+export async function getServiceCardPages(slugs: string[]) {
+  if (slugs.length === 0) return new Map<string, { slug: string; contentJson: unknown; imagePath: string | null }>();
+  const pages = await prisma.page.findMany({
+    where: { slug: { in: slugs }, published: true },
+    select: { slug: true, contentJson: true, imagePath: true },
+  });
+  return new Map(pages.map((page) => [page.slug, page]));
 }
 
 export async function getFaqCategoriesPage(categoryPage: number, pageSize: number) {
