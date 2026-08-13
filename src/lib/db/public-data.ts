@@ -69,11 +69,40 @@ export async function getOfficesIndexData(page: number, pageSize: number) {
   return { pagination, offices };
 }
 
+const SERVICE_CATEGORY_BASE = {
+  id: true,
+  slug: true,
+  name: true,
+  sortOrder: true,
+  active: true,
+} as const;
+
+async function findActiveServiceCategories(take?: number) {
+  try {
+    return await prisma.serviceCategory.findMany({
+      where: { active: true },
+      orderBy: { sortOrder: 'asc' },
+      take,
+      select: {
+        ...SERVICE_CATEGORY_BASE,
+        teaser: true,
+        description: true,
+        imagePath: true,
+      },
+    });
+  } catch {
+    const rows = await prisma.serviceCategory.findMany({
+      where: { active: true },
+      orderBy: { sortOrder: 'asc' },
+      take,
+      select: SERVICE_CATEGORY_BASE,
+    });
+    return rows.map((row) => ({ ...row, teaser: null, description: null, imagePath: null }));
+  }
+}
+
 export async function getServiceCategories() {
-  return prisma.serviceCategory.findMany({
-    where: { active: true },
-    orderBy: { sortOrder: 'asc' },
-  });
+  return findActiveServiceCategories();
 }
 
 export async function getHomeBlogPosts() {
@@ -86,11 +115,7 @@ export async function getHomeBlogPosts() {
 }
 
 export async function getHomeServiceCategories() {
-  return prisma.serviceCategory.findMany({
-    where: { active: true },
-    orderBy: { sortOrder: 'asc' },
-    take: 6,
-  });
+  return findActiveServiceCategories(6);
 }
 
 export async function getTeamMembers() {

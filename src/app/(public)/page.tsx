@@ -8,6 +8,7 @@ import {
   getHomeBlogPosts,
   getHomeServiceCategories,
 } from '@/lib/db/public-data';
+import { resolveServiceCardCopy } from '@/lib/site/service-card';
 import { SITE_CONTACT } from '@/lib/site/nav-links';
 import { getPublishedTextTestimonials, getPublishedVideoTestimonials } from '@/lib/site/testimonials';
 import '@/styles/home-index2.css';
@@ -126,6 +127,7 @@ export default async function HomePage() {
     getPublishedTextTestimonials(),
   ]);
 
+  const homeServices = serviceCategories.map((service) => resolveServiceCardCopy(service));
   const [featuredPost, ...otherPosts] = blogPosts;
 
   return (
@@ -221,11 +223,11 @@ export default async function HomePage() {
           </div>
 
           <div className="home2-service-grid">
-            {serviceCategories.map((service, index) => {
+            {homeServices.map((service, index) => {
               const cardAos = SERVICE_CARD_AOS[index % SERVICE_CARD_AOS.length];
               return (
               <article
-                key={service.id}
+                key={service.slug}
                 className="home2-service-card"
                 {...aos(cardAos.animation, cardAos.duration, 'easing' in cardAos ? cardAos.easing : undefined)}
               >
@@ -238,7 +240,7 @@ export default async function HomePage() {
                   />
                 </div>
                 <h3 className="home2-title-sm">{service.name}</h3>
-                {service.teaser?.trim() ? (
+                {service.teaser ? (
                   <p className="home2-text-muted" style={{ marginTop: '12px' }}>
                     {service.teaser}
                   </p>

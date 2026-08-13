@@ -113,6 +113,22 @@ export function parseServiceDetailJson(value: unknown): ServiceDetailJson | null
   return parsed.success ? parsed.data : null;
 }
 
+export function extractTeaserFromContentJson(value: unknown): string {
+  const parsed = parseServiceDetailJson(value);
+  const fromParsed = parsed?.cardTeaser?.trim() || parsed?.introParagraphs?.[0]?.trim() || '';
+  if (fromParsed) return fromParsed;
+
+  if (!value || typeof value !== 'object') return '';
+  const record = value as Record<string, unknown>;
+  if (typeof record.cardTeaser === 'string' && record.cardTeaser.trim()) {
+    return record.cardTeaser.trim();
+  }
+  if (Array.isArray(record.introParagraphs) && typeof record.introParagraphs[0] === 'string') {
+    return record.introParagraphs[0].trim();
+  }
+  return '';
+}
+
 export function parseServicesIndexJson(value: unknown): ServicesIndexJson | null {
   const parsed = servicesIndexJsonSchema.safeParse(value);
   return parsed.success ? parsed.data : null;
