@@ -4,11 +4,7 @@ import ServiceDetailContent from '@/components/services/ServiceDetailContent';
 import ThemePageHero from '@/components/theme/ThemePageHero';
 import { getPublishedPageBySlug } from '@/lib/cms/cache';
 import { getServiceCategories } from '@/lib/db/public-data';
-import { prisma } from '@/lib/db';
-import {
-  parseServiceDetailJson,
-  resolveServiceDetailJson,
-} from '@/lib/site/service-page-json';
+import { resolveServiceDetailJson } from '@/lib/site/service-page-json';
 import '@/styles/services-page.css';
 
 export const dynamic = 'force-dynamic';
@@ -21,12 +17,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: page.metaTitle ?? page.title,
     description: page.metaDescription ?? undefined,
   };
-}
-
-function teaserFromPage(page: { contentJson: unknown; title: string }) {
-  const json = parseServiceDetailJson(page.contentJson);
-  if (json?.cardTeaser) return json.cardTeaser;
-  return `Expert guidance across ${page.title.toLowerCase()} — tailored advisory for compliance and strategic decisions.`;
 }
 
 export default async function CmsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -64,29 +54,23 @@ export default async function CmsPage({ params }: { params: Promise<{ slug: stri
   }
 
   const content = resolveServiceDetailJson(page);
-  const otherSlugs = categories.filter((category) => category.slug !== slug).slice(0, 4);
-  const otherPages = await prisma.page.findMany({
-    where: { slug: { in: otherSlugs.map((item) => item.slug) }, published: true },
-  });
-  const otherPagesBySlug = new Map(otherPages.map((item) => [item.slug, item]));
-
-  const moreServices = otherSlugs.map((category) => {
-    const otherPage = otherPagesBySlug.get(category.slug);
-    return {
+  const moreServices = categories
+    .filter((category) => category.slug !== slug)
+    .slice(0, 4)
+    .map((category) => ({
       slug: category.slug,
       name: category.name,
-      teaser: otherPage
-        ? teaserFromPage(otherPage)
-        : `Explore our ${category.name.toLowerCase()} advisory services.`,
-      imagePath: otherPage?.imagePath,
-    };
-  });
+      teaser: category.teaser?.trim() || category.description?.trim() || '',
+      imagePath: category.imagePath,
+    }));
+
+  const heroImage = page.imagePath?.trim() || serviceMatch.imagePath?.trim() || null;
 
   return (
     <ServiceDetailContent
       title={page.title}
       heroTitle={page.title}
-      imagePath={page.imagePath}
+      imagePath={heroImage}
       content={content}
       services={categories.map((category) => ({ slug: category.slug, name: category.name }))}
       moreServices={moreServices}

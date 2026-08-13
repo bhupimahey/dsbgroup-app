@@ -6,10 +6,15 @@ import {
   defaultServicesIndexJson,
   SERVICES_INDEX_BODY_PLACEHOLDER,
 } from '../src/lib/site/service-page-json';
+import {
+  defaultNbfcPageJson,
+  NBFC_PAGE_BODY_PLACEHOLDER,
+} from '../src/lib/site/nbfc-page-json';
 import { buildServiceCategoryPages } from '../src/lib/site/service-seed-data';
 
 const SERVICE_CATEGORY_PAGES = buildServiceCategoryPages();
 const SERVICES_INDEX_JSON = defaultServicesIndexJson();
+const NBFC_PAGE_JSON = defaultNbfcPageJson();
 
 const ABOUT_PAGE_JSON = defaultAboutPageJson();
 
@@ -44,11 +49,13 @@ const CMS_PAGES = [
   },
   {
     slug: 'nbfc',
-    title: 'NBFC',
-    body: '<p>End-to-end NBFC consultancy — licensing, incorporation, funding, investor tie-ups, and RBI compliance advisory.</p><p>DSB Law Group has supported 50+ NBFC establishments across India.</p>',
-    metaTitle: 'NBFC Consultancy',
-    metaDescription: 'NBFC licensing, governance, and regulatory advisory.',
-    metaKeywords: 'NBFC, RBI, licensing, compliance',
+    title: NBFC_PAGE_JSON.introHeading,
+    body: NBFC_PAGE_BODY_PLACEHOLDER,
+    contentJson: NBFC_PAGE_JSON,
+    metaTitle: NBFC_PAGE_JSON.heroTitle,
+    metaDescription:
+      'DSB Law Group advises Non-Banking Financial Companies on incorporation, RBI licensing, regulatory compliance, restructuring and strategic growth.',
+    metaKeywords: 'NBFC, RBI, licensing, compliance, non-banking financial company',
   },
   {
     slug: 'ucbs',

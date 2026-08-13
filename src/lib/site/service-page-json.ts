@@ -16,7 +16,7 @@ export const serviceApproachCardSchema = z.object({
 export const serviceDetailJsonSchema = z.object({
   template: z.literal('service-detail'),
   version: z.literal(1),
-  cardTeaser: z.string().min(1).max(500),
+  cardTeaser: z.string().max(500).optional().or(z.literal('')),
   introParagraphs: z.array(z.string().min(1).max(5000)).min(1).max(8),
   secondaryHeading: z.string().min(1).max(300),
   secondaryParagraph: z.string().min(1).max(5000),

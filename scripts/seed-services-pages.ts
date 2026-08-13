@@ -5,13 +5,45 @@ import {
   defaultServicesIndexJson,
   SERVICES_INDEX_BODY_PLACEHOLDER,
 } from '../src/lib/site/service-page-json';
-import { buildServiceCategoryPages } from '../src/lib/site/service-seed-data';
+import {
+  buildServiceCategoryPages,
+  buildServiceCategoryRecords,
+} from '../src/lib/site/service-seed-data';
+import {
+  defaultNbfcPageJson,
+  NBFC_PAGE_BODY_PLACEHOLDER,
+} from '../src/lib/site/nbfc-page-json';
 
 const prisma = createPrismaClient();
 
 async function main() {
   const servicesIndex = defaultServicesIndexJson();
   const servicePages = buildServiceCategoryPages();
+  const categoryRecords = buildServiceCategoryRecords();
+  const nbfcContent = defaultNbfcPageJson();
+
+  for (const cat of categoryRecords) {
+    await prisma.serviceCategory.upsert({
+      where: { slug: cat.slug },
+      update: {
+        name: cat.name,
+        teaser: cat.teaser,
+        description: cat.description,
+        imagePath: cat.imagePath,
+        sortOrder: cat.sortOrder,
+        active: true,
+      },
+      create: {
+        slug: cat.slug,
+        name: cat.name,
+        teaser: cat.teaser,
+        description: cat.description,
+        imagePath: cat.imagePath,
+        sortOrder: cat.sortOrder,
+        active: true,
+      },
+    });
+  }
 
   await prisma.page.upsert({
     where: { slug: 'services' },
@@ -61,7 +93,34 @@ async function main() {
     });
   }
 
-  console.log(`Services index + ${servicePages.length} service detail pages saved to database.`);
+  await prisma.page.upsert({
+    where: { slug: 'nbfc' },
+    update: {
+      title: nbfcContent.introHeading,
+      body: NBFC_PAGE_BODY_PLACEHOLDER,
+      contentJson: nbfcContent as Prisma.InputJsonValue,
+      metaTitle: nbfcContent.heroTitle,
+      metaDescription:
+        'DSB Law Group advises Non-Banking Financial Companies on incorporation, RBI licensing, regulatory compliance, restructuring and strategic growth.',
+      metaKeywords: 'NBFC, RBI, licensing, compliance, non-banking financial company',
+      published: true,
+    },
+    create: {
+      slug: 'nbfc',
+      title: nbfcContent.introHeading,
+      body: NBFC_PAGE_BODY_PLACEHOLDER,
+      contentJson: nbfcContent as Prisma.InputJsonValue,
+      metaTitle: nbfcContent.heroTitle,
+      metaDescription:
+        'DSB Law Group advises Non-Banking Financial Companies on incorporation, RBI licensing, regulatory compliance, restructuring and strategic growth.',
+      metaKeywords: 'NBFC, RBI, licensing, compliance, non-banking financial company',
+      published: true,
+    },
+  });
+
+  console.log(
+    `Seeded /services index page, ${servicePages.length} service detail pages, ${categoryRecords.length} service categories, and NBFC page.`,
+  );
 }
 
 main()

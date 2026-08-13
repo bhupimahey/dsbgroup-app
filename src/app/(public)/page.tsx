@@ -238,9 +238,11 @@ export default async function HomePage() {
                   />
                 </div>
                 <h3 className="home2-title-sm">{service.name}</h3>
-                <p className="home2-text-muted" style={{ marginTop: '12px' }}>
-                  Practical advisory and implementation support tailored to this practice area.
-                </p>
+                {service.teaser?.trim() ? (
+                  <p className="home2-text-muted" style={{ marginTop: '12px' }}>
+                    {service.teaser}
+                  </p>
+                ) : null}
                 <Link href={`/pages/${service.slug}`} className="home2-link">
                   Learn More <span>→</span>
                 </Link>

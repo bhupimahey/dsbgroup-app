@@ -5,6 +5,7 @@ import { createPrismaClient } from '../src/lib/prisma-client';
 import { CMS_PAGES, SERVICE_CATEGORY_PAGES } from './seed-content';
 import { TEAM_SEED_MEMBERS, teamSeedPayload } from '../src/lib/team/team-seed-data';
 import { TEXT_TESTIMONIALS, VIDEO_TESTIMONIALS } from '../src/lib/site/testimonials-content';
+import { buildServiceCategoryRecords } from '../src/lib/site/service-seed-data';
 
 const prisma = createPrismaClient();
 
@@ -39,24 +40,28 @@ async function main() {
     },
   });
 
-  const serviceCategories = [
-    { slug: 'intellectual-property', name: 'Intellectual Property Rights' },
-    { slug: 'labour-law', name: 'Labor & Industrial Law' },
-    { slug: 'joint-ventures', name: 'Joint Ventures' },
-    { slug: 'taxation', name: 'Taxation' },
-    { slug: 'business-advisory', name: 'Business Advisory' },
-    { slug: 'banking-finance', name: 'Banking & Finance' },
-    { slug: 'private-equity', name: 'Private Equity' },
-    { slug: 'audit', name: 'Audit' },
-    { slug: 'mergers-acquisitions', name: 'Mergers & Acquisitions' },
-    { slug: 'corporate-advisory', name: 'Corporate Advisory' },
-  ];
+  const serviceCategoryRecords = buildServiceCategoryRecords();
 
-  for (const [i, cat] of serviceCategories.entries()) {
+  for (const cat of serviceCategoryRecords) {
     await prisma.serviceCategory.upsert({
       where: { slug: cat.slug },
-      update: { name: cat.name, sortOrder: i, active: true },
-      create: { ...cat, sortOrder: i, active: true },
+      update: {
+        name: cat.name,
+        teaser: cat.teaser,
+        description: cat.description,
+        imagePath: cat.imagePath,
+        sortOrder: cat.sortOrder,
+        active: true,
+      },
+      create: {
+        slug: cat.slug,
+        name: cat.name,
+        teaser: cat.teaser,
+        description: cat.description,
+        imagePath: cat.imagePath,
+        sortOrder: cat.sortOrder,
+        active: true,
+      },
     });
   }
 

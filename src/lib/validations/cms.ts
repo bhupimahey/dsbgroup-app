@@ -92,6 +92,9 @@ export const categorySchema = z.object({
 export const serviceCategorySchema = z.object({
   slug: z.string().min(1).max(120).regex(/^[a-z0-9-]+$/),
   name: z.string().min(1).max(200),
+  teaser: z.string().max(2000).optional().or(z.literal('')),
+  description: z.string().max(5000).optional().or(z.literal('')),
+  imagePath: z.string().max(500).optional().or(z.literal('')),
   sortOrder: z.coerce.number().int().min(0).max(9999).optional(),
   active: z.coerce.boolean().optional(),
 });

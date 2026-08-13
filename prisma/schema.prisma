@@ -255,6 +255,9 @@ model ServiceCategory {
   id          String                   @id @default(cuid())
   slug        String                   @unique
   name        String
+  teaser      String?                  @db.Text
+  description String?                  @db.Text
+  imagePath   String?
   sortOrder   Int                      @default(0)
   active      Boolean                  @default(true)
   preferences SubscriptionPreference[]

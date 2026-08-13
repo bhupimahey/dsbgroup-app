@@ -15,6 +15,7 @@ import {
   SERVICE_PAGE_BODY_PLACEHOLDER,
   SERVICES_INDEX_BODY_PLACEHOLDER,
 } from '@/lib/site/service-page-json';
+import { NBFC_PAGE_BODY_PLACEHOLDER, parseNbfcPageForm } from '@/lib/site/nbfc-page-json';
 
 function parseStandardPageForm(formData: FormData) {
   return pageSchema.parse({
@@ -115,6 +116,30 @@ export async function updatePageAction(id: string, formData: FormData) {
     redirect('/admin/pages');
   }
 
+  if (formData.get('nbfcTemplate') === '1') {
+    const contentJson = parseNbfcPageForm(formData);
+    const meta = parseSharedMeta(formData);
+
+    await prisma.page.update({
+      where: { id },
+      data: {
+        slug: meta.slug,
+        title: contentJson.introHeading,
+        body: NBFC_PAGE_BODY_PLACEHOLDER,
+        contentJson,
+        metaTitle: contentJson.heroTitle,
+        metaDescription: meta.metaDescription,
+        metaKeywords: meta.metaKeywords,
+        imagePath: meta.imagePath,
+        published: meta.published,
+      },
+    });
+
+    revalidatePath('/admin/pages');
+    revalidatePath('/nbfc');
+    redirect('/admin/pages');
+  }
+
   if (formData.get('serviceDetailTemplate') === '1') {
     const contentJson = parseServiceDetailForm(formData);
     const title = String(formData.get('title') ?? '').trim();
@@ -159,6 +184,7 @@ export async function updatePageAction(id: string, formData: FormData) {
   revalidatePath('/admin/pages');
   if (data.slug === 'about') revalidatePath('/about');
   if (data.slug === 'services') revalidatePath('/services');
+  if (data.slug === 'nbfc') revalidatePath('/nbfc');
   redirect('/admin/pages');
 }
 
@@ -169,6 +195,7 @@ export async function deletePageAction(id: string) {
   revalidatePath('/admin/pages');
   if (page?.slug === 'about') revalidatePath('/about');
   if (page?.slug === 'services') revalidatePath('/services');
+  if (page?.slug === 'nbfc') revalidatePath('/nbfc');
   if (page?.slug) revalidatePath(`/pages/${page.slug}`);
   redirect('/admin/pages');
 }

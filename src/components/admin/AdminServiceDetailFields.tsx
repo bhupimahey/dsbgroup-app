@@ -42,17 +42,19 @@ export default function AdminServiceDetailFields({
       <input type="hidden" name="serviceDetailTemplate" value="1" />
       <AdminField label="Slug" name="slug" defaultValue={slug} required />
 
-      <Section title="Listing & hero">
+      <Section title="Hero image & title">
         <AdminField label="Service name (page title)" name="title" defaultValue={title} required />
-        <AdminTextarea label="Card teaser (services index)" name="cardTeaser" defaultValue={content.cardTeaser} rows={3} required />
         <AdminFileUpload
           label="Hero / detail image"
           name="imagePath"
           accept="image/jpeg,image/png,image/webp,image/gif"
           defaultValue={imagePath ?? ''}
           uploadKind="page-image"
+          hint="Hero image on this service detail page. Card image and short teaser used on /services live under Service Areas."
         />
       </Section>
+
+      <input type="hidden" name="cardTeaser" value={content.cardTeaser ?? ''} />
 
       <Section title="Main content">
         <AdminTextarea

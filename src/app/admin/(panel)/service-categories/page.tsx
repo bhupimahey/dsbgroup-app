@@ -4,7 +4,8 @@ import {
   deleteServiceCategoryAction,
 } from '@/lib/admin/service-category-actions';
 import { parseFilterParam, pickListQuery, serviceCategoryListWhere } from '@/lib/admin/list-filters';
-import { AdminField } from '@/components/admin/AdminFormFields';
+import { AdminField, AdminTextarea } from '@/components/admin/AdminFormFields';
+import AdminFileUpload from '@/components/admin/AdminFileUpload';
 import AdminPageHeader from '@/components/admin/ui/AdminPageHeader';
 import AdminPagination from '@/components/admin/ui/AdminPagination';
 import AdminListFilters from '@/components/admin/ui/AdminListFilters';
@@ -48,9 +49,32 @@ export default async function AdminServiceCategoriesPage({
     <div className={adminPage}>
       <AdminPageHeader />
 
-      <AdminForm title="New service area" subtitle="Used for subscription preferences and newsletter targeting." action={createServiceCategoryAction}>
+      <AdminForm
+        title="New service area"
+        subtitle="Controls the card on /services, the More Services strip, and newsletter targeting."
+        action={createServiceCategoryAction}
+      >
         <AdminField label="Name" name="name" required />
         <AdminField label="Slug" name="slug" required hint="Lowercase letters, numbers, and hyphens only." />
+        <AdminTextarea
+          label="Card teaser"
+          name="teaser"
+          rows={3}
+          hint="Short summary shown on /services cards and the More Services strip on detail pages."
+        />
+        <AdminTextarea
+          label="Long description"
+          name="description"
+          rows={4}
+          hint="Optional longer summary used where a fuller description is needed."
+        />
+        <AdminFileUpload
+          label="Card image"
+          name="imagePath"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          uploadKind="page-image"
+          hint="Image used on the /services and More Services cards. Recommended 250×209."
+        />
         <AdminField label="Sort order" name="sortOrder" defaultValue="0" />
         <label className="flex items-center gap-2 text-sm" style={{ color: 'var(--z-text)' }}>
           <input type="checkbox" name="active" defaultChecked className="rounded" />

@@ -1,1 +1,6 @@
-export type PageEditorKind = 'about' | 'services-index' | 'service-detail' | 'standard';
+export type PageEditorKind =
+  | 'about'
+  | 'services-index'
+  | 'service-detail'
+  | 'nbfc'
+  | 'standard';

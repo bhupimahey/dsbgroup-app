@@ -45,3 +45,8 @@ deploy/rsync.env
 next-env.d.ts
 
 /src/generated/prisma
+
+# local docx extraction artifacts (used for content copy)
+/scripts/_content-extract.txt
+/scripts/_content.zip
+/scripts/_docx_extract/

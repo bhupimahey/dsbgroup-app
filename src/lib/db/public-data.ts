@@ -106,16 +106,7 @@ export async function getServicesIndexData() {
     getServiceCategories(),
   ]);
 
-  const pages = await prisma.page.findMany({
-    where: {
-      slug: { in: categories.map((category) => category.slug) },
-      published: true,
-    },
-  });
-
-  const pagesBySlug = new Map(pages.map((page) => [page.slug, page]));
-
-  return { indexPage, categories, pagesBySlug };
+  return { indexPage, categories };
 }
 
 export async function getFaqCategoriesPage(categoryPage: number, pageSize: number) {

@@ -40,7 +40,7 @@ export default function ServicesIndexContent({ content, services }: Props) {
                   <h2>
                     <Link href={`/pages/${service.slug}`}>{service.name}</Link>
                   </h2>
-                  <p>{service.teaser}</p>
+                  {service.teaser ? <p>{service.teaser}</p> : null}
                   <Link href={`/pages/${service.slug}`} className="services-card-link">
                     Learn More <span aria-hidden>→</span>
                   </Link>
