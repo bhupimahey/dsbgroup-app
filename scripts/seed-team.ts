@@ -13,7 +13,7 @@ async function main() {
     });
   }
 
-  console.log(`Team roster updated: ${TEAM_SEED_MEMBERS.length} profiles saved (photos left unchanged).`);
+  console.log(`Team roster updated: ${TEAM_SEED_MEMBERS.length} profiles saved as document paragraphs (photos left unchanged).`);
 }
 
 main()

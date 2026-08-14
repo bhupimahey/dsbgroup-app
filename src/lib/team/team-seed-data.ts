@@ -1,4 +1,4 @@
-import { ensureBioHtml } from '@/lib/team/bio-html';
+import { paragraphsToBioHtml } from '@/lib/team/bio-html';
 import { teamTeaser } from '@/lib/team/constants';
 import { TEAM_LIVE_MEMBERS, type TeamLiveMember } from '@/lib/team/team-live-bios';
 
@@ -8,11 +8,11 @@ function m(member: TeamLiveMember): TeamSeedMember {
   return { published: true, ...member };
 }
 
-/** Roster aligned with https://www.dsblawgroup.com/our-team */
+/** Roster from the client Our People document — plain paragraphs only. */
 export const TEAM_SEED_MEMBERS: TeamSeedMember[] = TEAM_LIVE_MEMBERS.map(m);
 
 export function teamSeedPayload(member: TeamSeedMember) {
-  const bioHtml = ensureBioHtml(member.bio);
+  const bioHtml = paragraphsToBioHtml(member.bio);
   return {
     name: member.name,
     title: member.title,
