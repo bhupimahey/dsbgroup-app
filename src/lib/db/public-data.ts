@@ -119,10 +119,15 @@ export async function getHomeServiceCategories() {
 }
 
 export async function getTeamMembers() {
-  return prisma.teamMember.findMany({
+  const members = await prisma.teamMember.findMany({
     where: { published: true },
     orderBy: [{ group: 'asc' }, { sortOrder: 'asc' }],
   });
+
+  return members.map((member) => ({
+    ...member,
+    imagePath: member.showPhotoOnFront ? member.imagePath : null,
+  }));
 }
 
 export async function getServicesIndexData() {

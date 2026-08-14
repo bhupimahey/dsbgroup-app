@@ -39,6 +39,7 @@ export const teamSchema = z.object({
     'EMPANELLED_ADVOCATES',
   ]),
   imagePath: z.string().max(500).optional().or(z.literal('')),
+  showPhotoOnFront: z.coerce.boolean().optional(),
   phone: z.string().max(40).optional().or(z.literal('')),
   email: z.string().email().max(200).optional().or(z.literal('')),
   sortOrder: z.coerce.number().int().min(0).max(9999).optional(),

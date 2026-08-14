@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { prisma } from '@/lib/db';
 import { deleteTeamAction } from '@/lib/admin/team-actions';
 import { TEAM_GROUP_LABELS, TEAM_GROUP_ORDER } from '@/lib/team/constants';
@@ -71,6 +72,7 @@ export default async function AdminTeamPage({
         <table className={adminTable}>
           <thead>
             <tr>
+              <th className={adminTableHeadCell}>Photo</th>
               <th className={adminTableHeadCell}>Name</th>
               <th className={adminTableHeadCell}>Section</th>
               <th className={adminTableHeadCell}>Title</th>
@@ -82,13 +84,28 @@ export default async function AdminTeamPage({
           <tbody>
             {members.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-10 text-center" style={{ color: 'var(--z-text-muted)' }}>
+                <td colSpan={7} className="px-4 py-10 text-center" style={{ color: 'var(--z-text-muted)' }}>
                   No team members match your filters.
                 </td>
               </tr>
             ) : (
               members.map((m) => (
                 <tr key={m.id} className={adminTableRow}>
+                  <td className={adminTableCell}>
+                    <div className="relative h-12 w-12 overflow-hidden rounded-full border bg-slate-100" style={{ borderColor: 'var(--z-border)' }}>
+                      {m.imagePath ? (
+                        <Image src={m.imagePath} alt={m.name} fill className="object-cover object-top" sizes="48px" unoptimized />
+                      ) : (
+                        <span className="flex h-full w-full items-center justify-center text-xs font-semibold text-white" style={{ background: 'linear-gradient(145deg, #05162e, #0a2444)' }}>
+                          {m.name
+                            .split(' ')
+                            .map((part) => part[0])
+                            .join('')
+                            .slice(0, 2)}
+                        </span>
+                      )}
+                    </div>
+                  </td>
                   <td className={`${adminTableCell} font-semibold`}>{m.name}</td>
                   <td className={`${adminTableCell} text-xs`} style={{ color: 'var(--z-text-muted)' }}>
                     {TEAM_GROUP_LABELS[m.group]}
@@ -103,9 +120,16 @@ export default async function AdminTeamPage({
                     {!m.phone && !m.email ? '—' : null}
                   </td>
                   <td className={adminTableCell}>
-                    <AdminStatusBadge variant={m.published ? 'published' : 'draft'}>
-                      {m.published ? 'Published' : 'Draft'}
-                    </AdminStatusBadge>
+                    <div className="flex flex-col gap-1">
+                      <AdminStatusBadge variant={m.published ? 'published' : 'draft'}>
+                        {m.published ? 'Published' : 'Draft'}
+                      </AdminStatusBadge>
+                      {m.imagePath && !m.showPhotoOnFront ? (
+                        <span className="text-xs" style={{ color: 'var(--z-text-muted)' }}>
+                          Photo hidden on site
+                        </span>
+                      ) : null}
+                    </div>
                   </td>
                   <td className={adminTableCell}>
                     <AdminTableActions

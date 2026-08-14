@@ -1,6 +1,7 @@
 import { paragraphsToBioHtml } from '@/lib/team/bio-html';
 import { teamTeaser } from '@/lib/team/constants';
 import { TEAM_LIVE_MEMBERS, type TeamLiveMember } from '@/lib/team/team-live-bios';
+import { TEAM_PHOTO_FILES } from '@/lib/team/team-photos';
 
 export type TeamSeedMember = TeamLiveMember & { published?: boolean };
 
@@ -24,5 +25,24 @@ export function teamSeedPayload(member: TeamSeedMember) {
     email: member.email ?? null,
     sortOrder: member.sortOrder,
     published: member.published ?? true,
+  };
+}
+
+export function teamCreatePayload(member: TeamSeedMember) {
+  return {
+    ...teamSeedPayload(member),
+    imagePath: TEAM_PHOTO_FILES[member.id] ?? null,
+    showPhotoOnFront: true,
+  };
+}
+
+export function teamUpdatePayload(
+  member: TeamSeedMember,
+  existing: { imagePath: string | null } | null,
+) {
+  const photo = TEAM_PHOTO_FILES[member.id] ?? null;
+  return {
+    ...teamSeedPayload(member),
+    ...(!existing?.imagePath && photo ? { imagePath: photo } : {}),
   };
 }

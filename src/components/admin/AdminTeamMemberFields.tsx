@@ -1,6 +1,7 @@
 import { AdminCheckbox, AdminField, AdminSelect, AdminTextarea } from '@/components/admin/AdminFormFields';
 import AdminFileUpload from '@/components/admin/AdminFileUpload';
 import AdminRichTextEditor from '@/components/admin/AdminRichTextEditorLazy';
+import { adminHint } from '@/components/admin/ui/admin-styles';
 import { TEAM_GROUP_OPTIONS } from '@/lib/team/constants';
 
 type Defaults = {
@@ -11,6 +12,7 @@ type Defaults = {
   branch?: string | null;
   group?: string;
   imagePath?: string | null;
+  showPhotoOnFront?: boolean;
   phone?: string | null;
   email?: string | null;
   sortOrder?: number;
@@ -26,8 +28,16 @@ export default function AdminTeamMemberFields({ defaults = {} }: { defaults?: De
         accept="image/jpeg,image/png,image/webp"
         defaultValue={defaults.imagePath ?? ''}
         uploadKind="team-image"
-        hint="Optional professional headshot. If you skip this, initials are shown on /team. Upload to display the photo."
+        hint="Professional headshot. Shown in admin even if you hide it on the public site."
       />
+      <AdminCheckbox
+        label="Show photo on website"
+        name="showPhotoOnFront"
+        defaultChecked={defaults.showPhotoOnFront ?? true}
+      />
+      <p className={`${adminHint} -mt-2`} style={{ color: 'var(--z-text-muted)' }}>
+        Uncheck to hide the portrait on /team and About. The photo stays visible in admin.
+      </p>
       <AdminField label="Name" name="name" defaultValue={defaults.name} required />
       <AdminField label="Title / designation" name="title" defaultValue={defaults.title} required />
       <AdminSelect

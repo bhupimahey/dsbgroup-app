@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import type { Prisma } from '../src/generated/prisma/client';
 import { createPrismaClient } from '../src/lib/prisma-client';
 import { CMS_PAGES, SERVICE_CATEGORY_PAGES } from './seed-content';
-import { TEAM_SEED_MEMBERS, teamSeedPayload } from '../src/lib/team/team-seed-data';
+import { TEAM_SEED_MEMBERS, teamCreatePayload, teamUpdatePayload } from '../src/lib/team/team-seed-data';
 import { TEXT_TESTIMONIALS, VIDEO_TESTIMONIALS } from '../src/lib/site/testimonials-content';
 import { buildServiceCategoryRecords } from '../src/lib/site/service-seed-data';
 
@@ -218,10 +218,14 @@ async function main() {
   });
 
   for (const member of TEAM_SEED_MEMBERS) {
+    const existing = await prisma.teamMember.findUnique({
+      where: { id: member.id },
+      select: { imagePath: true },
+    });
     await prisma.teamMember.upsert({
       where: { id: member.id },
-      update: teamSeedPayload(member),
-      create: { id: member.id, ...teamSeedPayload(member) },
+      update: teamUpdatePayload(member, existing),
+      create: { id: member.id, ...teamCreatePayload(member) },
     });
   }
 
