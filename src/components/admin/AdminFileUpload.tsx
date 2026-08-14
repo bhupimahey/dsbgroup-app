@@ -89,6 +89,19 @@ export default function AdminFileUpload({
             View uploaded file
           </a>
         ) : null}
+        {path ? (
+          <button
+            type="button"
+            className="text-sm font-medium hover:underline"
+            style={{ color: 'var(--z-text-muted)' }}
+            onClick={() => {
+              setPath('');
+              setError('');
+            }}
+          >
+            Remove
+          </button>
+        ) : null}
       </div>
       {path && isImageKind ? (
         <div className="relative mt-3 h-40 w-full max-w-xs overflow-hidden rounded-lg border" style={{ borderColor: 'var(--z-border)' }}>

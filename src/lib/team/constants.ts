@@ -14,7 +14,7 @@ export const TEAM_GROUP_LABELS: Record<TeamGroup, string> = {
   PARTNERS_DIRECTORS: 'Partners / Directors',
   SENIOR_WHOLE_TIME_CONSULTANTS: 'Senior Whole-Time Consultants',
   WHOLE_TIME_CONSULTANTS: 'Whole Time Consultants',
-  EMPANELLED_ADVOCATES: 'Empanelled Advocates (Labor, Civil, Criminal)',
+  EMPANELLED_ADVOCATES: 'Empanelled Advocates (Labour, Civil, Criminal)',
 };
 
 export const TEAM_GROUP_OPTIONS = TEAM_GROUP_ORDER.map((value) => ({

@@ -26,7 +26,7 @@ export default function AdminTeamMemberFields({ defaults = {} }: { defaults?: De
         accept="image/jpeg,image/png,image/webp"
         defaultValue={defaults.imagePath ?? ''}
         uploadKind="team-image"
-        hint="Professional headshot — matches the card layout on /team."
+        hint="Optional professional headshot. If you skip this, initials are shown on /team. Upload to display the photo."
       />
       <AdminField label="Name" name="name" defaultValue={defaults.name} required />
       <AdminField label="Title / designation" name="title" defaultValue={defaults.title} required />

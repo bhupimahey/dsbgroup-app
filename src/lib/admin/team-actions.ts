@@ -48,6 +48,7 @@ export async function createTeamAction(formData: FormData) {
   await prisma.teamMember.create({ data: teamData(data) });
   revalidatePath('/admin/team');
   revalidatePath('/team');
+  revalidatePath('/about');
   redirect('/admin/team');
 }
 
@@ -57,6 +58,7 @@ export async function updateTeamAction(id: string, formData: FormData) {
   await prisma.teamMember.update({ where: { id }, data: teamData(data) });
   revalidatePath('/admin/team');
   revalidatePath('/team');
+  revalidatePath('/about');
   redirect('/admin/team');
 }
 
@@ -65,5 +67,6 @@ export async function deleteTeamAction(id: string) {
   await prisma.teamMember.delete({ where: { id } });
   revalidatePath('/admin/team');
   revalidatePath('/team');
+  revalidatePath('/about');
   redirect('/admin/team');
 }
