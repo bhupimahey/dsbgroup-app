@@ -1,6 +1,4 @@
-import { createWriteStream } from 'node:fs';
-import { mkdir } from 'node:fs/promises';
-import { pipeline } from 'node:stream/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { TEAM_PHOTO_SOURCES } from '../src/lib/team/team-photos';
 
@@ -11,10 +9,10 @@ async function download(url: string, dest: string) {
     headers: { 'User-Agent': 'Mozilla/5.0 (compatible; DSBLawGroup-import/1.0)' },
     redirect: 'follow',
   });
-  if (!response.ok || !response.body) {
+  if (!response.ok) {
     throw new Error(`${response.status} ${response.statusText} for ${url}`);
   }
-  await pipeline(response.body, createWriteStream(dest));
+  await writeFile(dest, Buffer.from(await response.arrayBuffer()));
 }
 
 async function main() {
