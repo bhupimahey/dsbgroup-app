@@ -16,6 +16,10 @@ import {
   SERVICES_INDEX_BODY_PLACEHOLDER,
 } from '@/lib/site/service-page-json';
 import { NBFC_PAGE_BODY_PLACEHOLDER, parseNbfcPageForm } from '@/lib/site/nbfc-page-json';
+import {
+  HR_LABOUR_PAGE_BODY_PLACEHOLDER,
+  parseHrLabourPageForm,
+} from '@/lib/site/hr-labour-page-json';
 
 function parseStandardPageForm(formData: FormData) {
   return pageSchema.parse({
@@ -140,6 +144,30 @@ export async function updatePageAction(id: string, formData: FormData) {
     redirect('/admin/pages');
   }
 
+  if (formData.get('hrLabourTemplate') === '1') {
+    const contentJson = parseHrLabourPageForm(formData);
+    const meta = parseSharedMeta(formData);
+
+    await prisma.page.update({
+      where: { id },
+      data: {
+        slug: meta.slug,
+        title: contentJson.heroTitle,
+        body: HR_LABOUR_PAGE_BODY_PLACEHOLDER,
+        contentJson,
+        metaTitle: contentJson.heroTitle,
+        metaDescription: meta.metaDescription,
+        metaKeywords: meta.metaKeywords,
+        imagePath: meta.imagePath,
+        published: meta.published,
+      },
+    });
+
+    revalidatePath('/admin/pages');
+    revalidatePath('/hr-labour-law/about');
+    redirect('/admin/pages');
+  }
+
   if (formData.get('serviceDetailTemplate') === '1') {
     const contentJson = parseServiceDetailForm(formData);
     const title = String(formData.get('title') ?? '').trim();
@@ -185,6 +213,9 @@ export async function updatePageAction(id: string, formData: FormData) {
   if (data.slug === 'about') revalidatePath('/about');
   if (data.slug === 'services') revalidatePath('/services');
   if (data.slug === 'nbfc') revalidatePath('/nbfc');
+  if (data.slug === 'about-hr-labour-law' || data.slug === 'hr-labour-laws') {
+    revalidatePath('/hr-labour-law/about');
+  }
   redirect('/admin/pages');
 }
 
@@ -196,6 +227,9 @@ export async function deletePageAction(id: string) {
   if (page?.slug === 'about') revalidatePath('/about');
   if (page?.slug === 'services') revalidatePath('/services');
   if (page?.slug === 'nbfc') revalidatePath('/nbfc');
+  if (page?.slug === 'about-hr-labour-law' || page?.slug === 'hr-labour-laws') {
+    revalidatePath('/hr-labour-law/about');
+  }
   if (page?.slug) revalidatePath(`/pages/${page.slug}`);
   redirect('/admin/pages');
 }

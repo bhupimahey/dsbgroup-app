@@ -10,11 +10,16 @@ import {
   defaultNbfcPageJson,
   NBFC_PAGE_BODY_PLACEHOLDER,
 } from '../src/lib/site/nbfc-page-json';
+import {
+  defaultHrLabourPageJson,
+  HR_LABOUR_PAGE_BODY_PLACEHOLDER,
+} from '../src/lib/site/hr-labour-page-json';
 import { buildServiceCategoryPages } from '../src/lib/site/service-seed-data';
 
 const SERVICE_CATEGORY_PAGES = buildServiceCategoryPages();
 const SERVICES_INDEX_JSON = defaultServicesIndexJson();
 const NBFC_PAGE_JSON = defaultNbfcPageJson();
+const HR_LABOUR_PAGE_JSON = defaultHrLabourPageJson();
 
 const ABOUT_PAGE_JSON = defaultAboutPageJson();
 
@@ -75,11 +80,13 @@ const CMS_PAGES = [
   },
   {
     slug: 'about-hr-labour-law',
-    title: 'About HR & Labour Law',
-    body: '<p>Overview of DSB Law Group&apos;s HR and labour law practice — workforce structuring, disputes, POSH, and code compliance.</p>',
-    metaTitle: 'About HR & Labour Law',
-    metaDescription: 'HR and labour law practice overview.',
-    metaKeywords: 'HR, labour law, employment',
+    title: HR_LABOUR_PAGE_JSON.heroTitle,
+    body: HR_LABOUR_PAGE_BODY_PLACEHOLDER,
+    contentJson: HR_LABOUR_PAGE_JSON,
+    metaTitle: HR_LABOUR_PAGE_JSON.heroTitle,
+    metaDescription:
+      'HR and labour law advisory from DSB Law Group — employment documentation, wages, POSH, social security and workforce compliance.',
+    metaKeywords: 'HR, labour law, employment, POSH, labour codes',
   },
   {
     slug: 'new-labour-codes-compliance',

@@ -3,4 +3,5 @@ export type PageEditorKind =
   | 'services-index'
   | 'service-detail'
   | 'nbfc'
+  | 'hr-labour'
   | 'standard';

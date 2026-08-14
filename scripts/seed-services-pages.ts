@@ -13,6 +13,10 @@ import {
   defaultNbfcPageJson,
   NBFC_PAGE_BODY_PLACEHOLDER,
 } from '../src/lib/site/nbfc-page-json';
+import {
+  defaultHrLabourPageJson,
+  HR_LABOUR_PAGE_BODY_PLACEHOLDER,
+} from '../src/lib/site/hr-labour-page-json';
 
 const prisma = createPrismaClient();
 
@@ -21,6 +25,7 @@ async function main() {
   const servicePages = buildServiceCategoryPages();
   const categoryRecords = buildServiceCategoryRecords();
   const nbfcContent = defaultNbfcPageJson();
+  const hrLabourContent = defaultHrLabourPageJson();
 
   for (const cat of categoryRecords) {
     await prisma.serviceCategory.upsert({
@@ -118,8 +123,33 @@ async function main() {
     },
   });
 
+  await prisma.page.upsert({
+    where: { slug: 'about-hr-labour-law' },
+    update: {
+      title: hrLabourContent.heroTitle,
+      body: HR_LABOUR_PAGE_BODY_PLACEHOLDER,
+      contentJson: hrLabourContent as Prisma.InputJsonValue,
+      metaTitle: hrLabourContent.heroTitle,
+      metaDescription:
+        'HR and labour law advisory from DSB Law Group — employment documentation, wages, POSH, social security and workforce compliance.',
+      metaKeywords: 'HR, labour law, employment, POSH, labour codes',
+      published: true,
+    },
+    create: {
+      slug: 'about-hr-labour-law',
+      title: hrLabourContent.heroTitle,
+      body: HR_LABOUR_PAGE_BODY_PLACEHOLDER,
+      contentJson: hrLabourContent as Prisma.InputJsonValue,
+      metaTitle: hrLabourContent.heroTitle,
+      metaDescription:
+        'HR and labour law advisory from DSB Law Group — employment documentation, wages, POSH, social security and workforce compliance.',
+      metaKeywords: 'HR, labour law, employment, POSH, labour codes',
+      published: true,
+    },
+  });
+
   console.log(
-    `Seeded /services index page, ${servicePages.length} service detail pages, ${categoryRecords.length} service categories, and NBFC page.`,
+    `Seeded /services index page, ${servicePages.length} service detail pages, ${categoryRecords.length} service categories, NBFC page, and HR & Labour Laws page.`,
   );
 }
 

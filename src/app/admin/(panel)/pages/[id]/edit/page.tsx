@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { deletePageAction, updatePageAction } from '@/lib/admin/page-actions';
 import { getPageEditorKind } from '@/lib/admin/page-templates';
 import AdminAboutPageFields from '@/components/admin/AdminAboutPageFields';
+import AdminHrLabourPageFields from '@/components/admin/AdminHrLabourPageFields';
 import AdminNbfcPageFields from '@/components/admin/AdminNbfcPageFields';
 import AdminServiceDetailFields from '@/components/admin/AdminServiceDetailFields';
 import AdminServicesIndexFields from '@/components/admin/AdminServicesIndexFields';
@@ -15,6 +16,7 @@ import { AdminConfirmDeleteForm, AdminFormDeleteButton } from '@/components/admi
 import { AdminForm } from '@/components/admin/ui/AdminFormCard';
 import { adminPage } from '@/components/admin/ui/admin-styles';
 import { resolveAboutJsonFromPage } from '@/lib/site/about-page-json';
+import { resolveHrLabourJsonFromPage } from '@/lib/site/hr-labour-page-json';
 import { resolveNbfcJsonFromPage } from '@/lib/site/nbfc-page-json';
 import { resolveServiceDetailJson, resolveServicesIndexJson } from '@/lib/site/service-page-json';
 
@@ -31,6 +33,7 @@ export default async function AdminEditPagePage({ params }: { params: Promise<{ 
     'services-index': 'Edit Services index page',
     'service-detail': 'Edit service detail page',
     nbfc: 'Edit NBFC Advisory page',
+    'hr-labour': 'Edit HR & Labour Laws page',
     standard: 'Edit page',
   };
 
@@ -39,6 +42,7 @@ export default async function AdminEditPagePage({ params }: { params: Promise<{ 
     'services-index': 'Controls the /services listing page hero and heading.',
     'service-detail': 'Structured sections map to the public service detail layout.',
     nbfc: 'Structured sections map directly to the public /nbfc layout.',
+    'hr-labour': 'Structured sections map directly to the public /hr-labour-law/about layout.',
     standard: page.title,
   };
 
@@ -82,6 +86,14 @@ export default async function AdminEditPagePage({ params }: { params: Promise<{ 
         ) : editorKind === 'nbfc' ? (
           <AdminNbfcPageFields
             content={resolveNbfcJsonFromPage(page)}
+            slug={page.slug}
+            metaDescription={page.metaDescription}
+            metaKeywords={page.metaKeywords}
+            published={page.published}
+          />
+        ) : editorKind === 'hr-labour' ? (
+          <AdminHrLabourPageFields
+            content={resolveHrLabourJsonFromPage(page)}
             slug={page.slug}
             metaDescription={page.metaDescription}
             metaKeywords={page.metaKeywords}
