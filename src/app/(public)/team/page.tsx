@@ -39,7 +39,7 @@ export default async function TeamPage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         {grouped.length === 0 ? (
           <p className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500">
             Team profiles will appear here soon.
@@ -52,7 +52,9 @@ export default async function TeamPage() {
               </h2>
               <ul
                 className={`mt-6 grid gap-5 ${
-                  section.group === 'MANAGING_PARTNERS_CEO' ? 'grid-cols-1' : 'sm:grid-cols-2 xl:grid-cols-3'
+                  section.group === 'MANAGING_PARTNERS_CEO'
+                    ? 'grid-cols-1'
+                    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
                 }`}
               >
                 {section.members.map((member) => (

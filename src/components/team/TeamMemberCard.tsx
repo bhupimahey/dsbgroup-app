@@ -30,7 +30,7 @@ function MemberPhoto({ member, className }: { member: TeamMemberView; className?
         alt={member.name}
         fill
         className={`object-cover object-top ${className ?? ''}`}
-        sizes="(max-width: 640px) 100vw, 280px"
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
         unoptimized
       />
     );
