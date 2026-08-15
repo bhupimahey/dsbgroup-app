@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { prisma } from '@/lib/db';
 import { deleteTeamAction } from '@/lib/admin/team-actions';
 import { TEAM_GROUP_LABELS, TEAM_GROUP_ORDER } from '@/lib/team/constants';
+import { adminTeamImagePath } from '@/lib/team/team-photos';
 import {
   parseFilterParam,
   pickListQuery,
@@ -89,12 +90,14 @@ export default async function AdminTeamPage({
                 </td>
               </tr>
             ) : (
-              members.map((m) => (
+              members.map((m) => {
+                const photo = adminTeamImagePath(m);
+                return (
                 <tr key={m.id} className={adminTableRow}>
                   <td className={adminTableCell}>
                     <div className="relative h-12 w-12 overflow-hidden rounded-full border bg-slate-100" style={{ borderColor: 'var(--z-border)' }}>
-                      {m.imagePath ? (
-                        <Image src={m.imagePath} alt={m.name} fill className="object-cover object-top" sizes="48px" unoptimized />
+                      {photo ? (
+                        <Image src={photo} alt={m.name} fill className="object-cover object-top" sizes="48px" unoptimized />
                       ) : (
                         <span className="flex h-full w-full items-center justify-center text-xs font-semibold text-white" style={{ background: 'linear-gradient(145deg, #05162e, #0a2444)' }}>
                           {m.name
@@ -124,7 +127,7 @@ export default async function AdminTeamPage({
                       <AdminStatusBadge variant={m.published ? 'published' : 'draft'}>
                         {m.published ? 'Published' : 'Draft'}
                       </AdminStatusBadge>
-                      {m.imagePath && !m.showPhotoOnFront ? (
+                      {photo && !m.showPhotoOnFront ? (
                         <span className="text-xs" style={{ color: 'var(--z-text-muted)' }}>
                           Photo hidden on site
                         </span>
@@ -139,7 +142,8 @@ export default async function AdminTeamPage({
                     />
                   </td>
                 </tr>
-              ))
+                );
+              })
             )}
           </tbody>
         </table>

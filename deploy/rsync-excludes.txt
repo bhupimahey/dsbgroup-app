@@ -1,4 +1,5 @@
 # Rsync exclusions — never sync secrets, build artifacts, or server-only uploads.
+# Committed team portraits live in public/team/ (not public/uploads/) so they deploy.
 .git/
 .github/
 node_modules/

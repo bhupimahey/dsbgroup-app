@@ -2,7 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { TEAM_PHOTO_SOURCES } from '../src/lib/team/team-photos';
 
-const DEST_DIR = path.join(process.cwd(), 'public', 'uploads', 'team');
+const DEST_DIR = path.join(process.cwd(), 'public', 'team');
 
 async function download(url: string, dest: string) {
   const response = await fetch(url, {
@@ -25,7 +25,7 @@ async function main() {
     console.log('ok');
   }
 
-  console.log(`Saved ${TEAM_PHOTO_SOURCES.length} team photos to public/uploads/team`);
+  console.log(`Saved ${TEAM_PHOTO_SOURCES.length} team photos to public/team`);
 }
 
 main().catch((error) => {

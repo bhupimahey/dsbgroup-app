@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db';
 import { getPaginationMeta } from '@/lib/pagination';
+import { publicTeamImagePath } from '@/lib/team/team-photos';
 
 export const BLOG_PAGE_SIZE = 9;
 
@@ -126,7 +127,7 @@ export async function getTeamMembers() {
 
   return members.map((member) => ({
     ...member,
-    imagePath: member.showPhotoOnFront ? member.imagePath : null,
+    imagePath: publicTeamImagePath(member),
   }));
 }
 

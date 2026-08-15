@@ -7,6 +7,7 @@ import AdminSubmitButton from '@/components/admin/ui/AdminSubmitButton';
 import { AdminConfirmDeleteForm, AdminFormDeleteButton } from '@/components/admin/ui/AdminTableActions';
 import { AdminForm } from '@/components/admin/ui/AdminFormCard';
 import { adminPage } from '@/components/admin/ui/admin-styles';
+import { adminTeamImagePath } from '@/lib/team/team-photos';
 
 export default async function AdminEditTeamMemberPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -20,7 +21,12 @@ export default async function AdminEditTeamMemberPage({ params }: { params: Prom
       <AdminBackLink href="/admin/team">Back to team</AdminBackLink>
 
       <AdminForm title="Edit team member" subtitle={member.name} action={update}>
-        <AdminTeamMemberFields defaults={member} />
+        <AdminTeamMemberFields
+          defaults={{
+            ...member,
+            imagePath: adminTeamImagePath(member),
+          }}
+        />
         <AdminSubmitButton pendingLabel="Saving…">Save changes</AdminSubmitButton>
       </AdminForm>
 
