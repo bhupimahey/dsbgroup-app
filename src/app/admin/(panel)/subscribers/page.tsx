@@ -132,9 +132,9 @@ export default async function AdminSubscribersPage({
                         <input type="hidden" name="subscriberId" value={subscriber.id} />
                         <input type="hidden" name="active" value={subscriber.active ? 'false' : 'true'} />
                         <AdminPendingButton
+                          variant="link"
                           pendingLabel="Updating…"
-                          className="text-[var(--z-accent-dark)]"
-                          style={{ color: 'var(--z-accent-dark)' }}
+                          style={{ color: subscriber.active ? 'var(--z-danger)' : 'var(--z-primary)' }}
                         >
                           {subscriber.active ? 'Deactivate' : 'Activate'}
                         </AdminPendingButton>

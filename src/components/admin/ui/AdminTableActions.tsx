@@ -205,18 +205,24 @@ export function AdminPendingButton({
   pendingLabel,
   className = '',
   style,
+  variant = 'button',
 }: {
   children: ReactNode;
   pendingLabel: string;
   className?: string;
   style?: React.CSSProperties;
+  variant?: 'button' | 'link';
 }) {
   const { pending } = useFormStatus();
+  const classes =
+    variant === 'link'
+      ? 'inline-flex cursor-pointer items-center gap-1.5 bg-transparent p-0 text-sm font-medium underline underline-offset-2 hover:opacity-80 disabled:cursor-wait disabled:opacity-70'
+      : 'inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium transition disabled:cursor-wait disabled:opacity-70';
 
   return (
     <button
       type="submit"
-      className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium transition disabled:cursor-wait disabled:opacity-70 ${className}`}
+      className={`${classes} ${className}`}
       style={style}
       disabled={pending}
       aria-busy={pending}

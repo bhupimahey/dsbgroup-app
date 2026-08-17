@@ -127,7 +127,11 @@ export default async function AdminUsersPage({
                       <form action={toggleUserActiveFormAction}>
                         <input type="hidden" name="userId" value={user.id} />
                         <input type="hidden" name="active" value={user.active ? 'false' : 'true'} />
-                        <AdminPendingButton pendingLabel="Updating…" style={{ color: 'var(--z-accent-dark)' }}>
+                        <AdminPendingButton
+                          variant="link"
+                          pendingLabel="Updating…"
+                          style={{ color: user.active ? 'var(--z-danger)' : 'var(--z-primary)' }}
+                        >
                           {user.active ? 'Deactivate' : 'Activate'}
                         </AdminPendingButton>
                       </form>
