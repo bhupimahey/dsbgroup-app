@@ -76,14 +76,14 @@
   top: 0;
   z-index: 60;
   background: #ffffff;
-  border-bottom: 1px solid var(--theme-gold);
-  box-shadow: 0 4px 18px rgba(29, 41, 64, 0.06);
+  border-bottom: 0;
+  box-shadow: none;
 }
 
 .theme-topbar {
   border-bottom: 0;
   font-size: 13px;
-  background: #05162e;
+  background: #1a1c3d;
   color: #fff;
 }
 
@@ -182,13 +182,13 @@
 
 .theme-locations-badge--gold {
   background: var(--theme-gold);
-  color: var(--theme-navy);
+  color: #111111;
 }
 
 .theme-locations-badge--navy {
-  background: rgba(8, 24, 48, 0.35);
+  background: #1a1c3d;
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.92);
+  border: 1px solid #ffffff;
 }
 
 .theme-locations-list {
@@ -260,6 +260,8 @@
   justify-content: space-between;
   gap: 1.25rem;
   padding: 0.9rem 0;
+  border-top: 1px solid var(--theme-gold);
+  border-bottom: 1px solid var(--theme-gold);
 }
 
 .theme-header-social {
@@ -388,7 +390,7 @@
 .theme-main-nav-button {
   background: none;
   border: 0;
-  color: var(--theme-navy);
+  color: #1a237e;
   font-weight: 600;
   font-size: 13px;
   text-decoration: none;
