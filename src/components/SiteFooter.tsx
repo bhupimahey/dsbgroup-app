@@ -1,21 +1,65 @@
-'use client';
-
-import SiteSocialLinks from '@/components/site/SiteSocialLinks';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import DsbLogo from '@/components/brand/DsbLogo';
-import FooterSubscribeForm from '@/components/subscription/FooterSubscribeForm';
+import HomeCtaSubscribe from '@/components/home/HomeCtaSubscribe';
+import SiteSocialLinks from '@/components/site/SiteSocialLinks';
+import { getHomePageContent } from '@/lib/db/public-data';
 import {
-  FOOTER_LINKS,
   FOOTER_SERVICE_LINKS,
   FOOTER_USEFUL_LINKS,
   HEAD_OFFICE,
   SITE_CONTACT,
 } from '@/lib/site/nav-links';
 
-function HomeFooter() {
+function EmailIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="theme-footer-contact-icon" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"
+      />
+    </svg>
+  );
+}
+
+function PinIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="theme-footer-contact-icon theme-footer-contact-icon--pin" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
+      />
+    </svg>
+  );
+}
+
+function PhoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="theme-footer-contact-icon" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.3 21 3 13.7 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"
+      />
+    </svg>
+  );
+}
+
+export default async function SiteFooter() {
+  const content = await getHomePageContent();
+
   return (
     <footer className="theme-footer-home theme-shell">
+      <section className="theme-footer-cta">
+        <div className="theme-footer-cta-inner">
+          <div>
+            <h2 className="theme-footer-cta-heading">{content.ctaHeading}</h2>
+            <p className="theme-footer-cta-text">{content.ctaText}</p>
+          </div>
+          <div>
+            <HomeCtaSubscribe />
+          </div>
+        </div>
+      </section>
+
       <div className="theme-footer-home-main">
         <div className="theme-footer-home-inner">
           <div className="theme-footer-home-grid">
@@ -43,7 +87,7 @@ function HomeFooter() {
               <h3>Useful Links</h3>
               <ul className="theme-footer-home-list">
                 {FOOTER_USEFUL_LINKS.map((link) => (
-                  <li key={link.href}>
+                  <li key={`${link.href}-${link.label}`}>
                     <Link href={link.href}>{link.label}</Link>
                   </li>
                 ))}
@@ -53,11 +97,11 @@ function HomeFooter() {
             <div>
               <h3>Contact Us</h3>
               <div className="theme-footer-contact-item">
-                <span aria-hidden>✉</span>
+                <EmailIcon />
                 <a href={SITE_CONTACT.emailHref}>{SITE_CONTACT.email}</a>
               </div>
               <div className="theme-footer-contact-item">
-                <span aria-hidden>📍</span>
+                <PinIcon />
                 <span>
                   {HEAD_OFFICE.line1}
                   <br />
@@ -65,7 +109,7 @@ function HomeFooter() {
                 </span>
               </div>
               <div className="theme-footer-contact-item">
-                <span aria-hidden>☎</span>
+                <PhoneIcon />
                 <a href={SITE_CONTACT.phoneHref}>{SITE_CONTACT.phone}</a>
               </div>
             </div>
@@ -77,67 +121,4 @@ function HomeFooter() {
       </div>
     </footer>
   );
-}
-
-function InnerFooter() {
-  const quickLinks = FOOTER_LINKS.slice(0, 8);
-  const policyLinks = FOOTER_LINKS.slice(8);
-
-  return (
-    <footer className="theme-footer theme-shell">
-      <div className="theme-footer-main">
-        <div className="theme-footer-inner">
-          <div className="theme-footer-grid">
-            <div>
-              <DsbLogo href="/" height={42} onDark />
-              <p className="mt-4 text-sm leading-6">
-                Full-service legal and regulatory advisory for businesses, NBFCs, and institutions
-                across India.
-              </p>
-              <SiteSocialLinks className="theme-footer-social mt-4" />
-            </div>
-
-            <div>
-              <h3>About Link</h3>
-              <div className="theme-footer-list">
-                {quickLinks.map((link) => (
-                  <Link key={link.href} href={link.href}>
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3>Policies</h3>
-              <div className="theme-footer-list">
-                {policyLinks.map((link) => (
-                  <Link key={link.href} href={link.href}>
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div className="theme-footer-subscribe-box">
-              <h3>Subscribe</h3>
-              <p>
-                Subscribe to receive legal updates, newsletter issues, and recent regulatory
-                insights.
-              </p>
-              <FooterSubscribeForm variant="boxed" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="theme-copyright">
-        © Copyright {new Date().getFullYear()} DSB Law Group. All rights reserved.
-      </div>
-    </footer>
-  );
-}
-
-export default function SiteFooter() {
-  const pathname = usePathname();
-  return pathname === '/' ? <HomeFooter /> : <InnerFooter />;
 }

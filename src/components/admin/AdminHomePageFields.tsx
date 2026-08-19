@@ -280,7 +280,10 @@ export default function AdminHomePageFields({
         <AdminTextarea label="Location text" name="contactLocationText" defaultValue={content.contactLocationText} rows={2} required />
       </Section>
 
-      <Section title="Footer CTA">
+      <Section title="Footer CTA (all pages)">
+        <p className="text-xs" style={{ color: 'var(--z-text-muted)' }}>
+          This heading and text appear in the navy subscribe band above the footer on every public page.
+        </p>
         <AdminField label="Heading" name="ctaHeading" defaultValue={content.ctaHeading} required />
         <AdminTextarea label="Text" name="ctaText" defaultValue={content.ctaText} rows={3} required />
       </Section>

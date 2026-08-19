@@ -81,7 +81,7 @@ export default function SiteHeader({ socialAuth }: { socialAuth?: ReactNode }) {
 
           <div className="theme-topbar-locations" aria-label="Our office locations">
             <div className="theme-locations-row">
-              <span className="theme-locations-badge theme-locations-badge--gold">Our Offices</span>
+              <span className="theme-locations-badge theme-locations-badge--gold">OUR OFFICES</span>
               <ul className="theme-locations-list">
                 {OUR_OFFICES.map((city) => (
                   <li key={city}>{city}</li>
@@ -89,7 +89,7 @@ export default function SiteHeader({ socialAuth }: { socialAuth?: ReactNode }) {
               </ul>
             </div>
             <div className="theme-locations-row">
-              <span className="theme-locations-badge theme-locations-badge--navy">Spoke Offices</span>
+              <span className="theme-locations-badge theme-locations-badge--navy">SPOKE OFFICES</span>
               <ul className="theme-locations-list">
                 {SPOKE_OFFICES.map((city) => (
                   <li key={city}>{city}</li>

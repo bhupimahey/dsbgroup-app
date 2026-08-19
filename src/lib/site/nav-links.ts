@@ -84,7 +84,7 @@ export const FOOTER_SERVICE_LINKS: NavLink[] = [
   { href: '/hr-labour-law/about', label: 'HR & Labour Law' },
   { href: '/ucbs', label: "UCB's" },
   { href: '/pages/banking-finance', label: 'Banking & Finance' },
-  { href: '/pages/corporate-law', label: 'Corporate Law' },
+  { href: '/pages/corporate-advisory', label: 'Corporate Law' },
 ];
 
 export const FOOTER_USEFUL_LINKS: NavLink[] = [

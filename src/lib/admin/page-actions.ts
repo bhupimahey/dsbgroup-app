@@ -98,6 +98,7 @@ export async function updatePageAction(id: string, formData: FormData) {
 
     revalidatePath('/admin/pages');
     revalidatePath('/');
+    revalidatePath('/', 'layout');
     redirect('/admin/pages');
   }
 

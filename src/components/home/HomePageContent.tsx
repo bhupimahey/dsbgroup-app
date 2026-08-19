@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
 import AosInit from '@/components/home/AosInit';
-import HomeCtaSubscribe from '@/components/home/HomeCtaSubscribe';
 import HomeTestimonialsShowcase from '@/components/home/HomeTestimonialsShowcase';
 import type { CSSProperties } from 'react';
 import type { HomePageJson } from '@/lib/site/home-page-json';
@@ -582,23 +581,6 @@ export default function HomePageContent({
                 </article>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="home2-cta">
-        <div className="home2-container home2-cta-grid">
-          <div {...aos('fade-right', 1000)}>
-            <h2 className="home2-title-lg" style={{ color: '#fff', marginBottom: '16px' }}>
-              {content.ctaHeading}
-            </h2>
-            <p className="home2-lead" style={{ color: 'rgba(255,255,255,0.9)' }}>
-              {content.ctaText}
-            </p>
-          </div>
-          <div aria-hidden />
-          <div {...aos('fade-left', 1000)}>
-            <HomeCtaSubscribe />
           </div>
         </div>
       </section>
