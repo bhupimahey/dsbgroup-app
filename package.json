@@ -13,6 +13,7 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
     "db:seed-about": "tsx scripts/seed-about-page.ts",
+    "db:seed-home": "tsx scripts/seed-home-page.ts",
     "db:seed-services": "tsx scripts/seed-services-pages.ts",
     "db:seed-team": "tsx scripts/seed-team.ts",
     "db:seed-team-photos": "tsx scripts/seed-team-photos.ts",

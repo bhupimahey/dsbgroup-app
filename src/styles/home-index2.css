@@ -179,7 +179,7 @@
       rgba(245, 248, 252, 0.12) 62%,
       rgba(245, 248, 252, 0.05) 100%
     ),
-    url('/images/Hero-bg.png') left center / cover no-repeat;
+    var(--home-hero-bg, url('/images/Hero-bg.png')) left center / cover no-repeat;
   padding: 48px 0 56px;
   overflow: visible;
 }
@@ -206,7 +206,7 @@
   line-height: 1.1;
   font-weight: 700;
   color: #1a237e;
-  margin: 0 0 28px;
+  margin: 0 0 10px;
   text-align: left;
 }
 
@@ -279,7 +279,7 @@
 
 .home2-welcome-photo {
   object-fit: cover;
-  object-position: 60% center;
+  object-position: center;
 }
 
 .home2-welcome-anniversary {
@@ -327,9 +327,14 @@
 /* About */
 .home2-about-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2rem;
-  align-items: center;
+  grid-template-columns: minmax(0, 580px) minmax(0, 1fr);
+  gap: 2rem 3rem;
+  align-items: start;
+}
+
+.home2-about-images {
+  width: 100%;
+  max-width: 580px;
 }
 
 .home2-about-images img,
@@ -341,7 +346,10 @@
 }
 
 .home2-about-main {
-  min-height: 280px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 580 / 350;
   margin-bottom: 30px;
   background: linear-gradient(135deg, #c9d4df, #eef2f6);
 }
@@ -349,11 +357,14 @@
 .home2-about-sub-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 30px;
 }
 
 .home2-about-sub {
-  min-height: 180px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 274 / 260;
   background: linear-gradient(135deg, #dbe3ea, #f5f7fa);
 }
 
@@ -532,7 +543,7 @@
   border-radius: 5px;
   background:
     linear-gradient(160deg, rgba(20, 27, 44, 0.08), rgba(26, 35, 126, 0.18)),
-    url('/images/theme/index2/sections/company-img1.png') center/cover no-repeat,
+    var(--home-progress-bg, url('/images/theme/index2/sections/company-img1.png')) center/cover no-repeat,
     linear-gradient(135deg, #c8d2dc, #eef2f6);
 }
 
@@ -1417,6 +1428,10 @@
     padding-right: 0;
   }
 
+  .home2-about-images {
+    max-width: none;
+  }
+
   .home2-service-grid,
   .home2-case-grid,
   .home2-testimonial-grid,
@@ -1461,5 +1476,99 @@
 
   .home2-cta-form {
     flex-direction: column;
+  }
+}
+
+.home2-welcome-tagline {
+  margin: 0 0 18px;
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #c5a059;
+}
+
+.home2-welcome-copy .home2-welcome-intro {
+  margin: 0 0 14px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #3d4a63;
+}
+
+.home2-expertise-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem 1.25rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home2-expertise-list li {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #3d4a63;
+}
+
+.home2-expertise-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c5a059;
+}
+
+.home2-why-grid,
+.home2-vision-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.home2-why-card,
+.home2-vision-card {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 10px 30px rgba(20, 27, 44, 0.06);
+  padding: 1.5rem 1.35rem;
+}
+
+.home2-founder-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.home2-founder-photo {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #eef2f6;
+}
+
+.home2-founder-photo img {
+  object-fit: cover;
+  object-position: top;
+}
+
+.home2-founder-role {
+  margin: 0 0 1rem;
+  font-size: 15px;
+  font-weight: 600;
+  color: #c5a059;
+}
+
+@media (max-width: 991px) {
+  .home2-why-grid,
+  .home2-vision-grid,
+  .home2-founder-grid,
+  .home2-expertise-list {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,4 +1,5 @@
 export type PageEditorKind =
+  | 'home'
   | 'about'
   | 'services-index'
   | 'service-detail'

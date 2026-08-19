@@ -11,9 +11,15 @@ attach_team_photos() {
   npx tsx scripts/seed-team-photos.ts || echo "team photo seed skipped"
 }
 
+seed_home_page() {
+  echo "==> Seeding home page content if missing"
+  npx tsx scripts/seed-home-page.ts || echo "home page seed skipped"
+}
+
 if OUTPUT="$(npx prisma migrate deploy 2>&1)"; then
   echo "$OUTPUT"
   attach_team_photos
+  seed_home_page
   exit 0
 fi
 
@@ -24,6 +30,7 @@ if echo "$OUTPUT" | grep -qE "Duplicate column name|1060|sync_schema_fields|P301
   npx prisma migrate resolve --applied 20260702173000_sync_schema_fields
   npx prisma migrate deploy
   attach_team_photos
+  seed_home_page
   exit 0
 fi
 

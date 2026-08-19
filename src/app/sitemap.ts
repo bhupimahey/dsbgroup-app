@@ -41,7 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]);
 
     const cmsPages = pages
-      .filter((p) => !['about', 'privacy', 'terms', 'careers'].includes(p.slug))
+      .filter((p) => !['home', 'about', 'privacy', 'terms', 'careers'].includes(p.slug))
       .map((p) => ({
         url: `${base}/pages/${p.slug}`,
         lastModified: p.updatedAt,

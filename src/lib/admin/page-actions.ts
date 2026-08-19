@@ -15,6 +15,10 @@ import {
   SERVICE_PAGE_BODY_PLACEHOLDER,
   SERVICES_INDEX_BODY_PLACEHOLDER,
 } from '@/lib/site/service-page-json';
+import {
+  HOME_PAGE_BODY_PLACEHOLDER,
+  parseHomePageForm,
+} from '@/lib/site/home-page-json';
 import { NBFC_PAGE_BODY_PLACEHOLDER, parseNbfcPageForm } from '@/lib/site/nbfc-page-json';
 import {
   HR_LABOUR_PAGE_BODY_PLACEHOLDER,
@@ -72,6 +76,30 @@ export async function createPageAction(formData: FormData) {
 
 export async function updatePageAction(id: string, formData: FormData) {
   await requireStaff();
+
+  if (formData.get('homeTemplate') === '1') {
+    const contentJson = parseHomePageForm(formData);
+    const meta = parseSharedMeta(formData);
+
+    await prisma.page.update({
+      where: { id },
+      data: {
+        slug: 'home',
+        title: contentJson.heroHeading,
+        body: HOME_PAGE_BODY_PLACEHOLDER,
+        contentJson,
+        metaTitle: `${contentJson.heroHeading} | ${contentJson.heroTagline}`,
+        metaDescription: meta.metaDescription,
+        metaKeywords: meta.metaKeywords,
+        imagePath: contentJson.heroImagePath || null,
+        published: meta.published,
+      },
+    });
+
+    revalidatePath('/admin/pages');
+    revalidatePath('/');
+    redirect('/admin/pages');
+  }
 
   if (formData.get('aboutTemplate') === '1') {
     const contentJson = parseAboutPageForm(formData);
@@ -210,6 +238,7 @@ export async function updatePageAction(id: string, formData: FormData) {
   });
 
   revalidatePath('/admin/pages');
+  if (data.slug === 'home') revalidatePath('/');
   if (data.slug === 'about') revalidatePath('/about');
   if (data.slug === 'services') revalidatePath('/services');
   if (data.slug === 'nbfc') revalidatePath('/nbfc');
@@ -224,6 +253,7 @@ export async function deletePageAction(id: string) {
   const page = await prisma.page.findUnique({ where: { id }, select: { slug: true } });
   await prisma.page.delete({ where: { id } });
   revalidatePath('/admin/pages');
+  if (page?.slug === 'home') revalidatePath('/');
   if (page?.slug === 'about') revalidatePath('/about');
   if (page?.slug === 'services') revalidatePath('/services');
   if (page?.slug === 'nbfc') revalidatePath('/nbfc');

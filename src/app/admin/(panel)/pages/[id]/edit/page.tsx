@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { deletePageAction, updatePageAction } from '@/lib/admin/page-actions';
 import { getPageEditorKind } from '@/lib/admin/page-templates';
 import AdminAboutPageFields from '@/components/admin/AdminAboutPageFields';
+import AdminHomePageFields from '@/components/admin/AdminHomePageFields';
 import AdminHrLabourPageFields from '@/components/admin/AdminHrLabourPageFields';
 import AdminNbfcPageFields from '@/components/admin/AdminNbfcPageFields';
 import AdminServiceDetailFields from '@/components/admin/AdminServiceDetailFields';
@@ -16,6 +17,7 @@ import { AdminConfirmDeleteForm, AdminFormDeleteButton } from '@/components/admi
 import { AdminForm } from '@/components/admin/ui/AdminFormCard';
 import { adminPage } from '@/components/admin/ui/admin-styles';
 import { resolveAboutJsonFromPage } from '@/lib/site/about-page-json';
+import { resolveHomeJsonFromPage } from '@/lib/site/home-page-json';
 import { resolveHrLabourJsonFromPage } from '@/lib/site/hr-labour-page-json';
 import { resolveNbfcJsonFromPage } from '@/lib/site/nbfc-page-json';
 import { resolveServiceDetailJson, resolveServicesIndexJson } from '@/lib/site/service-page-json';
@@ -29,6 +31,7 @@ export default async function AdminEditPagePage({ params }: { params: Promise<{ 
   const update = updatePageAction.bind(null, id);
 
   const titles: Record<typeof editorKind, string> = {
+    home: 'Edit Home page',
     about: 'Edit About Us page',
     'services-index': 'Edit Services index page',
     'service-detail': 'Edit service detail page',
@@ -38,6 +41,7 @@ export default async function AdminEditPagePage({ params }: { params: Promise<{ 
   };
 
   const subtitles: Record<typeof editorKind, string> = {
+    home: 'Structured sections map directly to the public homepage layout.',
     about: 'Structured sections map directly to the public /about layout.',
     'services-index': 'Controls the /services listing page hero and heading.',
     'service-detail': 'Structured sections map to the public service detail layout.',
@@ -56,7 +60,15 @@ export default async function AdminEditPagePage({ params }: { params: Promise<{ 
         action={update}
         className={editorKind === 'standard' ? 'max-w-2xl' : 'max-w-3xl'}
       >
-        {editorKind === 'about' ? (
+        {editorKind === 'home' ? (
+          <AdminHomePageFields
+            content={resolveHomeJsonFromPage(page)}
+            slug={page.slug}
+            metaDescription={page.metaDescription}
+            metaKeywords={page.metaKeywords}
+            published={page.published}
+          />
+        ) : editorKind === 'about' ? (
           <AdminAboutPageFields
             content={resolveAboutJsonFromPage(page)}
             slug={page.slug}

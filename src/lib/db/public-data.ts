@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db';
 import { getPaginationMeta } from '@/lib/pagination';
+import { resolveHomeJsonFromPage } from '@/lib/site/home-page-json';
 import { publicTeamImagePath } from '@/lib/team/team-photos';
 
 export const BLOG_PAGE_SIZE = 9;
@@ -117,6 +118,14 @@ export async function getHomeBlogPosts() {
 
 export async function getHomeServiceCategories() {
   return findActiveServiceCategories(6);
+}
+
+export async function getHomePageContent() {
+  const page = await prisma.page.findUnique({
+    where: { slug: 'home' },
+    select: { contentJson: true },
+  });
+  return resolveHomeJsonFromPage(page);
 }
 
 export async function getTeamMembers() {

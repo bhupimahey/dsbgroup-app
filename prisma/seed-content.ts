@@ -3,6 +3,10 @@ import {
   defaultAboutPageJson,
 } from '../src/lib/site/about-page-json';
 import {
+  defaultHomePageJson,
+  HOME_PAGE_BODY_PLACEHOLDER,
+} from '../src/lib/site/home-page-json';
+import {
   defaultServicesIndexJson,
   SERVICES_INDEX_BODY_PLACEHOLDER,
 } from '../src/lib/site/service-page-json';
@@ -22,8 +26,19 @@ const NBFC_PAGE_JSON = defaultNbfcPageJson();
 const HR_LABOUR_PAGE_JSON = defaultHrLabourPageJson();
 
 const ABOUT_PAGE_JSON = defaultAboutPageJson();
+const HOME_PAGE_JSON = defaultHomePageJson();
 
 const CMS_PAGES = [
+  {
+    slug: 'home',
+    title: HOME_PAGE_JSON.heroHeading,
+    body: HOME_PAGE_BODY_PLACEHOLDER,
+    contentJson: HOME_PAGE_JSON,
+    metaTitle: `${HOME_PAGE_JSON.heroHeading} | ${HOME_PAGE_JSON.heroTagline}`,
+    metaDescription:
+      'DSB Law Group is a full-service Indian law firm providing legal, regulatory and business advisory solutions across India.',
+    metaKeywords: 'DSB Law Group, legal consultants, NBFC, corporate advisory, taxation',
+  },
   {
     slug: 'about',
     title: ABOUT_PAGE_JSON.introHeading,

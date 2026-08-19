@@ -25,8 +25,11 @@ export const metadata = { title: 'Pages' };
 const FILTER_KEYS = ['q', 'status'] as const;
 
 function previewHref(slug: string) {
+  if (slug === 'home') return '/';
   if (slug === 'about') return '/about';
   if (slug === 'services') return '/services';
+  if (slug === 'nbfc') return '/nbfc';
+  if (slug === 'about-hr-labour-law') return '/hr-labour-law/about';
   return `/pages/${slug}`;
 }
 

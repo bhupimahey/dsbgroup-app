@@ -1,4 +1,6 @@
 [
+  { "from": "/home", "to": "/" },
+  { "from": "/pages/home", "to": "/" },
   { "from": "/about-us", "to": "/about" },
   { "from": "/contact-us", "to": "/contact" },
   { "from": "/our-team", "to": "/team" },
